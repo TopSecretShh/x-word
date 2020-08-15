@@ -1,0 +1,12 @@
+#grid {
+  margin: 40px;
+  border-collapse: collapse;
+  border: 2px solid black;
+  /* border: 1px solid black; */
+}
+
+#grid td {
+  height: 35px;
+  width: 35px;
+  border: 1px solid black;
+}
