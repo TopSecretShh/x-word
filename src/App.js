@@ -13,18 +13,18 @@ export default class App extends React.Component {
     author: "Anonymous",
   };
 
-  setSizeDaily = () => {
-    this.setState({
-      rows: 15,
-      cols: 15,
-    });
-  };
-
-  setSizeSunday = () => {
-    this.setState({
-      rows: 21,
-      cols: 21,
-    });
+  setSize = (e) => {
+    if (e.target.value === "daily") {
+      this.setState({
+        rows: 15,
+        cols: 15,
+      });
+    } else if (e.target.value === "sunday") {
+      this.setState({
+        rows: 21,
+        cols: 21,
+      });
+    }
   };
 
   render() {
@@ -42,10 +42,18 @@ export default class App extends React.Component {
 
           <div className="size-btns">
             <h3>Size</h3>
-            <button type="button" onClick={() => this.setSizeDaily()}>
+            <button
+              type="button"
+              value="daily"
+              onClick={(e) => this.setSize(e)}
+            >
               Daily
             </button>
-            <button type="button" onClick={() => this.setSizeSunday()}>
+            <button
+              type="button"
+              value="sunday"
+              onClick={(e) => this.setSize(e)}
+            >
               Sunday
             </button>
           </div>
