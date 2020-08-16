@@ -13,6 +13,20 @@ export default class App extends React.Component {
     author: "Anonymous",
   };
 
+  setSizeDaily = () => {
+    this.setState({
+      rows: 15,
+      cols: 15,
+    });
+  };
+
+  setSizeSunday = () => {
+    this.setState({
+      rows: 21,
+      cols: 21,
+    });
+  };
+
   render() {
     const value = {
       rows: this.state.rows,
@@ -25,6 +39,17 @@ export default class App extends React.Component {
         <div className="App">
           <h1>{this.state.title}</h1>
           <p>by {this.state.author}</p>
+
+          <div className="size-btns">
+            <h3>Size</h3>
+            <button type="button" onClick={() => this.setSizeDaily()}>
+              Daily
+            </button>
+            <button type="button" onClick={() => this.setSizeSunday()}>
+              Sunday
+            </button>
+          </div>
+
           <Grid />
         </div>
       </Context.Provider>
