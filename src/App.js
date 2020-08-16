@@ -13,19 +13,21 @@ export default class App extends React.Component {
     author: "Anonymous",
   };
 
-  setSize = (e) => {
-    if (e.target.value === "daily") {
+  setSize = (value) => {
+    if (value === "daily") {
       this.setState({
         rows: 15,
         cols: 15,
       });
-    } else if (e.target.value === "sunday") {
+    } else if (value === "sunday") {
       this.setState({
         rows: 21,
         cols: 21,
       });
     }
   };
+
+  // need a mouse handler so that you can click/select squares
 
   render() {
     const value = {
@@ -45,14 +47,14 @@ export default class App extends React.Component {
             <button
               type="button"
               value="daily"
-              onClick={(e) => this.setSize(e)}
+              onClick={(e) => this.setSize(e.target.value)}
             >
               Daily
             </button>
             <button
               type="button"
               value="sunday"
-              onClick={(e) => this.setSize(e)}
+              onClick={(e) => this.setSize(e.target.value)}
             >
               Sunday
             </button>
