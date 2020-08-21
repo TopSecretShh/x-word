@@ -1,15 +1,54 @@
+.App {
+  margin: 16px;
+}
+
 #grid {
-  margin: 40px;
-  border-collapse: collapse;
-  border: 2px solid black;
-}
-
-#grid td {
-  height: 35px;
-  width: 35px;
+  margin-top: 16px;
   border: 1px solid black;
+  border-right: none;
+  border-bottom: none;
+  display: block;
 }
 
-.black {
-  background-color: black;
+.crossword__cell {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  fill: white;
+  cursor: pointer;
+}
+
+.crossword__container--grid-wrapper {
+  min-width: 250px;
+  max-width: 500px;
+  position: relative;
+}
+
+svg[viewBox] {
+  background: black;
+}
+
+.crossword__cell--selected {
+  fill: lightsteelblue;
+}
+
+.crossword__cell--filled {
+  fill: black;
+}
+
+/* Color for cells that are both filled and selected */
+.crossword__cell--filled.crossword__cell--selected {
+  fill: rgb(35, 69, 95);
+}
+
+.crossword__cell--number {
+  fill: black;
+  user-select: none;
+  font-size: 9px;
+  font-weight: 500;
+}
+
+@media (max-width: 450px) { 
+  .crossword__cell--number {
+    font-size: 11px;
+    transform: translateY(2px)
+  }
 }
