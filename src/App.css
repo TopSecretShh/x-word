@@ -2,6 +2,10 @@
   margin: 40px;
   border-collapse: collapse;
   border: 2px solid black;
+
+  /* this should be responsive, yet fixed so the boxes don't squish */
+  table-layout: fixed;
+  width: 500px;
 }
 
 #grid td {

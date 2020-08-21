@@ -18,9 +18,9 @@ export default class Grid extends React.Component {
     let cols = this.context.cols;
 
     let grid = Array.from({ length: rows }).map((_, i) => (
-      <tr key={i}>
+      <tr key={i} data-row={i}>
         {Array.from({ length: cols }).map((_, i) => (
-          <td key={i}>
+          <td key={i} data-col={i}>
             <div className="label"></div>
             <div className="fill"></div>
           </td>
@@ -28,13 +28,43 @@ export default class Grid extends React.Component {
       </tr>
     ));
 
+    this.setGridArray(grid);
+
     return grid;
   };
+
+  setGridArray = (grid) => {
+    // console.log(grid[0].props.children[0]);
+  };
+
+  // numbering
+  // count = 1
+  // box gets number if:
+  //    - first in row
+  //    - block to the left
+  //    - block above
+  // box does not get number if:
+  //    - not first in row
+  //    - no block above
+  //    - no block to left
+  //    - box is block
+
+  // so first, get all boxes (how?)
+  // I guess all td values could be put into state?
+  // something like:
+  // state = {
+  //   squares: [
+  //     {1: ''},
+  //     {2: ''}
+  //   ]
+  // }
 
   render() {
     return (
       <div className="Grid">
-        <table id="grid">{this.renderGrid()}</table>
+        <table id="grid">
+          <tbody>{this.renderGrid()}</tbody>
+        </table>
       </div>
     );
   }
