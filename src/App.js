@@ -41,6 +41,42 @@ export default class App extends React.Component {
     }
   };
 
+  handlePatternBtn = () => {
+    if (this.state.rows === 15) {
+      this.setState({
+        blocks: this.state.blocks
+          .fill(true, 4, 5)
+          .fill(true, 10, 11)
+          .fill(true, 19, 20)
+          .fill(true, 25, 26)
+          .fill(true, 34, 35)
+          .fill(true, 40, 41)
+          .fill(true, 55, 56)
+          .fill(true, 60, 63)
+          .fill(true, 67, 68)
+          .fill(true, 72, 75)
+          .fill(true, 81, 82)
+          .fill(true, 95, 96)
+          .fill(true, 101, 102)
+          .fill(true, 109, 110)
+          .fill(true, 115, 116)
+          .fill(true, 123, 124)
+          .fill(true, 129, 130)
+          .fill(true, 143, 144)
+          .fill(true, 150, 153)
+          .fill(true, 157, 158)
+          .fill(true, 162, 165)
+          .fill(true, 171, 172)
+          .fill(true, 184, 185)
+          .fill(true, 190, 191)
+          .fill(true, 199, 200)
+          .fill(true, 205, 206)
+          .fill(true, 214, 215)
+          .fill(true, 220, 221),
+      });
+    }
+  };
+
   selectCell = (value) => {
     this.setState({
       selectedCell: value,
@@ -91,6 +127,13 @@ export default class App extends React.Component {
               onClick={(e) => this.setSize(e.target.value)}
             >
               Sunday
+            </button>
+          </div>
+
+          <div className="pattern-btn">
+            <h3>Pattern</h3>
+            <button type="button" onClick={() => this.handlePatternBtn()}>
+              Pattern
             </button>
           </div>
 

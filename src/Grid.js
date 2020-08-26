@@ -42,7 +42,7 @@ export default class Grid extends React.Component {
       <React.Fragment key={i}>
         {Array.from({ length: cols }).map((_, j) => (
           <Cell
-            key={j + i}
+            key={[j, i]}
             cellSize={size}
             row={i}
             col={j}
