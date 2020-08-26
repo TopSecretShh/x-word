@@ -26,6 +26,8 @@ export default class Grid extends React.Component {
       let isBlockBeforeFilled = blocks[i - 1] || i % rows === 0;
       let isBlockAboveFilled = blocks[i - rows] || i - rows < 0;
       let isBlockBelowFilled = blocks[i + rows] || i + rows > rows * rows;
+
+      // need to adjust isBlockNumbered so that if there is a block on the left edge the cell above should have a number
       let isBlockNumbered =
         !isBlockFilled &&
         !isBlockBelowFilled &&
@@ -42,7 +44,7 @@ export default class Grid extends React.Component {
       <React.Fragment key={i}>
         {Array.from({ length: cols }).map((_, j) => (
           <Cell
-            key={[j, i]}
+            key={[i, j]}
             cellSize={size}
             row={i}
             col={j}
