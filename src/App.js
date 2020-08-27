@@ -117,8 +117,6 @@ export default class App extends React.Component {
       // daily size with pattern missing last two numbers
       // sunday size w/o pattern only numbers up to a point
 
-
-
     let cellProperties = blocks.map((block, i) => {
       let isBlockFilled = block
      
@@ -177,7 +175,7 @@ export default class App extends React.Component {
               selectedCell={this.state.selectedCell} 
               selectCell={(cell) => this.selectCell(cell)}
               blocks={this.state.blocks}
-              cellNumberLabels={cellProperties}
+              cellProperties={cellProperties}
               />
             <Clues
               blocks={cellProperties} 
@@ -191,11 +189,7 @@ export default class App extends React.Component {
             </button>
           </div>
 
-          <Grid
-            selectedCell={this.state.selectedCell}
-            selectCell={(cell) => this.selectCell(cell)}
-            blocks={this.state.blocks}
-          />
+     
         </div>
       </Context.Provider>
     );

@@ -13,10 +13,6 @@
   display: flex;
 }
 
-.clues h3{
-  
-}
-
 .crossword__cell {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   fill: white;
