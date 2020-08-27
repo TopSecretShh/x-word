@@ -1,5 +1,6 @@
 import React from "react";
 import Grid from "./Grid";
+import Clues from "./Clues"
 import Context from "./Context";
 import "./App.css";
 
@@ -64,6 +65,34 @@ export default class App extends React.Component {
       title: this.state.title,
       author: this.state.author,
     };
+
+    let rows = this.state.rows;
+    let blocks = this.state.blocks
+    let counter = 0;
+  
+    let cellProperties = blocks.map((block, i) => {
+      let isBlockFilled = block
+      let isBlockBeforeFilled = blocks[i - 1] || i % rows === 0;
+      let isBlockAfterFilled = blocks[i + 1] || (i + 1) % rows === 0;
+      let isBlockAboveFilled = blocks[i - rows] || i - rows < 0;
+      let isBlockBelowFilled = blocks[i + rows] || i + rows > rows * rows;
+      
+
+      if (isBlockFilled) {
+        return [null, null]
+      } else if ((isBlockAboveFilled && isBlockBeforeFilled) && (!isBlockAfterFilled && !isBlockBelowFilled)) {
+        counter++
+        return [counter, 'acrossdown']
+      } else if (isBlockBeforeFilled && !isBlockAfterFilled) {
+        counter++
+        return [counter, 'across']
+      } else if (isBlockAboveFilled && !isBlockBelowFilled) {
+        counter++ 
+        return [counter, 'down']
+      }
+      
+      return [null, null]
+    })
     return (
       <Context.Provider value={value}>
         <div className="App" onKeyDown={() => this.handleKeyDown()} >
@@ -87,12 +116,17 @@ export default class App extends React.Component {
               Sunday
             </button>
           </div>
-
-          <Grid 
-            selectedCell={this.state.selectedCell} 
-            selectCell={(cell) => this.selectCell(cell)}
-            blocks={this.state.blocks}
+          <div className='puzzle'>
+            <Grid 
+              selectedCell={this.state.selectedCell} 
+              selectCell={(cell) => this.selectCell(cell)}
+              blocks={this.state.blocks}
+              cellNumberLabels={cellProperties}
+              />
+            <Clues
+              blocks={cellProperties} 
             />
+          </div>
         </div>
       </Context.Provider>
     );

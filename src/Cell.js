@@ -7,8 +7,8 @@ function Cell({cellSize, row, col, cellNumber, selectCell, selectedCell, blocked
             <rect
               x={col * cellSize}
               y={row * cellSize}
-              width={cellSize -1} 
-              height={cellSize -1}
+              width={cellSize - 1} 
+              height={cellSize - 1}
               onClick={() => selectCell(cellNumber)}
               >
             </rect>

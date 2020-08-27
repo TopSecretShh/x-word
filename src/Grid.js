@@ -18,23 +18,7 @@ export default class Grid extends React.Component {
     let rows = this.context.rows;
     let cols = this.context.cols;
     let size = 500 / rows;
-    let blocks = this.props.blocks
-    let counter = 0;
   
-    let cellNumberLabels = blocks.map((block, i) => {
-      let isBlockFilled = block
-      let isBlockBeforeFilled = blocks[i - 1] || i % rows === 0;
-      let isBlockAboveFilled = blocks[i - rows] || i - rows < 0;
-      let isBlockBelowFilled = blocks[i + rows] || i + rows > rows * rows;
-      let isBlockNumbered = (!isBlockFilled && !isBlockBelowFilled) && (isBlockBeforeFilled || isBlockAboveFilled)
-      
-      if (isBlockNumbered) {
-        counter++
-        return counter
-      }
-      return null
-    })
-
     let grid = Array.from({ length: rows }).map((_, i) => (
       <>
         {Array.from({ length: cols }).map((_, j) => (
@@ -47,7 +31,7 @@ export default class Grid extends React.Component {
             selectCell={this.props.selectCell}
             selectedCell={rows * i + j === this.props.selectedCell}
             blocked={this.props.blocks[rows * i + j]}
-            cellNumberLabel={cellNumberLabels[rows * i + j]}
+            cellNumberLabel={this.props.cellNumberLabels[rows * i + j][0]}
           />
         ))}
       </>

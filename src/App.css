@@ -7,7 +7,14 @@
   border: 1px solid black;
   border-right: none;
   border-bottom: none;
-  display: block;
+}
+
+.clues {
+  display: flex;
+}
+
+.clues h3{
+  
 }
 
 .crossword__cell {
@@ -20,6 +27,7 @@
   min-width: 250px;
   max-width: 500px;
   position: relative;
+  flex-basis: 90%;
 }
 
 svg[viewBox] {
@@ -51,4 +59,13 @@ svg[viewBox] {
     font-size: 11px;
     transform: translateY(2px)
   }
+}
+
+ul {
+  list-style-type: none;
+}
+
+.puzzle {
+  display: flex;
+  flex-wrap: wrap;
 }
