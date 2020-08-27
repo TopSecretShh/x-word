@@ -1,6 +1,6 @@
 import React from "react";
 import Grid from "./Grid";
-import Clues from "./Clues"
+import Clues from "./Clues";
 import Context from "./Context";
 import "./App.css";
 
@@ -36,7 +36,7 @@ export default class App extends React.Component {
       this.setState({
         rows: 21,
         cols: 21,
-        blocks: Array(225).fill(false),
+        blocks: Array(441).fill(false),
         selectedCell: null,
       });
     }
@@ -88,7 +88,7 @@ export default class App extends React.Component {
     const cell = this.state.selectedCell;
     const blocks = [...this.state.blocks];
     blocks[cell] = !blocks[cell];
-    // Middle cell won't become a block
+    // Middle cell won't become a block, but we want it to be able to
     blocks[this.state.rows * this.state.cols - cell - 1] = !blocks[
       this.state.rows * this.state.cols - cell - 1
     ];
@@ -109,44 +109,40 @@ export default class App extends React.Component {
     };
 
     let rows = this.state.rows;
-    let blocks = this.state.blocks
+    let blocks = this.state.blocks;
     let counter = 0;
 
-      // need to adjust isBlockNumbered so that if there is a block on the left edge the cell above should have a number
-      // there must be something here that is limiting the numbering:
-      // daily size with pattern missing last two numbers
-      // sunday size w/o pattern only numbers up to a point
-
     let cellProperties = blocks.map((block, i) => {
-      let isBlockFilled = block
-     
-      let isBlockBeforeFilled = blocks[i - 1] || 
-      i % rows === 0;
+      let isBlockFilled = block;
 
-      let isBlockAfterFilled = blocks[i + 1] || 
-      (i + 1) % rows === 0;
+      let isBlockBeforeFilled = blocks[i - 1] || i % rows === 0;
 
-      let isBlockAboveFilled = blocks[i - rows] || 
-      i - rows < 0;
-     
-      let isBlockBelowFilled = blocks[i + rows] ||
-      i + rows > rows * rows;
+      let isBlockAfterFilled = blocks[i + 1] || (i + 1) % rows === 0;
+
+      let isBlockAboveFilled = blocks[i - rows] || i - rows < 0;
+
+      let isBlockBelowFilled = blocks[i + rows] || i + rows > rows * rows;
 
       if (isBlockFilled) {
-        return [null, null]
-      } else if ((isBlockAboveFilled && isBlockBeforeFilled) && (!isBlockAfterFilled && !isBlockBelowFilled)) {
-        counter++
-        return [counter, 'acrossdown']
+        return [null, null];
+      } else if (
+        isBlockAboveFilled &&
+        isBlockBeforeFilled &&
+        !isBlockAfterFilled &&
+        !isBlockBelowFilled
+      ) {
+        counter++;
+        return [counter, "acrossdown"];
       } else if (isBlockBeforeFilled && !isBlockAfterFilled) {
-        counter++
-        return [counter, 'across']
+        counter++;
+        return [counter, "across"];
       } else if (isBlockAboveFilled && !isBlockBelowFilled) {
-        counter++ 
-        return [counter, 'down']
+        counter++;
+        return [counter, "down"];
       }
-      
-      return [null, null]
-    })
+
+      return [null, null];
+    });
     return (
       <Context.Provider value={value}>
         <div className="App" onKeyDown={() => this.handleKeyDown()}>
@@ -170,16 +166,14 @@ export default class App extends React.Component {
               Sunday
             </button>
           </div>
-          <div className='puzzle'>
-            <Grid 
-              selectedCell={this.state.selectedCell} 
+          <div className="puzzle">
+            <Grid
+              selectedCell={this.state.selectedCell}
               selectCell={(cell) => this.selectCell(cell)}
               blocks={this.state.blocks}
               cellProperties={cellProperties}
-              />
-            <Clues
-              blocks={cellProperties} 
             />
+            <Clues blocks={cellProperties} />
           </div>
 
           <div className="pattern-btn">
@@ -188,8 +182,6 @@ export default class App extends React.Component {
               Pattern
             </button>
           </div>
-
-     
         </div>
       </Context.Provider>
     );

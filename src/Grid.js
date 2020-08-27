@@ -15,10 +15,12 @@ export default class Grid extends React.Component {
   // all letters should be in an across and down word
 
   renderGrid = () => {
+    console.log("cell props", this.props.cellProperties);
+
     let rows = this.context.rows;
     let cols = this.context.cols;
     let size = 500 / rows;
-  
+
     let grid = Array.from({ length: rows }).map((_, i) => (
       <React.Fragment key={i}>
         {Array.from({ length: cols }).map((_, j) => (
