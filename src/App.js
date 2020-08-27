@@ -86,20 +86,18 @@ export default class App extends React.Component {
 
   handleKeydown = (e) => {
     const cell = this.state.selectedCell;
+    const rows = this.state.rows
+    const cols = this.state.cols
+    const totalSquares = rows * cols
+    const cellTwin = totalSquares - cell - 1
     const blocks = [...this.state.blocks];
     blocks[cell] = !blocks[cell];
-    // Middle cell won't become a block :(
 
-    console.log(blocks[0]);
-
-    // this will allow the middle cell to be blocked, but ruins the symmetry (the symmetrical cell blocks, but not the selected one)
-    // if (blocks[this.state.rows * this.state.cols] % 2 !== 0) {
-    //   blocks[cell] = Math.ceil(blocks[this.state.rows * this.state.cols] / 2);
-    // }
-
-    blocks[this.state.rows * this.state.cols - cell - 1] = !blocks[
-      this.state.rows * this.state.cols - cell - 1
-    ];
+    if (cell !== Math.floor(totalSquares / 2))
+    {
+      blocks[cellTwin] = !blocks[cellTwin];
+    }
+    
 
     if (e.code === "Period" && cell) {
       this.setState({
