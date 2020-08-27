@@ -13,15 +13,15 @@ export default class App extends React.Component {
     title: "Untitled",
     author: "Anonymous",
     blocks: Array(225).fill(false),
-    selectedCell: null
+    selectedCell: null,
   };
 
   componentDidMount() {
-    document.addEventListener("keydown", this.handleKeydown)
+    document.addEventListener("keydown", this.handleKeydown);
   }
 
   componentWillUnmount() {
-    document.removeEventListener("keydown", this.handleKeydown)
+    document.removeEventListener("keydown", this.handleKeydown);
   }
 
   setSize = (value) => {
@@ -29,34 +29,76 @@ export default class App extends React.Component {
       this.setState({
         rows: 15,
         cols: 15,
+        blocks: Array(225).fill(false),
+        selectedCell: null,
       });
     } else if (value === "sunday") {
       this.setState({
         rows: 21,
         cols: 21,
+        blocks: Array(225).fill(false),
+        selectedCell: null,
+      });
+    }
+  };
+
+  handlePatternBtn = () => {
+    if (this.state.rows === 15) {
+      this.setState({
+        blocks: this.state.blocks
+          .fill(true, 4, 5)
+          .fill(true, 10, 11)
+          .fill(true, 19, 20)
+          .fill(true, 25, 26)
+          .fill(true, 34, 35)
+          .fill(true, 40, 41)
+          .fill(true, 55, 56)
+          .fill(true, 60, 63)
+          .fill(true, 67, 68)
+          .fill(true, 72, 75)
+          .fill(true, 81, 82)
+          .fill(true, 95, 96)
+          .fill(true, 101, 102)
+          .fill(true, 109, 110)
+          .fill(true, 115, 116)
+          .fill(true, 123, 124)
+          .fill(true, 129, 130)
+          .fill(true, 143, 144)
+          .fill(true, 150, 153)
+          .fill(true, 157, 158)
+          .fill(true, 162, 165)
+          .fill(true, 171, 172)
+          .fill(true, 184, 185)
+          .fill(true, 190, 191)
+          .fill(true, 199, 200)
+          .fill(true, 205, 206)
+          .fill(true, 214, 215)
+          .fill(true, 220, 221),
       });
     }
   };
 
   selectCell = (value) => {
     this.setState({
-      selectedCell: value
-    })
-  }
+      selectedCell: value,
+    });
+  };
 
   handleKeydown = (e) => {
-    const cell = this.state.selectedCell
-    const blocks = [...this.state.blocks]
-    blocks[cell] = !blocks[cell]
+    const cell = this.state.selectedCell;
+    const blocks = [...this.state.blocks];
+    blocks[cell] = !blocks[cell];
     // Middle cell won't become a block
-    blocks[(this.state.rows * this.state.cols) - cell - 1] = !blocks[(this.state.rows * this.state.cols) - cell - 1] 
-   
+    blocks[this.state.rows * this.state.cols - cell - 1] = !blocks[
+      this.state.rows * this.state.cols - cell - 1
+    ];
+
     if (e.code === "Period" && cell) {
-       this.setState({
-      blocks: blocks
-    })
+      this.setState({
+        blocks: blocks,
+      });
     }
-  }
+  };
 
   render() {
     const value = {
@@ -69,14 +111,28 @@ export default class App extends React.Component {
     let rows = this.state.rows;
     let blocks = this.state.blocks
     let counter = 0;
-  
+
+      // need to adjust isBlockNumbered so that if there is a block on the left edge the cell above should have a number
+      // there must be something here that is limiting the numbering:
+      // daily size with pattern missing last two numbers
+      // sunday size w/o pattern only numbers up to a point
+
+
+
     let cellProperties = blocks.map((block, i) => {
       let isBlockFilled = block
-      let isBlockBeforeFilled = blocks[i - 1] || i % rows === 0;
-      let isBlockAfterFilled = blocks[i + 1] || (i + 1) % rows === 0;
-      let isBlockAboveFilled = blocks[i - rows] || i - rows < 0;
-      let isBlockBelowFilled = blocks[i + rows] || i + rows > rows * rows;
-      
+     
+      let isBlockBeforeFilled = blocks[i - 1] || 
+      i % rows === 0;
+
+      let isBlockAfterFilled = blocks[i + 1] || 
+      (i + 1) % rows === 0;
+
+      let isBlockAboveFilled = blocks[i - rows] || 
+      i - rows < 0;
+     
+      let isBlockBelowFilled = blocks[i + rows] ||
+      i + rows > rows * rows;
 
       if (isBlockFilled) {
         return [null, null]
@@ -95,7 +151,7 @@ export default class App extends React.Component {
     })
     return (
       <Context.Provider value={value}>
-        <div className="App" onKeyDown={() => this.handleKeyDown()} >
+        <div className="App" onKeyDown={() => this.handleKeyDown()}>
           <h1>{this.state.title}</h1>
           <p>by {this.state.author}</p>
 
@@ -127,6 +183,19 @@ export default class App extends React.Component {
               blocks={cellProperties} 
             />
           </div>
+
+          <div className="pattern-btn">
+            <h3>Pattern</h3>
+            <button type="button" onClick={() => this.handlePatternBtn()}>
+              Pattern
+            </button>
+          </div>
+
+          <Grid
+            selectedCell={this.state.selectedCell}
+            selectCell={(cell) => this.selectCell(cell)}
+            blocks={this.state.blocks}
+          />
         </div>
       </Context.Provider>
     );
