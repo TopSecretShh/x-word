@@ -88,22 +88,28 @@ export default class App extends React.Component {
     const cell = this.state.selectedCell;
     const rows = this.state.rows
     const cols = this.state.cols
-    const totalSquares = rows * cols
-    const cellTwin = totalSquares - cell - 1
+    const totalSquares = rows * cols - 1
+    const cellTwin = totalSquares - cell
     const blocks = [...this.state.blocks];
+   
+
     blocks[cell] = !blocks[cell];
 
+    
+
+    
     if (cell !== Math.floor(totalSquares / 2))
     {
       blocks[cellTwin] = !blocks[cellTwin];
     }
     
-
-    if (e.code === "Period" && cell) {
+    // This is where the problem was for setting the first square! I put this in to prevent period from working if nothing was selected, but it also prevented it from working with cell = 0!
+    if (e.code === "Period" && (cell || cell === 0)) {
       this.setState({
         blocks: blocks,
       });
     }
+
   };
 
   render() {
