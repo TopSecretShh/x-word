@@ -28,6 +28,9 @@ export default class Grid extends React.Component {
       let isBlockBelowFilled = blocks[i + rows] || i + rows > rows * rows;
 
       // need to adjust isBlockNumbered so that if there is a block on the left edge the cell above should have a number
+      // there must be something here that is limiting the numbering:
+      // daily size with pattern missing last two numbers
+      // sunday size w/o pattern only numbers up to a point
       let isBlockNumbered =
         !isBlockFilled &&
         !isBlockBelowFilled &&
