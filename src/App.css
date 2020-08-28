@@ -50,9 +50,20 @@ svg[viewBox] {
   font-weight: 500;
 }
 
+.crossword__cell--letter {
+  fill: black;
+  user-select: none;
+  font-size: 17px;
+  font-weight: 500;
+}
+
 @media (max-width: 450px) { 
   .crossword__cell--number {
     font-size: 11px;
+    font-weight: 700;
+    transform: translateY(2px)
+  }
+  .crossword__cell--letter {
     transform: translateY(2px)
   }
 }

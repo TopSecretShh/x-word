@@ -26,11 +26,12 @@ export default class Grid extends React.Component {
             key={[i, j]}
             cellSize={size}
             row={i}
-            col={j}
+            col={j}np
             cellNumber={rows * i + j}
             selectCell={this.props.selectCell}
             selectedCell={rows * i + j === this.props.selectedCell}
-            blocked={this.props.blocks[rows * i + j]}
+            blocked={this.props.blocks[rows * i + j] === true}
+            cellCharacterLabel={this.props.blocks[rows * i + j]}
             cellNumberLabel={this.props.cellProperties[rows * i + j][0]}
           />
         ))}

@@ -1,8 +1,14 @@
 import React from "react";
 import Grid from "./Grid";
 import Clues from "./Clues";
+import PATTERNONE from "./Patterns.js"
 import Context from "./Context";
 import "./App.css";
+
+// Problems
+// Blocking a lettered square or lettering a block square, does not work symmetrically 
+// Keydown problems causing crashes
+// Sunday letter and number positioning
 
 export default class App extends React.Component {
   static contextType = Context;
@@ -16,6 +22,8 @@ export default class App extends React.Component {
     selectedCell: null,
   };
 
+  
+  // Pressing Tab twice is causing TypeError: this.handleKeyDown is not a function
   componentDidMount() {
     document.addEventListener("keydown", this.handleKeydown);
   }
@@ -45,72 +53,53 @@ export default class App extends React.Component {
   handlePatternBtn = () => {
     if (this.state.rows === 15) {
       this.setState({
-        blocks: this.state.blocks
-          .fill(true, 4, 5)
-          .fill(true, 10, 11)
-          .fill(true, 19, 20)
-          .fill(true, 25, 26)
-          .fill(true, 34, 35)
-          .fill(true, 40, 41)
-          .fill(true, 55, 56)
-          .fill(true, 60, 63)
-          .fill(true, 67, 68)
-          .fill(true, 72, 75)
-          .fill(true, 81, 82)
-          .fill(true, 95, 96)
-          .fill(true, 101, 102)
-          .fill(true, 109, 110)
-          .fill(true, 115, 116)
-          .fill(true, 123, 124)
-          .fill(true, 129, 130)
-          .fill(true, 143, 144)
-          .fill(true, 150, 153)
-          .fill(true, 157, 158)
-          .fill(true, 162, 165)
-          .fill(true, 171, 172)
-          .fill(true, 184, 185)
-          .fill(true, 190, 191)
-          .fill(true, 199, 200)
-          .fill(true, 205, 206)
-          .fill(true, 214, 215)
-          .fill(true, 220, 221),
-      });
+        blocks: PATTERNONE
+      })
     }
   };
-
+        
   selectCell = (value) => {
     this.setState({
       selectedCell: value,
     });
   };
 
+  fillCell = (cell, character) => {
+    const rows = this.state.rows;
+    const cols = this.state.cols;
+    const totalSquares = rows * cols - 1;
+    const cellTwin = totalSquares - cell;
+    const blocks = [...this.state.blocks]; 
+
+    if (typeof character === "string") {
+
+      blocks[cell] = character.toUpperCase()
+    } else {
+      blocks[cell] = !blocks[cell];
+    
+      if (cell !== Math.floor(totalSquares / 2)) {
+        blocks[cellTwin] = !blocks[cellTwin];
+      }
+    }
+
+    this.setState({
+      blocks: blocks,
+    });
+    console.log(blocks)
+  }
+
   handleKeydown = (e) => {
     const cell = this.state.selectedCell;
-    const rows = this.state.rows
-    const cols = this.state.cols
-    const totalSquares = rows * cols - 1
-    const cellTwin = totalSquares - cell
-    const blocks = [...this.state.blocks];
-   
 
-    blocks[cell] = !blocks[cell];
-
-    
-
-    
-    if (cell !== Math.floor(totalSquares / 2))
-    {
-      blocks[cellTwin] = !blocks[cellTwin];
-    }
-    
-    // This is where the problem was for setting the first square! I put this in to prevent period from working if nothing was selected, but it also prevented it from working with cell = 0!
     if (e.code === "Period" && (cell || cell === 0)) {
-      this.setState({
-        blocks: blocks,
-      });
+      this.fillCell(cell)
     }
 
-  };
+    if (e.keyCode >= 65 && e.keyCode <= 90) {
+      this.fillCell(cell, e.key)
+    }
+
+  }
 
   render() {
     const value = {
@@ -125,18 +114,20 @@ export default class App extends React.Component {
     let blocks = this.state.blocks;
     let counter = 0;
 
+    // This should add down and across, not 'acrossdown'
     let cellProperties = blocks.map((block, i) => {
-      let isBlockFilled = block;
+      
+      let isBlockFilled = block === true;
 
-      let isBlockBeforeFilled = blocks[i - 1] || i % rows === 0;
+      let isBlockBeforeFilled = blocks[i - 1] === true || i % rows === 0;
 
-      let isBlockAfterFilled = blocks[i + 1] || (i + 1) % rows === 0;
+      let isBlockAfterFilled = blocks[i + 1] === true || (i + 1) % rows === 0;
 
-      let isBlockAboveFilled = blocks[i - rows] || i - rows < 0;
+      let isBlockAboveFilled = blocks[i - rows] === true || i - rows < 0;
 
-      let isBlockBelowFilled = blocks[i + rows] || i + rows > rows * rows;
+      let isBlockBelowFilled = blocks[i + rows] === true || i + rows > rows * rows;
 
-      if (isBlockFilled) {
+       if (isBlockFilled) {
         return [null, null];
       } else if (
         isBlockAboveFilled &&
