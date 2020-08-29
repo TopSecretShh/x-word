@@ -12,6 +12,7 @@ export default class App extends React.Component {
     cols: 15,
     title: "Untitled",
     author: "Anonymous",
+    custom: false,
     blocks: Array(225).fill(false),
     selectedCell: null,
   };
@@ -39,7 +40,18 @@ export default class App extends React.Component {
         blocks: Array(441).fill(false),
         selectedCell: null,
       });
+    } else if (value === "custom") {
+      this.setState({
+        custom: true,
+      });
     }
+  };
+
+  handleSubmitCustom = (e) => {
+    this.setState({
+      rows: e.target.rows.value,
+      cols: e.target.cols.value,
+    });
   };
 
   handlePatternBtn = () => {
@@ -86,30 +98,24 @@ export default class App extends React.Component {
 
   handleKeydown = (e) => {
     const cell = this.state.selectedCell;
-    const rows = this.state.rows
-    const cols = this.state.cols
-    const totalSquares = rows * cols - 1
-    const cellTwin = totalSquares - cell
+    const rows = this.state.rows;
+    const cols = this.state.cols;
+    const totalSquares = rows * cols - 1;
+    const cellTwin = totalSquares - cell;
     const blocks = [...this.state.blocks];
-   
 
     blocks[cell] = !blocks[cell];
 
-    
-
-    
-    if (cell !== Math.floor(totalSquares / 2))
-    {
+    if (cell !== Math.floor(totalSquares / 2)) {
       blocks[cellTwin] = !blocks[cellTwin];
     }
-    
+
     // This is where the problem was for setting the first square! I put this in to prevent period from working if nothing was selected, but it also prevented it from working with cell = 0!
     if (e.code === "Period" && (cell || cell === 0)) {
       this.setState({
         blocks: blocks,
       });
     }
-
   };
 
   render() {
@@ -120,6 +126,8 @@ export default class App extends React.Component {
       author: this.state.author,
       selectCell: this.selectCell,
     };
+
+    const custom = this.state.custom;
 
     let rows = this.state.rows;
     let blocks = this.state.blocks;
@@ -178,6 +186,37 @@ export default class App extends React.Component {
             >
               Sunday
             </button>
+            <button
+              type="button"
+              value="custom"
+              onClick={(e) => this.setSize(e.target.value)}
+            >
+              Custom
+            </button>
+            {custom ? (
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  this.handleSubmitCustom(e);
+                }}
+              >
+                <fieldset className="custom-size">
+                  <label>
+                    # of rows:{"  "}
+                    <input type="number" name="rows" min={3} max={30} />
+                  </label>
+                  <br />
+                  <label>
+                    # of columns:{" "}
+                    <input type="number" name="cols" min={3} max={30} />
+                  </label>
+                  <br />
+                  <button type="submit">Enter</button>
+                </fieldset>
+              </form>
+            ) : (
+              ""
+            )}
           </div>
           <div className="puzzle">
             <Grid
