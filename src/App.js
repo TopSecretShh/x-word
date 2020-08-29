@@ -53,6 +53,11 @@ export default class App extends React.Component {
         custom: true,
       });
     }
+    if (this.state.custom) {
+      this.setState({
+        custom: false,
+      });
+    }
   };
 
   handleSubmitCustom = (e) => {
@@ -173,54 +178,63 @@ export default class App extends React.Component {
           <h1>{this.state.title}</h1>
           <p>by {this.state.author}</p>
 
-          <div className="size-btns">
-            <h3>Size</h3>
-            <button
-              type="button"
-              value="daily"
-              onClick={(e) => this.setSize(e.target.value)}
-            >
-              Daily
-            </button>
-            <button
-              type="button"
-              value="sunday"
-              onClick={(e) => this.setSize(e.target.value)}
-            >
-              Sunday
-            </button>
-            <button
-              type="button"
-              value="custom"
-              onClick={(e) => this.setSize(e.target.value)}
-            >
-              Custom
-            </button>
-            {custom ? (
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  this.handleSubmitCustom(e);
-                }}
+          <div className="puzzle-options">
+            <div className="size-btns">
+              <h3>Size</h3>
+              <button
+                type="button"
+                value="daily"
+                onClick={(e) => this.setSize(e.target.value)}
               >
-                <fieldset className="custom-size">
-                  <label>
-                    # of rows:{"  "}
-                    <input type="number" name="rows" min={3} max={30} />
-                  </label>
-                  <br />
-                  <label>
-                    # of columns:{" "}
-                    <input type="number" name="cols" min={3} max={30} />
-                  </label>
-                  <br />
-                  <button type="submit">Enter</button>
-                </fieldset>
-              </form>
-            ) : (
-              ""
-            )}
+                Daily
+              </button>
+              <button
+                type="button"
+                value="sunday"
+                onClick={(e) => this.setSize(e.target.value)}
+              >
+                Sunday
+              </button>
+              <button
+                type="button"
+                value="custom"
+                onClick={(e) => this.setSize(e.target.value)}
+              >
+                Custom
+              </button>
+              {custom ? (
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    this.handleSubmitCustom(e);
+                  }}
+                >
+                  <fieldset className="custom-size">
+                    <label>
+                      # of rows:{"  "}
+                      <input type="number" name="rows" min={3} max={30} />
+                    </label>
+                    <br />
+                    <label>
+                      # of columns:{" "}
+                      <input type="number" name="cols" min={3} max={30} />
+                    </label>
+                    <br />
+                    <button type="submit">Enter</button>
+                  </fieldset>
+                </form>
+              ) : (
+                ""
+              )}
+            </div>
+            <div className="pattern-btn">
+              <h3>Pattern</h3>
+              <button type="button" onClick={() => this.handlePatternBtn()}>
+                Pattern
+              </button>
+            </div>
           </div>
+
           <div className="puzzle">
             <Grid
               selectedCell={this.state.selectedCell}
@@ -229,13 +243,6 @@ export default class App extends React.Component {
               cellProperties={cellProperties}
             />
             <Clues blocks={cellProperties} />
-          </div>
-
-          <div className="pattern-btn">
-            <h3>Pattern</h3>
-            <button type="button" onClick={() => this.handlePatternBtn()}>
-              Pattern
-            </button>
           </div>
         </div>
       </Context.Provider>

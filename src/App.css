@@ -13,8 +13,12 @@
   display: flex;
 }
 
+.puzzle-options {
+  display: flex;
+}
+
 .crossword__cell {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   fill: white;
   cursor: pointer;
 }
@@ -57,14 +61,14 @@ svg[viewBox] {
   font-weight: 500;
 }
 
-@media (max-width: 450px) { 
+@media (max-width: 450px) {
   .crossword__cell--number {
     font-size: 11px;
     font-weight: 700;
-    transform: translateY(2px)
+    transform: translateY(2px);
   }
   .crossword__cell--letter {
-    transform: translateY(2px)
+    transform: translateY(2px);
   }
 }
 
