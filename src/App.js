@@ -25,6 +25,7 @@ export default class App extends React.Component {
   };
 
   // Pressing Tab twice is causing TypeError: this.handleKeyDown is not a function
+  // sometimes pressing command key also causes this.handleKeyDown is not a function
   componentDidMount() {
     document.addEventListener("keydown", this.handleKeydown);
   }
