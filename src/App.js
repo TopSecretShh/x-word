@@ -20,6 +20,7 @@ export default class App extends React.Component {
     author: "Anonymous",
     blocks: Array(225).fill(false),
     selectedCell: null,
+    orientationIsHorizontal: true
   };
 
   
@@ -70,10 +71,14 @@ export default class App extends React.Component {
     const totalSquares = rows * cols - 1;
     const cellTwin = totalSquares - cell;
     const blocks = [...this.state.blocks]; 
+    const nextCell = this.state.orientationIsHorizontal ? cell + 1 : cell + rows
 
     if (typeof character === "string") {
 
       blocks[cell] = character.toUpperCase()
+      this.setState({
+        selectedCell: nextCell
+      })
     } else {
       blocks[cell] = !blocks[cell];
     
