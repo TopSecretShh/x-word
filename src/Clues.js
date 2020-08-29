@@ -1,16 +1,19 @@
 import React from "react";
 
 function Clues({ blocks }) {
-  let across = blocks.map((b, i) => {
-    return b[1] === "across" || b[1] === "acrossdown" ? (
-      <li key={i}>{b[0]}</li>
-    ) : null;
-  });
-  let down = blocks.map((b, i) => {
-    return b[1] === "down" || b[1] === "acrossdown" ? (
-      <li key={i}>{b[0]}</li>
-    ) : null;
-  });
+let across = []
+let down = []
+
+blocks.forEach((b, i) => {
+  if (b[1] === "across") {
+    across.push(<li key={i}>{b[0]}</li>)
+  } else if (b[1] === "down") {
+    down.push(<li key={i}>{b[0]}</li>)
+  } else if (b[1] === "acrossdown") {
+    across.push(<li key={i}>{b[0]}</li>)
+    down.push(<li key={i}>{b[0]}</li>)
+  }
+})
 
   return (
     <div className="clues">
