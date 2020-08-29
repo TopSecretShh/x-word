@@ -59,6 +59,8 @@ export default class App extends React.Component {
     this.setState({
       rows: e.target.rows.value,
       cols: e.target.cols.value,
+      blocks: Array(e.target.rows.value * e.target.cols.value).fill(false),
+      selectedCell: null,
     });
   };
 
