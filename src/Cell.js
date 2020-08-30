@@ -2,7 +2,7 @@ import React from 'react';
 
 
   
-function Cell({cellSize, row, col, cellNumber, selectCell, selectedCell, blocked, cellNumberLabel, cellCharacterLabel}) 
+function Cell({cellSize, row, col, cellNumber, inputCell, selectCell, selectedCell, blocked, cellNumberLabel, cellCharacterLabel}) 
 { 
   return <g   
           className={`crossword__cell ${selectedCell ? 'crossword__cell--selected' : ""} ${(blocked) ? 'crossword__cell--filled' : ""}`}>
@@ -12,11 +12,13 @@ function Cell({cellSize, row, col, cellNumber, selectCell, selectedCell, blocked
               width={cellSize - 1} 
               height={cellSize - 1}
               onClick={() => selectCell(cellNumber)}
+              onKeyDown={(e) => inputCell(e)}
+              tabIndex="0"
               >
             </rect>
             <text 
               className='crossword__cell--letter'
-              x={col * cellSize + 10}
+              x={col * cellSize + 16}
               y={row * cellSize + 24}>
                 {cellCharacterLabel}
             </text>

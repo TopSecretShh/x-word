@@ -9,6 +9,7 @@ import "./App.css";
 // Blocking a lettered square or lettering a block square, does not work symmetrically
 // Keydown problems causing crashes
 // Sunday letter and number positioning
+// Too many columns extend beyond area
 
 export default class App extends React.Component {
   static contextType = Context;
@@ -26,13 +27,13 @@ export default class App extends React.Component {
 
   // Pressing Tab twice is causing TypeError: this.handleKeyDown is not a function
   // sometimes pressing command key also causes this.handleKeyDown is not a function
-  componentDidMount() {
-    document.addEventListener("keydown", this.handleKeydown);
-  }
+  // componentDidMount() {
+  //   document.addEventListener("keydown", this.handleKeydown);
+  // }
 
-  componentWillUnmount() {
-    document.removeEventListener("keydown", this.handleKeydown);
-  }
+  // componentWillUnmount() {
+  //   document.removeEventListener("keydown", this.handleKeydown);
+  // }
 
   setSize = (value) => {
     if (value === "daily") {
@@ -115,10 +116,10 @@ export default class App extends React.Component {
   handleKeydown = (e) => {
     const cell = this.state.selectedCell;
 
-    if (e.code === "Period" && (cell || cell === 0)) {
+    if (e.key === "." && (cell || cell === 0)) {
       this.fillCell(cell);
     }
-
+    // keyCode is depreciated, need to change
     if (e.keyCode >= 65 && e.keyCode <= 90) {
       this.fillCell(cell, e.key);
     }
@@ -136,6 +137,7 @@ export default class App extends React.Component {
     const custom = this.state.custom;
 
     let rows = this.state.rows;
+    let cols = this.state.cols;
     let blocks = this.state.blocks;
     let counter = 0;
     let cellOrientation = []
@@ -145,9 +147,9 @@ export default class App extends React.Component {
     
     blocks.forEach((_, i) => {
 
-      let isBlockBeforeFilled = blocks[i - 1] === true || i % rows === 0;
+      let isBlockBeforeFilled = blocks[i - 1] === true || i % cols === 0;
 
-      let isBlockAfterFilled = blocks[i + 1] === true || (i + 1) % rows === 0;
+      let isBlockAfterFilled = blocks[i + 1] === true || (i + 1) % cols === 0;
 
       let isBlockAboveFilled = blocks[i - rows] === true || i - rows < 0;
 
@@ -178,7 +180,7 @@ export default class App extends React.Component {
     });
     return (
       <Context.Provider value={value}>
-        <div className="App" onKeyDown={() => this.handleKeyDown()}>
+        <div className="App">
           <h1>{this.state.title}</h1>
           <p>by {this.state.author}</p>
 
@@ -245,6 +247,7 @@ export default class App extends React.Component {
               selectCell={(cell) => this.selectCell(cell)}
               blocks={this.state.blocks}
               cellNumber={cellNumber}
+              inputCell={(cell) => this.handleKeydown(cell)}
               />
             <Clues 
               cellOrientation={cellOrientation}

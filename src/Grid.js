@@ -29,6 +29,7 @@ export default class Grid extends React.Component {
             col={j}
             cellNumber={rows * i + j}
             selectCell={this.props.selectCell}
+            inputCell={this.props.inputCell}
             selectedCell={rows * i + j === this.props.selectedCell}
             blocked={this.props.blocks[rows * i + j] === true}
             cellCharacterLabel={this.props.blocks[rows * i + j]}

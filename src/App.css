@@ -59,6 +59,7 @@ svg[viewBox] {
   fill: black;
   font-size: 17px;
   font-weight: 500;
+  text-anchor: middle;
 }
 
 @media (max-width: 450px) {
