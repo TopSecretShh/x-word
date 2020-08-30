@@ -110,7 +110,6 @@ export default class App extends React.Component {
     this.setState({
       blocks: blocks,
     });
-    console.log(blocks);
   };
 
   handleKeydown = (e) => {
@@ -139,10 +138,12 @@ export default class App extends React.Component {
     let rows = this.state.rows;
     let blocks = this.state.blocks;
     let counter = 0;
+    let cellOrientation = []
+    let cellNumber = []
 
     // This should add down and across, not 'acrossdown'
-    let cellProperties = blocks.map((block, i) => {
-      let isBlockFilled = block === true;
+    
+    blocks.forEach((_, i) => {
 
       let isBlockBeforeFilled = blocks[i - 1] === true || i % rows === 0;
 
@@ -152,26 +153,28 @@ export default class App extends React.Component {
 
       let isBlockBelowFilled =
         blocks[i + rows] === true || i + rows > rows * rows;
-
-      if (isBlockFilled) {
-        return [null, null];
-      } else if (
+     
+     if (
         isBlockAboveFilled &&
         isBlockBeforeFilled &&
         !isBlockAfterFilled &&
         !isBlockBelowFilled
       ) {
         counter++;
-        return [counter, "acrossdown"];
+        cellNumber.push(counter)
+        cellOrientation.push("acrossdown")
       } else if (isBlockBeforeFilled && !isBlockAfterFilled) {
         counter++;
-        return [counter, "across"];
+        cellNumber.push(counter)
+        cellOrientation.push("across")
       } else if (isBlockAboveFilled && !isBlockBelowFilled) {
         counter++;
-        return [counter, "down"];
+        cellNumber.push(counter)
+        cellOrientation.push("down")
+      } else {
+        cellOrientation.push(null)
+        cellNumber.push(null)
       }
-
-      return [null, null];
     });
     return (
       <Context.Provider value={value}>
@@ -241,9 +244,11 @@ export default class App extends React.Component {
               selectedCell={this.state.selectedCell}
               selectCell={(cell) => this.selectCell(cell)}
               blocks={this.state.blocks}
-              cellProperties={cellProperties}
-            />
-            <Clues blocks={cellProperties} />
+              cellNumber={cellNumber}
+              />
+            <Clues 
+              cellOrientation={cellOrientation}
+              cellNumber={cellNumber} />
           </div>
         </div>
       </Context.Provider>
