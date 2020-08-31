@@ -24,10 +24,10 @@
 }
 
 .crossword__container--grid-wrapper {
-  min-width: 250px;
+  min-width: 320px;
   max-width: 500px;
   position: relative;
-  flex-basis: 90%;
+  flex-basis: 100%;
 }
 
 svg[viewBox] {

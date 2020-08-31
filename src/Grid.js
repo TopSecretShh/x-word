@@ -18,26 +18,23 @@ export default class Grid extends React.Component {
     let rows = this.context.rows;
     let cols = this.context.cols;
     let size = 500 / rows;
-  
-    let grid = Array.from({ length: rows }).map((_, i) => (
-      <React.Fragment key={i}>
-        {Array.from({ length: cols }).map((_, j) => (
-          <Cell
-            key={[i, j]}
-            cellSize={size}
-            row={i}
-            col={j}
-            cellNumber={rows * i + j}
-            selectCell={this.props.selectCell}
-            inputCell={this.props.inputCell}
-            selectedCell={rows * i + j === this.props.selectedCell}
-            blocked={this.props.blocks[rows * i + j] === true}
-            cellCharacterLabel={this.props.blocks[rows * i + j]}
-            cellNumberLabel={this.props.cellNumber[rows * i + j]}
-          />
-        ))}
-      </React.Fragment>
-    ));
+    let blocks = this.props.blocks
+    
+    let grid = blocks.map((block, i) => {
+      return <Cell
+              key={i}
+              cellSize={size}
+              row={Math.floor(i / cols)}
+              col={i % cols}
+              cellNumber={i}
+              selectCell={this.props.selectCell}
+              inputCell={this.props.inputCell}
+              selectedCell={i === this.props.selectedCell}
+              blocked={block === true}
+              cellCharacterLabel={block}
+              cellNumberLabel={this.props.cellNumber[i]}
+            />
+    })
     return grid;
   };
 

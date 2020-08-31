@@ -7,7 +7,6 @@ import "./App.css";
 
 // Problems
 // Blocking a lettered square or lettering a block square, does not work symmetrically
-// Keydown problems causing crashes
 // Sunday letter and number positioning
 // Too many columns extend beyond area
 
@@ -15,25 +14,15 @@ export default class App extends React.Component {
   static contextType = Context;
 
   state = {
-    rows: 15,
-    cols: 15,
+    rows: 6,
+    cols: 3,
     title: "Untitled",
     author: "Anonymous",
     custom: false,
-    blocks: Array(225).fill(false),
+    blocks: Array(18).fill(false),
     selectedCell: null,
     orientationIsHorizontal: true,
   };
-
-  // Pressing Tab twice is causing TypeError: this.handleKeyDown is not a function
-  // sometimes pressing command key also causes this.handleKeyDown is not a function
-  // componentDidMount() {
-  //   document.addEventListener("keydown", this.handleKeydown);
-  // }
-
-  // componentWillUnmount() {
-  //   document.removeEventListener("keydown", this.handleKeydown);
-  // }
 
   setSize = (value) => {
     if (value === "daily") {
@@ -90,10 +79,10 @@ export default class App extends React.Component {
     const cols = this.state.cols;
     const totalSquares = rows * cols - 1;
     const cellTwin = totalSquares - cell;
-    const blocks = [...this.state.blocks];
+    const blocks = this.state.blocks;
     const nextCell = this.state.orientationIsHorizontal
       ? cell + 1
-      : cell + rows;
+      : cell + cols;
 
     if (typeof character === "string") {
       blocks[cell] = character.toUpperCase();
@@ -111,6 +100,7 @@ export default class App extends React.Component {
     this.setState({
       blocks: blocks,
     });
+    console.log(this.state.blocks)
   };
 
   handleKeydown = (e) => {
@@ -143,40 +133,50 @@ export default class App extends React.Component {
     let cellOrientation = []
     let cellNumber = []
 
-    // This should add down and across, not 'acrossdown'
+  
     
     blocks.forEach((_, i) => {
 
-      let isBlockBeforeFilled = blocks[i - 1] === true || i % cols === 0;
+      let isBlockFilled = blocks[i] === true;
 
-      let isBlockAfterFilled = blocks[i + 1] === true || (i + 1) % cols === 0;
+      let isBlockBeforeFilled = blocks[i - 1] === true ||
+      i % cols === 0;
 
-      let isBlockAboveFilled = blocks[i - rows] === true || i - rows < 0;
+      let isBlockAfterFilled = blocks[i + 1] === true ||
+      (i + 1) % cols === 0;
 
-      let isBlockBelowFilled =
-        blocks[i + rows] === true || i + rows > rows * rows;
+      let isBlockAboveFilled = blocks[i - cols] === true ||
+      i - cols < 0;
+
+      let isBlockBelowFilled = blocks[i + cols] === true ||
+      i + cols >= rows * cols;
      
-     if (
-        isBlockAboveFilled &&
-        isBlockBeforeFilled &&
-        !isBlockAfterFilled &&
-        !isBlockBelowFilled
-      ) {
-        counter++;
-        cellNumber.push(counter)
-        cellOrientation.push("acrossdown")
-      } else if (isBlockBeforeFilled && !isBlockAfterFilled) {
-        counter++;
-        cellNumber.push(counter)
-        cellOrientation.push("across")
-      } else if (isBlockAboveFilled && !isBlockBelowFilled) {
-        counter++;
-        cellNumber.push(counter)
-        cellOrientation.push("down")
-      } else {
+      if (isBlockFilled) {
         cellOrientation.push(null)
-        cellNumber.push(null)
+        cellNumber.push(null) 
+        return
       }
+      if (
+          isBlockAboveFilled &&
+          isBlockBeforeFilled &&
+          !isBlockAfterFilled &&
+          !isBlockBelowFilled
+        ) {
+          counter++;
+          cellNumber.push(counter)
+          cellOrientation.push("acrossdown")    // This should add down and across, not 'acrossdown'
+        } else if (isBlockBeforeFilled && !isBlockAfterFilled) {
+          counter++;
+          cellNumber.push(counter)
+          cellOrientation.push("across")
+        } else if (isBlockAboveFilled && !isBlockBelowFilled) {
+          counter++;
+          cellNumber.push(counter)
+          cellOrientation.push("down")
+        } else {
+          cellOrientation.push(null)
+          cellNumber.push(null)
+        }
     });
     return (
       <Context.Provider value={value}>

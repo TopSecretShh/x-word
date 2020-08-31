@@ -2,7 +2,18 @@ import React from 'react';
 
 
   
-function Cell({cellSize, row, col, cellNumber, inputCell, selectCell, selectedCell, blocked, cellNumberLabel, cellCharacterLabel}) 
+function Cell(
+  {cellSize, 
+  row, 
+  col,
+  cellNumber, 
+  inputCell, 
+  selectCell, 
+  selectedCell, 
+  blocked, 
+  cellNumberLabel, 
+  cellCharacterLabel}
+  ) 
 { 
   return <g   
           className={`crossword__cell ${selectedCell ? 'crossword__cell--selected' : ""} ${(blocked) ? 'crossword__cell--filled' : ""}`}>
