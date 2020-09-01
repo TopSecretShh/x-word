@@ -15,15 +15,15 @@ export default class Grid extends React.Component {
   // all letters should be in an across and down word
 
   renderGrid = () => {
-    let rows = this.context.rows;
+
+    
     let cols = this.context.cols;
-    let size = 500 / rows;
     let blocks = this.props.blocks
     
     let grid = blocks.map((block, i) => {
       return <Cell
               key={i}
-              cellSize={size}
+              cellSize={33}
               row={Math.floor(i / cols)}
               col={i % cols}
               cellNumber={i}
@@ -39,12 +39,14 @@ export default class Grid extends React.Component {
   };
 
   render() {
+    let width = this.context.cols * 33;
+    let height = this.context.rows * 33;
     return (
       <div className="crossword__container--grid-wrapper">
-        <svg viewBox={`0 0 500 500`} className="Grid" id="grid">
-          {this.renderGrid()}
+        <svg viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="xMinYMin slice" className="Grid" id="grid">
+          {this.renderGrid()} 
         </svg>
-      </div>
+    </div>
     );
   }
 }
