@@ -182,15 +182,12 @@ export default class App extends React.Component {
     return (
       <Context.Provider value={value}>
         <div className="App">
-          <Switch>
+          {/* <Switch>
             <Route exact path="/" component={Landing} />
             <Route path="/login" component={Login} />
             <Route path="/signup" component={SignUp} />
             <Route path="/home" component={Home} />
-          </Switch>
-
-          <h1>{this.state.title}</h1>
-          <p>by {this.state.author}</p>
+          </Switch> */}
 
           <div className="puzzle-options">
             <div className="size-btns">
