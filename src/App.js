@@ -1,4 +1,11 @@
 import React from "react";
+import { Route, Switch } from "react-router-dom";
+
+import Landing from "./Landing";
+import Login from "./Login";
+import SignUp from "./SignUp";
+import Home from "./Home";
+
 import Grid from "./Grid";
 import Clues from "./Clues";
 import PATTERNONE from "./Patterns.js";
@@ -100,7 +107,7 @@ export default class App extends React.Component {
     this.setState({
       blocks: blocks,
     });
-    console.log(this.state.blocks)
+    console.log(this.state.blocks);
   };
 
   handleKeydown = (e) => {
@@ -130,57 +137,58 @@ export default class App extends React.Component {
     let cols = this.state.cols;
     let blocks = this.state.blocks;
     let counter = 0;
-    let cellOrientation = []
-    let cellNumber = []
+    let cellOrientation = [];
+    let cellNumber = [];
 
-  
-    
     blocks.forEach((_, i) => {
-
       let isBlockFilled = blocks[i] === true;
 
-      let isBlockBeforeFilled = blocks[i - 1] === true ||
-      i % cols === 0;
+      let isBlockBeforeFilled = blocks[i - 1] === true || i % cols === 0;
 
-      let isBlockAfterFilled = blocks[i + 1] === true ||
-      (i + 1) % cols === 0;
+      let isBlockAfterFilled = blocks[i + 1] === true || (i + 1) % cols === 0;
 
-      let isBlockAboveFilled = blocks[i - cols] === true ||
-      i - cols < 0;
+      let isBlockAboveFilled = blocks[i - cols] === true || i - cols < 0;
 
-      let isBlockBelowFilled = blocks[i + cols] === true ||
-      i + cols >= rows * cols;
-     
+      let isBlockBelowFilled =
+        blocks[i + cols] === true || i + cols >= rows * cols;
+
       if (isBlockFilled) {
-        cellOrientation.push(null)
-        cellNumber.push(null) 
-        return
+        cellOrientation.push(null);
+        cellNumber.push(null);
+        return;
       }
       if (
-          isBlockAboveFilled &&
-          isBlockBeforeFilled &&
-          !isBlockAfterFilled &&
-          !isBlockBelowFilled
-        ) {
-          counter++;
-          cellNumber.push(counter)
-          cellOrientation.push("acrossdown")    // This should add down and across, not 'acrossdown'
-        } else if (isBlockBeforeFilled && !isBlockAfterFilled) {
-          counter++;
-          cellNumber.push(counter)
-          cellOrientation.push("across")
-        } else if (isBlockAboveFilled && !isBlockBelowFilled) {
-          counter++;
-          cellNumber.push(counter)
-          cellOrientation.push("down")
-        } else {
-          cellOrientation.push(null)
-          cellNumber.push(null)
-        }
+        isBlockAboveFilled &&
+        isBlockBeforeFilled &&
+        !isBlockAfterFilled &&
+        !isBlockBelowFilled
+      ) {
+        counter++;
+        cellNumber.push(counter);
+        cellOrientation.push("acrossdown"); // This should add down and across, not 'acrossdown'
+      } else if (isBlockBeforeFilled && !isBlockAfterFilled) {
+        counter++;
+        cellNumber.push(counter);
+        cellOrientation.push("across");
+      } else if (isBlockAboveFilled && !isBlockBelowFilled) {
+        counter++;
+        cellNumber.push(counter);
+        cellOrientation.push("down");
+      } else {
+        cellOrientation.push(null);
+        cellNumber.push(null);
+      }
     });
     return (
       <Context.Provider value={value}>
         <div className="App">
+          <Switch>
+            <Route exact path="/" component={Landing} />
+            <Route path="/login" component={Login} />
+            <Route path="/signup" component={SignUp} />
+            <Route path="/home" component={Home} />
+          </Switch>
+
           <h1>{this.state.title}</h1>
           <p>by {this.state.author}</p>
 
@@ -218,12 +226,12 @@ export default class App extends React.Component {
                   <fieldset className="custom-size">
                     <label>
                       # of rows:{"  "}
-                      <input type="number" name="rows" min={3} max={30} />
+                      <input type="number" name="rows" min={3} max={25} />
                     </label>
                     <br />
                     <label>
                       # of columns:{" "}
-                      <input type="number" name="cols" min={3} max={30} />
+                      <input type="number" name="cols" min={3} max={25} />
                     </label>
                     <br />
                     <button type="submit">Enter</button>
@@ -248,10 +256,8 @@ export default class App extends React.Component {
               blocks={this.state.blocks}
               cellNumber={cellNumber}
               inputCell={(cell) => this.handleKeydown(cell)}
-              />
-            <Clues 
-              cellOrientation={cellOrientation}
-              cellNumber={cellNumber} />
+            />
+            <Clues cellOrientation={cellOrientation} cellNumber={cellNumber} />
           </div>
         </div>
       </Context.Provider>
