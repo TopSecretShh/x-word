@@ -1,10 +1,10 @@
 import React from "react";
-import { Route, Switch } from "react-router-dom";
+// import { Route, Switch } from "react-router-dom";
 
-import Landing from "./Landing";
-import Login from "./Login";
-import SignUp from "./SignUp";
-import Home from "./Home";
+// import Landing from "./Landing";
+// import Login from "./Login";
+// import SignUp from "./SignUp";
+// import Home from "./Home";
 
 import Grid from "./Grid";
 import Clues from "./Clues";
@@ -188,6 +188,11 @@ export default class App extends React.Component {
             <Route path="/signup" component={SignUp} />
             <Route path="/home" component={Home} />
           </Switch> */}
+
+          <header>
+            <h1>{this.context.title}</h1>
+            <p>by {this.context.author}</p>
+          </header>
 
           <div className="puzzle-options">
             <div className="size-btns">

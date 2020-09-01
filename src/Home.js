@@ -5,6 +5,8 @@ import Grid from "./Grid";
 import Clues from "./Clues";
 import PATTERNONE from "./Patterns";
 
+import "./App.css";
+
 export default class Home extends React.Component {
   static contextType = Context;
 
