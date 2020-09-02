@@ -8,11 +8,26 @@ export default class Login extends React.Component {
     error: null,
   };
 
+  handleSubmit = () => {
+    console.log("logged in");
+    this.handleLoginSuccess();
+  };
+
+  handleLoginSuccess = () => {
+    this.props.history.push("/home");
+  };
+
   render() {
     const { error } = this.state;
     return (
       <div className="Login">
-        <form className="form-login">
+        <form
+          className="form-login"
+          onSubmit={(e) => {
+            e.preventDefault();
+            this.handleSubmit();
+          }}
+        >
           <fieldset>
             <legend>Login</legend>
             <div className="error">{error && <p>{error}</p>}</div>
