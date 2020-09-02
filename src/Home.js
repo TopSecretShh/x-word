@@ -1,36 +1,27 @@
 import React from "react";
-// import { Route, Switch } from "react-router-dom";
-
-// import Landing from "./Landing";
-// import Login from "./Login";
-// import SignUp from "./SignUp";
-// import Home from "./Home";
+import Context from "./Context";
 
 import Grid from "./Grid";
 import Clues from "./Clues";
-import PATTERNONE from "./Patterns.js";
-import Context from "./Context";
+import PATTERNONE from "./Patterns";
+
 import "./App.css";
 
-// Problems
-// Blocking a lettered square or lettering a block square, does not work symmetrically
-// Sunday letter and number positioning
-// Too many columns extend beyond area
-
-export default class App extends React.Component {
+export default class Home extends React.Component {
   static contextType = Context;
 
   state = {
-    rows: 5,
-    cols: 14,
+    rows: 6,
+    cols: 3,
     title: "Untitled",
     author: "Anonymous",
     custom: false,
-    blocks: Array(70).fill(false),
+    blocks: Array(18).fill(false),
     selectedCell: null,
     orientationIsHorizontal: true,
   };
 
+  /* BEGIN GRID SIZE */
   setSize = (value) => {
     if (value === "daily") {
       this.setState({
@@ -65,9 +56,10 @@ export default class App extends React.Component {
       blocks: Array(e.target.rows.value * e.target.cols.value).fill(false),
       selectedCell: null,
     });
-    
   };
+  /* END GRID SIZE */
 
+  /* BEGIN PATTERN */
   handlePatternBtn = () => {
     if (this.state.rows === 15) {
       this.setState({
@@ -75,7 +67,23 @@ export default class App extends React.Component {
       });
     }
   };
+  /* END PATTERN */
 
+  /* BEGIN KEYBOARD HANDLER */
+  handleKeydown = (e) => {
+    const cell = this.state.selectedCell;
+
+    if (e.key === "." && (cell || cell === 0)) {
+      this.fillCell(cell);
+    }
+    // keyCode is depreciated, need to change
+    if (e.keyCode >= 65 && e.keyCode <= 90) {
+      this.fillCell(cell, e.key);
+    }
+  };
+  /* END KEYBOARD HANDLER */
+
+  /* BEGIN CELL STUFF */
   selectCell = (value) => {
     this.setState({
       selectedCell: value,
@@ -86,7 +94,7 @@ export default class App extends React.Component {
     const rows = this.state.rows;
     const cols = this.state.cols;
     const totalSquares = rows * cols - 1;
-    const cellTwin = totalSquares - cell; // At 15 rows 10 cols for example, middle symmetry doesn't work
+    const cellTwin = totalSquares - cell;
     const blocks = this.state.blocks;
     const nextCell = this.state.orientationIsHorizontal
       ? cell + 1
@@ -108,33 +116,11 @@ export default class App extends React.Component {
     this.setState({
       blocks: blocks,
     });
-<<<<<<< HEAD
-=======
     console.log(this.state.blocks);
->>>>>>> 19e6f761071898048beb56e8895f3092f7c5f044
   };
-
-  handleKeydown = (e) => {
-    const cell = this.state.selectedCell;
-
-    if (e.key === "." && (cell || cell === 0)) {
-      this.fillCell(cell);
-    }
-    // keyCode is depreciated, need to change
-    if (e.keyCode >= 65 && e.keyCode <= 90) {
-      this.fillCell(cell, e.key);
-    }
-  };
+  /* END CELL STUFF */
 
   render() {
-    const value = {
-      rows: this.state.rows,
-      cols: this.state.cols,
-      title: this.state.title,
-      author: this.state.author,
-      selectCell: this.selectCell,
-    };
-
     const custom = this.state.custom;
 
     let rows = this.state.rows;
@@ -183,21 +169,15 @@ export default class App extends React.Component {
         cellNumber.push(null);
       }
     });
+
     return (
-      <Context.Provider value={value}>
-        <div className="App">
-          {/* <Switch>
-            <Route exact path="/" component={Landing} />
-            <Route path="/login" component={Login} />
-            <Route path="/signup" component={SignUp} />
-            <Route path="/home" component={Home} />
-          </Switch> */}
+      <div className="Home">
+        <header>
+          <h1>{this.context.title}</h1>
+          <p>by {this.context.author}</p>
+        </header>
 
-          <header>
-            <h1>{this.context.title}</h1>
-            <p>by {this.context.author}</p>
-          </header>
-
+        <main>
           <div className="puzzle-options">
             <div className="size-btns">
               <h3>Size</h3>
@@ -265,8 +245,8 @@ export default class App extends React.Component {
             />
             <Clues cellOrientation={cellOrientation} cellNumber={cellNumber} />
           </div>
-        </div>
-      </Context.Provider>
+        </main>
+      </div>
     );
   }
 }
