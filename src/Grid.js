@@ -28,6 +28,7 @@ export default class Grid extends React.Component {
               col={i % cols}
               cellNumber={i}
               selectCell={this.props.selectCell}
+              changeOrientation={this.props.changeOrientation}
               inputCell={this.props.inputCell}
               selectedCell={i === this.props.selectedCell}
               blocked={block === true}

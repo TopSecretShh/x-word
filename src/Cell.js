@@ -12,7 +12,8 @@ function Cell(
   selectedCell, 
   blocked, 
   cellNumberLabel, 
-  cellCharacterLabel}
+  cellCharacterLabel,
+  changeOrientation}
   ) 
 { 
   return <g   
@@ -23,6 +24,7 @@ function Cell(
               width={cellSize - 1} 
               height={cellSize - 1}
               onClick={() => selectCell(cellNumber)}
+              onDoubleClick={() => changeOrientation()}
               onKeyDown={(e) => inputCell(e)}
               tabIndex="0"
               >

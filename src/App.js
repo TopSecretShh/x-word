@@ -97,6 +97,7 @@ export default class App extends React.Component {
       this.setState({
         selectedCell: nextCell,
       });
+      if (blocks[cellTwin] === true) blocks[cellTwin] = false
     } else {
       blocks[cell] = !blocks[cell];
 
@@ -108,11 +109,15 @@ export default class App extends React.Component {
     this.setState({
       blocks: blocks,
     });
-<<<<<<< HEAD
-=======
-    console.log(this.state.blocks);
->>>>>>> 19e6f761071898048beb56e8895f3092f7c5f044
   };
+
+  handleDoubleClick = () => {
+    this.setState(prevState => {
+      return {
+        orientationIsHorizontal: !prevState.orientationIsHorizontal
+      }
+    })
+  }
 
   handleKeydown = (e) => {
     const cell = this.state.selectedCell;
@@ -127,6 +132,7 @@ export default class App extends React.Component {
   };
 
   render() {
+    console.log(this.state.orientationIsHorizontal)
     const value = {
       rows: this.state.rows,
       cols: this.state.cols,
@@ -262,6 +268,7 @@ export default class App extends React.Component {
               blocks={this.state.blocks}
               cellNumber={cellNumber}
               inputCell={(cell) => this.handleKeydown(cell)}
+              changeOrientation={() => this.handleDoubleClick()}
             />
             <Clues cellOrientation={cellOrientation} cellNumber={cellNumber} />
           </div>
