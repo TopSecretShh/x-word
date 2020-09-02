@@ -21,12 +21,12 @@ export default class App extends React.Component {
   static contextType = Context;
 
   state = {
-    rows: 6,
-    cols: 3,
+    rows: 5,
+    cols: 14,
     title: "Untitled",
     author: "Anonymous",
     custom: false,
-    blocks: Array(18).fill(false),
+    blocks: Array(70).fill(false),
     selectedCell: null,
     orientationIsHorizontal: true,
   };
@@ -65,6 +65,7 @@ export default class App extends React.Component {
       blocks: Array(e.target.rows.value * e.target.cols.value).fill(false),
       selectedCell: null,
     });
+    
   };
 
   handlePatternBtn = () => {
@@ -85,7 +86,7 @@ export default class App extends React.Component {
     const rows = this.state.rows;
     const cols = this.state.cols;
     const totalSquares = rows * cols - 1;
-    const cellTwin = totalSquares - cell;
+    const cellTwin = totalSquares - cell; // At 15 rows 10 cols for example, middle symmetry doesn't work
     const blocks = this.state.blocks;
     const nextCell = this.state.orientationIsHorizontal
       ? cell + 1
@@ -107,7 +108,10 @@ export default class App extends React.Component {
     this.setState({
       blocks: blocks,
     });
+<<<<<<< HEAD
+=======
     console.log(this.state.blocks);
+>>>>>>> 19e6f761071898048beb56e8895f3092f7c5f044
   };
 
   handleKeydown = (e) => {

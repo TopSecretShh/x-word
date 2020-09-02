@@ -1,3 +1,7 @@
+h1, h2, h3, p {
+  margin: 0;
+}
+
 .App {
   margin: 16px;
 }
@@ -24,15 +28,14 @@
 }
 
 .crossword__container--grid-wrapper {
-  min-width: 320px;
-  max-width: 500px;
-  position: relative;
-  flex-basis: 100%;
+   width: 500px;
 }
 
 svg[viewBox] {
   background: black;
   user-select: none;
+  width: 100%;
+
 }
 
 .crossword__cell--selected {
