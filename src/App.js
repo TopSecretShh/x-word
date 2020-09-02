@@ -65,7 +65,6 @@ export default class App extends React.Component {
       blocks: Array(e.target.rows.value * e.target.cols.value).fill(false),
       selectedCell: null,
     });
-    
   };
 
   handlePatternBtn = () => {
@@ -109,6 +108,10 @@ export default class App extends React.Component {
     this.setState({
       blocks: blocks,
     });
+<<<<<<< HEAD
+=======
+    console.log(this.state.blocks);
+>>>>>>> 76e7f9085041d9725bae587b375834304c85bd2c
   };
 
   handleDoubleClick = () => {

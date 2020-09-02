@@ -11,12 +11,12 @@ export default class Home extends React.Component {
   static contextType = Context;
 
   state = {
-    rows: 6,
-    cols: 3,
+    rows: 15,
+    cols: 15,
     title: "Untitled",
     author: "Anonymous",
     custom: false,
-    blocks: Array(18).fill(false),
+    blocks: Array(225).fill(false),
     selectedCell: null,
     orientationIsHorizontal: true,
   };
