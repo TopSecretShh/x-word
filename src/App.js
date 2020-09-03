@@ -154,54 +154,6 @@ export default class App extends React.Component {
       handleKeydown: this.handleKeydown,
     };
 
-    // const custom = this.state.custom;
-
-    // let rows = this.state.rows;
-    // let cols = this.state.cols;
-    // let blocks = this.state.blocks;
-    // let counter = 0;
-    // let cellOrientation = [];
-    // let cellNumber = [];
-
-    // blocks.forEach((_, i) => {
-    //   let isBlockFilled = blocks[i] === true;
-
-    //   let isBlockBeforeFilled = blocks[i - 1] === true || i % cols === 0;
-
-    //   let isBlockAfterFilled = blocks[i + 1] === true || (i + 1) % cols === 0;
-
-    //   let isBlockAboveFilled = blocks[i - cols] === true || i - cols < 0;
-
-    //   let isBlockBelowFilled =
-    //     blocks[i + cols] === true || i + cols >= rows * cols;
-
-    //   if (isBlockFilled) {
-    //     cellOrientation.push(null);
-    //     cellNumber.push(null);
-    //     return;
-    //   }
-    //   if (
-    //     isBlockAboveFilled &&
-    //     isBlockBeforeFilled &&
-    //     !isBlockAfterFilled &&
-    //     !isBlockBelowFilled
-    //   ) {
-    //     counter++;
-    //     cellNumber.push(counter);
-    //     cellOrientation.push("acrossdown"); // This should add down and across, not 'acrossdown'
-    //   } else if (isBlockBeforeFilled && !isBlockAfterFilled) {
-    //     counter++;
-    //     cellNumber.push(counter);
-    //     cellOrientation.push("across");
-    //   } else if (isBlockAboveFilled && !isBlockBelowFilled) {
-    //     counter++;
-    //     cellNumber.push(counter);
-    //     cellOrientation.push("down");
-    //   } else {
-    //     cellOrientation.push(null);
-    //     cellNumber.push(null);
-    //   }
-    // });
     return (
       <Context.Provider value={value}>
         <div className="App">
@@ -211,80 +163,6 @@ export default class App extends React.Component {
             <Route path="/signup" component={SignUp} />
             <Route path="/home" component={Home} />
           </Switch>
-
-          {/* <header>
-            <h1>{this.context.title}</h1>
-            <p>by {this.context.author}</p>
-          </header>
-
-          <div className="puzzle-options">
-            <div className="size-btns">
-              <h3>Size</h3>
-              <button
-                type="button"
-                value="daily"
-                onClick={(e) => this.setSize(e.target.value)}
-              >
-                Daily
-              </button>
-              <button
-                type="button"
-                value="sunday"
-                onClick={(e) => this.setSize(e.target.value)}
-              >
-                Sunday
-              </button>
-              <button
-                type="button"
-                value="custom"
-                onClick={(e) => this.setSize(e.target.value)}
-              >
-                Custom
-              </button>
-              {custom ? (
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    this.handleSubmitCustom(e);
-                  }}
-                >
-                  <fieldset className="custom-size">
-                    <label>
-                      # of rows:{"  "}
-                      <input type="number" name="rows" min={3} max={25} />
-                    </label>
-                    <br />
-                    <label>
-                      # of columns:{" "}
-                      <input type="number" name="cols" min={3} max={25} />
-                    </label>
-                    <br />
-                    <button type="submit">Enter</button>
-                  </fieldset>
-                </form>
-              ) : (
-                ""
-              )}
-            </div>
-            <div className="pattern-btn">
-              <h3>Pattern</h3>
-              <button type="button" onClick={() => this.handlePatternBtn()}>
-                Pattern
-              </button>
-            </div>
-          </div>
-
-          <div className="puzzle">
-            <Grid
-              selectedCell={this.state.selectedCell}
-              selectCell={(cell) => this.selectCell(cell)}
-              blocks={this.state.blocks}
-              cellNumber={cellNumber}
-              inputCell={(cell) => this.handleKeydown(cell)}
-              changeOrientation={() => this.handleDoubleClick()}
-            />
-            <Clues cellOrientation={cellOrientation} cellNumber={cellNumber} />
-          </div> */}
         </div>
       </Context.Provider>
     );

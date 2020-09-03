@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import Context from "./Context";
 
 import Grid from "./Grid";
@@ -61,6 +62,11 @@ export default class Home extends React.Component {
 
     return (
       <div className="Home">
+        <nav>
+          <Link className="btn-alt" to="/">
+            Back to Landing
+          </Link>
+        </nav>
         <header>
           <h1>{this.context.title}</h1>
           <p>by {this.context.author}</p>
