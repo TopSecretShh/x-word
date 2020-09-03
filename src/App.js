@@ -1,10 +1,10 @@
 import React from "react";
-// import { Route, Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 
-// import Landing from "./Landing";
-// import Login from "./Login";
-// import SignUp from "./SignUp";
-// import Home from "./Home";
+import Landing from "./Landing";
+import Login from "./Login";
+import SignUp from "./SignUp";
+import Home from "./Home";
 
 import Grid from "./Grid";
 import Clues from "./Clues";
@@ -21,14 +21,23 @@ export default class App extends React.Component {
   static contextType = Context;
 
   state = {
-    rows: 5,
-    cols: 14,
+    rows: 15,
+    cols: 15,
     title: "Untitled",
     author: "Anonymous",
     custom: false,
-    blocks: Array(70).fill(false),
+    blocks: Array(225).fill(false),
     selectedCell: null,
     orientationIsHorizontal: true,
+
+    // grid: [
+    //   {
+    //     id: 0,
+    //     block: false,
+    //     number: "",
+    //     letter: "",
+    //   },
+    // ],
   };
 
   setSize = (value) => {
@@ -75,131 +84,136 @@ export default class App extends React.Component {
     }
   };
 
-  selectCell = (value) => {
-    this.setState({
-      selectedCell: value,
-    });
-  };
+  // selectCell = (value) => {
+  //   this.setState({
+  //     selectedCell: value,
+  //   });
+  // };
 
-  fillCell = (cell, character) => {
-    const rows = this.state.rows;
-    const cols = this.state.cols;
-    const totalSquares = rows * cols - 1;
-    const cellTwin = totalSquares - cell; // At 15 rows 10 cols for example, middle symmetry doesn't work
-    const blocks = this.state.blocks;
-    const nextCell = this.state.orientationIsHorizontal
-      ? cell + 1
-      : cell + cols;
+  // fillCell = (cell, character) => {
+  //   const rows = this.state.rows;
+  //   const cols = this.state.cols;
+  //   const totalSquares = rows * cols - 1;
+  //   const cellTwin = totalSquares - cell; // At 15 rows 10 cols for example, middle symmetry doesn't work
+  //   const blocks = this.state.blocks;
+  //   const nextCell = this.state.orientationIsHorizontal
+  //     ? cell + 1
+  //     : cell + cols;
 
-    if (typeof character === "string") {
-      blocks[cell] = character.toUpperCase();
-      this.setState({
-        selectedCell: nextCell,
-      });
-      if (blocks[cellTwin] === true) blocks[cellTwin] = false;
-    } else {
-      blocks[cell] = !blocks[cell];
+  //   if (typeof character === "string") {
+  //     blocks[cell] = character.toUpperCase();
+  //     this.setState({
+  //       selectedCell: nextCell,
+  //     });
+  //     if (blocks[cellTwin] === true) blocks[cellTwin] = false;
+  //   } else {
+  //     blocks[cell] = !blocks[cell];
 
-      if (cell !== Math.floor(totalSquares / 2)) {
-        blocks[cellTwin] = !blocks[cellTwin];
-      }
-    }
+  //     if (cell !== Math.floor(totalSquares / 2)) {
+  //       blocks[cellTwin] = !blocks[cellTwin];
+  //     }
+  //   }
 
-    this.setState({
-      blocks: blocks,
-    });
-    console.log(this.state.blocks);
-  };
+  //   this.setState({
+  //     blocks: blocks,
+  //   });
+  //   console.log(this.state.blocks);
+  // };
 
-  handleDoubleClick = () => {
-    this.setState((prevState) => {
-      return {
-        orientationIsHorizontal: !prevState.orientationIsHorizontal,
-      };
-    });
-  };
+  // handleDoubleClick = () => {
+  //   this.setState((prevState) => {
+  //     return {
+  //       orientationIsHorizontal: !prevState.orientationIsHorizontal,
+  //     };
+  //   });
+  // };
 
-  handleKeydown = (e) => {
-    const cell = this.state.selectedCell;
+  // handleKeydown = (e) => {
+  //   const cell = this.state.selectedCell;
 
-    if (e.key === "." && (cell || cell === 0)) {
-      this.fillCell(cell);
-    }
-    // keyCode is depreciated, need to change
-    if (e.keyCode >= 65 && e.keyCode <= 90) {
-      this.fillCell(cell, e.key);
-    }
-  };
+  //   if (e.key === "." && (cell || cell === 0)) {
+  //     this.fillCell(cell);
+  //   }
+  //   // keyCode is depreciated, need to change
+  //   if (e.keyCode >= 65 && e.keyCode <= 90) {
+  //     this.fillCell(cell, e.key);
+  //   }
+  // };
 
   render() {
-    console.log(this.state.orientationIsHorizontal);
     const value = {
       rows: this.state.rows,
       cols: this.state.cols,
+      custom: this.state.custom,
+      blocks: this.state.blocks,
       title: this.state.title,
       author: this.state.author,
+      selectedCell: this.state.selectedCell,
       selectCell: this.selectCell,
+      setSize: this.setSize,
+      handleSubmitCustom: this.handleSubmitCustom,
+      handlePatternBtn: this.handlePatternBtn,
     };
 
-    const custom = this.state.custom;
+    // const custom = this.state.custom;
 
-    let rows = this.state.rows;
-    let cols = this.state.cols;
-    let blocks = this.state.blocks;
-    let counter = 0;
-    let cellOrientation = [];
-    let cellNumber = [];
+    // let rows = this.state.rows;
+    // let cols = this.state.cols;
+    // let blocks = this.state.blocks;
+    // let counter = 0;
+    // let cellOrientation = [];
+    // let cellNumber = [];
 
-    blocks.forEach((_, i) => {
-      let isBlockFilled = blocks[i] === true;
+    // blocks.forEach((_, i) => {
+    //   let isBlockFilled = blocks[i] === true;
 
-      let isBlockBeforeFilled = blocks[i - 1] === true || i % cols === 0;
+    //   let isBlockBeforeFilled = blocks[i - 1] === true || i % cols === 0;
 
-      let isBlockAfterFilled = blocks[i + 1] === true || (i + 1) % cols === 0;
+    //   let isBlockAfterFilled = blocks[i + 1] === true || (i + 1) % cols === 0;
 
-      let isBlockAboveFilled = blocks[i - cols] === true || i - cols < 0;
+    //   let isBlockAboveFilled = blocks[i - cols] === true || i - cols < 0;
 
-      let isBlockBelowFilled =
-        blocks[i + cols] === true || i + cols >= rows * cols;
+    //   let isBlockBelowFilled =
+    //     blocks[i + cols] === true || i + cols >= rows * cols;
 
-      if (isBlockFilled) {
-        cellOrientation.push(null);
-        cellNumber.push(null);
-        return;
-      }
-      if (
-        isBlockAboveFilled &&
-        isBlockBeforeFilled &&
-        !isBlockAfterFilled &&
-        !isBlockBelowFilled
-      ) {
-        counter++;
-        cellNumber.push(counter);
-        cellOrientation.push("acrossdown"); // This should add down and across, not 'acrossdown'
-      } else if (isBlockBeforeFilled && !isBlockAfterFilled) {
-        counter++;
-        cellNumber.push(counter);
-        cellOrientation.push("across");
-      } else if (isBlockAboveFilled && !isBlockBelowFilled) {
-        counter++;
-        cellNumber.push(counter);
-        cellOrientation.push("down");
-      } else {
-        cellOrientation.push(null);
-        cellNumber.push(null);
-      }
-    });
+    //   if (isBlockFilled) {
+    //     cellOrientation.push(null);
+    //     cellNumber.push(null);
+    //     return;
+    //   }
+    //   if (
+    //     isBlockAboveFilled &&
+    //     isBlockBeforeFilled &&
+    //     !isBlockAfterFilled &&
+    //     !isBlockBelowFilled
+    //   ) {
+    //     counter++;
+    //     cellNumber.push(counter);
+    //     cellOrientation.push("acrossdown"); // This should add down and across, not 'acrossdown'
+    //   } else if (isBlockBeforeFilled && !isBlockAfterFilled) {
+    //     counter++;
+    //     cellNumber.push(counter);
+    //     cellOrientation.push("across");
+    //   } else if (isBlockAboveFilled && !isBlockBelowFilled) {
+    //     counter++;
+    //     cellNumber.push(counter);
+    //     cellOrientation.push("down");
+    //   } else {
+    //     cellOrientation.push(null);
+    //     cellNumber.push(null);
+    //   }
+    // });
     return (
       <Context.Provider value={value}>
         <div className="App">
-          {/* <Switch>
+          <Switch>
             <Route exact path="/" component={Landing} />
             <Route path="/login" component={Login} />
             <Route path="/signup" component={SignUp} />
             <Route path="/home" component={Home} />
-          </Switch> */}
+          </Switch>
 
-          <header>
+          {/* <header>
             <h1>{this.context.title}</h1>
             <p>by {this.context.author}</p>
           </header>
@@ -271,7 +285,7 @@ export default class App extends React.Component {
               changeOrientation={() => this.handleDoubleClick()}
             />
             <Clues cellOrientation={cellOrientation} cellNumber={cellNumber} />
-          </div>
+          </div> */}
         </div>
       </Context.Provider>
     );

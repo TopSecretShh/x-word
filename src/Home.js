@@ -10,17 +10,6 @@ import "./App.css";
 export default class Home extends React.Component {
   static contextType = Context;
 
-  state = {
-    rows: 15,
-    cols: 15,
-    title: "Untitled",
-    author: "Anonymous",
-    custom: false,
-    blocks: Array(225).fill(false),
-    selectedCell: null,
-    orientationIsHorizontal: true,
-  };
-
   /* BEGIN GRID SIZE */
   setSize = (value) => {
     if (value === "daily") {
@@ -121,11 +110,11 @@ export default class Home extends React.Component {
   /* END CELL STUFF */
 
   render() {
-    const custom = this.state.custom;
+    const custom = this.context.custom;
 
-    let rows = this.state.rows;
-    let cols = this.state.cols;
-    let blocks = this.state.blocks;
+    let rows = this.context.rows;
+    let cols = this.context.cols;
+    let blocks = this.context.blocks;
     let counter = 0;
     let cellOrientation = [];
     let cellNumber = [];
@@ -184,21 +173,21 @@ export default class Home extends React.Component {
               <button
                 type="button"
                 value="daily"
-                onClick={(e) => this.setSize(e.target.value)}
+                onClick={(e) => this.context.setSize(e.target.value)}
               >
                 Daily
               </button>
               <button
                 type="button"
                 value="sunday"
-                onClick={(e) => this.setSize(e.target.value)}
+                onClick={(e) => this.context.setSize(e.target.value)}
               >
                 Sunday
               </button>
               <button
                 type="button"
                 value="custom"
-                onClick={(e) => this.setSize(e.target.value)}
+                onClick={(e) => this.context.setSize(e.target.value)}
               >
                 Custom
               </button>
@@ -206,7 +195,7 @@ export default class Home extends React.Component {
                 <form
                   onSubmit={(e) => {
                     e.preventDefault();
-                    this.handleSubmitCustom(e);
+                    this.context.handleSubmitCustom(e);
                   }}
                 >
                   <fieldset className="custom-size">
@@ -229,7 +218,10 @@ export default class Home extends React.Component {
             </div>
             <div className="pattern-btn">
               <h3>Pattern</h3>
-              <button type="button" onClick={() => this.handlePatternBtn()}>
+              <button
+                type="button"
+                onClick={() => this.context.handlePatternBtn()}
+              >
                 Pattern
               </button>
             </div>
@@ -237,9 +229,9 @@ export default class Home extends React.Component {
 
           <div className="puzzle">
             <Grid
-              selectedCell={this.state.selectedCell}
+              selectedCell={this.context.selectedCell}
               selectCell={(cell) => this.selectCell(cell)}
-              blocks={this.state.blocks}
+              blocks={this.context.blocks}
               cellNumber={cellNumber}
               inputCell={(cell) => this.handleKeydown(cell)}
             />

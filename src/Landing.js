@@ -13,10 +13,10 @@ export default class Landing extends React.Component {
         <p>Pardon the dust, construction is ongoing.</p>
         <Link className="btn-login" to="/login">
           Login
-        </Link>
+        </Link>{" "}
         <Link className="btn-signup" to="/signup">
           Sign Up
-        </Link>
+        </Link>{" "}
         <Link className="btn-alt" to="/home">
           Skip to Home
         </Link>
