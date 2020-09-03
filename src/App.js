@@ -39,7 +39,6 @@ export default class App extends React.Component {
         blocks: Array(225).fill(false),
         selectedCell: null,
       });
-      this.setGrid(15, 15);
     } else if (value === "sunday") {
       this.setState({
         rows: 21,
