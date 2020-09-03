@@ -39,32 +39,6 @@ export default class Grid extends React.Component {
     return grid;
   };
 
-  setGridArray = (grid) => {
-    // console.log(grid[0].props.children[0]);
-  };
-
-  // numbering
-  // count = 1
-  // box gets number if:
-  //    - first in row
-  //    - block to the left
-  //    - block above
-  // box does not get number if:
-  //    - not first in row
-  //    - no block above
-  //    - no block to left
-  //    - box is block
-
-  // so first, get all boxes (how?)
-  // I guess all td values could be put into state?
-  // something like:
-  // state = {
-  //   squares: [
-  //     {1: ''},
-  //     {2: ''}
-  //   ]
-  // }
-
   render() {
     let width = this.context.cols * 33;
     let height = this.context.rows * 33;

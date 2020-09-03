@@ -1,20 +1,12 @@
-<<<<<<< HEAD
-#grid {
-  margin: 40px;
-  border-collapse: collapse;
-  border: 2px solid black;
-
-  /* this should be responsive, yet fixed so the boxes don't squish */
-  table-layout: fixed;
-  width: 500px;
-=======
-h1, h2, h3, p {
+h1,
+h2,
+h3,
+p {
   margin: 0;
 }
 
 .App {
   margin: 16px;
->>>>>>> feature/cell-select-numbers
 }
 
 #grid {
@@ -39,14 +31,13 @@ h1, h2, h3, p {
 }
 
 .crossword__container--grid-wrapper {
-   width: 500px;
+  width: 500px;
 }
 
 svg[viewBox] {
   background: black;
   user-select: none;
   width: 100%;
-
 }
 
 .crossword__cell--selected {
