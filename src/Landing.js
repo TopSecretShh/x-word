@@ -1,7 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Context from "./Context";
 
 export default class Landing extends React.Component {
+  static contextType = Context;
+
+  handleGuestLogin = () => {
+    this.context.setCurrentUser("guest");
+  };
+
   render() {
     return (
       <div className="Landing">
@@ -17,7 +24,7 @@ export default class Landing extends React.Component {
         <Link className="btn-signup" to="/signup">
           Sign Up
         </Link>{" "}
-        <Link className="btn-alt" to="/home">
+        <Link className="btn-alt" to="/home" onClick={this.handleGuestLogin}>
           Skip to Home
         </Link>
       </div>

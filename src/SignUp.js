@@ -82,6 +82,7 @@ export default class SignUp extends React.Component {
                 type="password"
                 name="password"
                 id="password"
+                minLength={3}
                 aria-label="Create your password"
                 aria-required="true"
                 onChange={(e) => this.updatePassword(e)}
@@ -92,7 +93,7 @@ export default class SignUp extends React.Component {
             <div className="pass-info">
               {/* we can change this to whatever level of security is appropriate to a crossword puzzle generator... */}
               <p>
-                Password must be at least 8 characters long and include your
+                Password must be at least 3 characters long and include your
                 social security number and bank details
               </p>
             </div>

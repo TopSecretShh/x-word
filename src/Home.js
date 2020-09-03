@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import Context from "./Context";
 
 import Grid from "./Grid";
@@ -11,6 +11,8 @@ export default class Home extends React.Component {
   static contextType = Context;
 
   render() {
+    const user = this.context.currentUser;
+
     const custom = this.context.custom;
 
     let rows = this.context.rows;
@@ -60,7 +62,7 @@ export default class Home extends React.Component {
       }
     });
 
-    return (
+    return user ? (
       <div className="Home">
         <nav>
           <Link className="btn-alt" to="/">
@@ -145,6 +147,8 @@ export default class Home extends React.Component {
           </div>
         </main>
       </div>
+    ) : (
+      <Redirect to={{ pathname: "/login" }} />
     );
   }
 }
