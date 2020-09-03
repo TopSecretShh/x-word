@@ -1,36 +1,27 @@
 import React from "react";
-// import { Route, Switch } from "react-router-dom";
-
-// import Landing from "./Landing";
-// import Login from "./Login";
-// import SignUp from "./SignUp";
-// import Home from "./Home";
+import Context from "./Context";
 
 import Grid from "./Grid";
 import Clues from "./Clues";
-import PATTERNONE from "./Patterns.js";
-import Context from "./Context";
+import PATTERNONE from "./Patterns";
+
 import "./App.css";
 
-// Problems
-// Blocking a lettered square or lettering a block square, does not work symmetrically
-// Sunday letter and number positioning
-// Too many columns extend beyond area
-
-export default class App extends React.Component {
+export default class Home extends React.Component {
   static contextType = Context;
 
   state = {
-    rows: 5,
-    cols: 14,
+    rows: 15,
+    cols: 15,
     title: "Untitled",
     author: "Anonymous",
     custom: false,
-    blocks: Array(70).fill(false),
+    blocks: Array(225).fill(false),
     selectedCell: null,
     orientationIsHorizontal: true,
   };
 
+  /* BEGIN GRID SIZE */
   setSize = (value) => {
     if (value === "daily") {
       this.setState({
@@ -39,7 +30,6 @@ export default class App extends React.Component {
         blocks: Array(225).fill(false),
         selectedCell: null,
       });
-      this.setGrid(15, 15);
     } else if (value === "sunday") {
       this.setState({
         rows: 21,
@@ -67,7 +57,9 @@ export default class App extends React.Component {
       selectedCell: null,
     });
   };
+  /* END GRID SIZE */
 
+  /* BEGIN PATTERN */
   handlePatternBtn = () => {
     if (this.state.rows === 15) {
       this.setState({
@@ -75,7 +67,23 @@ export default class App extends React.Component {
       });
     }
   };
+  /* END PATTERN */
 
+  /* BEGIN KEYBOARD HANDLER */
+  handleKeydown = (e) => {
+    const cell = this.state.selectedCell;
+
+    if (e.key === "." && (cell || cell === 0)) {
+      this.fillCell(cell);
+    }
+    // keyCode is depreciated, need to change
+    if (e.keyCode >= 65 && e.keyCode <= 90) {
+      this.fillCell(cell, e.key);
+    }
+  };
+  /* END KEYBOARD HANDLER */
+
+  /* BEGIN CELL STUFF */
   selectCell = (value) => {
     this.setState({
       selectedCell: value,
@@ -86,7 +94,7 @@ export default class App extends React.Component {
     const rows = this.state.rows;
     const cols = this.state.cols;
     const totalSquares = rows * cols - 1;
-    const cellTwin = totalSquares - cell; // At 15 rows 10 cols for example, middle symmetry doesn't work
+    const cellTwin = totalSquares - cell;
     const blocks = this.state.blocks;
     const nextCell = this.state.orientationIsHorizontal
       ? cell + 1
@@ -97,7 +105,6 @@ export default class App extends React.Component {
       this.setState({
         selectedCell: nextCell,
       });
-      if (blocks[cellTwin] === true) blocks[cellTwin] = false;
     } else {
       blocks[cell] = !blocks[cell];
 
@@ -111,37 +118,9 @@ export default class App extends React.Component {
     });
     console.log(this.state.blocks);
   };
-
-  handleDoubleClick = () => {
-    this.setState((prevState) => {
-      return {
-        orientationIsHorizontal: !prevState.orientationIsHorizontal,
-      };
-    });
-  };
-
-  handleKeydown = (e) => {
-    const cell = this.state.selectedCell;
-
-    if (e.key === "." && (cell || cell === 0)) {
-      this.fillCell(cell);
-    }
-    // keyCode is depreciated, need to change
-    if (e.keyCode >= 65 && e.keyCode <= 90) {
-      this.fillCell(cell, e.key);
-    }
-  };
+  /* END CELL STUFF */
 
   render() {
-    console.log(this.state.orientationIsHorizontal);
-    const value = {
-      rows: this.state.rows,
-      cols: this.state.cols,
-      title: this.state.title,
-      author: this.state.author,
-      selectCell: this.selectCell,
-    };
-
     const custom = this.state.custom;
 
     let rows = this.state.rows;
@@ -190,21 +169,15 @@ export default class App extends React.Component {
         cellNumber.push(null);
       }
     });
+
     return (
-      <Context.Provider value={value}>
-        <div className="App">
-          {/* <Switch>
-            <Route exact path="/" component={Landing} />
-            <Route path="/login" component={Login} />
-            <Route path="/signup" component={SignUp} />
-            <Route path="/home" component={Home} />
-          </Switch> */}
+      <div className="Home">
+        <header>
+          <h1>{this.context.title}</h1>
+          <p>by {this.context.author}</p>
+        </header>
 
-          <header>
-            <h1>{this.context.title}</h1>
-            <p>by {this.context.author}</p>
-          </header>
-
+        <main>
           <div className="puzzle-options">
             <div className="size-btns">
               <h3>Size</h3>
@@ -269,12 +242,11 @@ export default class App extends React.Component {
               blocks={this.state.blocks}
               cellNumber={cellNumber}
               inputCell={(cell) => this.handleKeydown(cell)}
-              changeOrientation={() => this.handleDoubleClick()}
             />
             <Clues cellOrientation={cellOrientation} cellNumber={cellNumber} />
           </div>
-        </div>
-      </Context.Provider>
+        </main>
+      </div>
     );
   }
 }

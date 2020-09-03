@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #grid {
   margin: 40px;
   border-collapse: collapse;
@@ -6,14 +7,90 @@
   /* this should be responsive, yet fixed so the boxes don't squish */
   table-layout: fixed;
   width: 500px;
+=======
+h1, h2, h3, p {
+  margin: 0;
 }
 
-#grid td {
-  height: 35px;
-  width: 35px;
+.App {
+  margin: 16px;
+>>>>>>> feature/cell-select-numbers
+}
+
+#grid {
+  margin-top: 16px;
   border: 1px solid black;
+  border-right: none;
+  border-bottom: none;
 }
 
-.black {
-  background-color: black;
+.clues {
+  display: flex;
+}
+
+.puzzle-options {
+  display: flex;
+}
+
+.crossword__cell {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  fill: white;
+  cursor: pointer;
+}
+
+.crossword__container--grid-wrapper {
+   width: 500px;
+}
+
+svg[viewBox] {
+  background: black;
+  user-select: none;
+  width: 100%;
+
+}
+
+.crossword__cell--selected {
+  fill: lightsteelblue;
+}
+
+.crossword__cell--filled {
+  fill: black;
+}
+
+/* Color for cells that are both filled and selected */
+.crossword__cell--filled.crossword__cell--selected {
+  fill: rgb(35, 69, 95);
+}
+
+.crossword__cell--number {
+  font-family: Arial, Helvetica, sans-serif;
+  fill: black;
+  font-size: 9px;
+  font-weight: 500;
+}
+
+.crossword__cell--letter {
+  fill: black;
+  font-size: 17px;
+  font-weight: 500;
+  text-anchor: middle;
+}
+
+@media (max-width: 450px) {
+  .crossword__cell--number {
+    font-size: 13px;
+    transform: translateY(2px);
+  }
+  .crossword__cell--letter {
+    transform: translateY(2px);
+  }
+}
+
+ul {
+  list-style-type: none;
+}
+
+.puzzle {
+  display: flex;
+  flex-wrap: wrap;
 }

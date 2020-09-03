@@ -1,5 +1,6 @@
 import React from "react";
 import Context from "./Context";
+import Cell from "./Cell";
 
 export default class Grid extends React.Component {
   static contextType = Context;
@@ -14,22 +15,27 @@ export default class Grid extends React.Component {
   // all letters should be in an across and down word
 
   renderGrid = () => {
-    let rows = this.context.rows;
     let cols = this.context.cols;
+    let blocks = this.props.blocks;
 
-    let grid = Array.from({ length: rows }).map((_, i) => (
-      <tr key={i} data-row={i}>
-        {Array.from({ length: cols }).map((_, i) => (
-          <td key={i} data-col={i}>
-            <div className="label"></div>
-            <div className="fill"></div>
-          </td>
-        ))}
-      </tr>
-    ));
-
-    this.setGridArray(grid);
-
+    let grid = blocks.map((block, i) => {
+      return (
+        <Cell
+          key={i}
+          cellSize={33}
+          row={Math.floor(i / cols)}
+          col={i % cols}
+          cellNumber={i}
+          selectCell={this.props.selectCell}
+          changeOrientation={this.props.changeOrientation}
+          inputCell={this.props.inputCell}
+          selectedCell={i === this.props.selectedCell}
+          blocked={block === true}
+          cellCharacterLabel={block}
+          cellNumberLabel={this.props.cellNumber[i]}
+        />
+      );
+    });
     return grid;
   };
 
@@ -60,11 +66,18 @@ export default class Grid extends React.Component {
   // }
 
   render() {
+    let width = this.context.cols * 33;
+    let height = this.context.rows * 33;
     return (
-      <div className="Grid">
-        <table id="grid">
-          <tbody>{this.renderGrid()}</tbody>
-        </table>
+      <div className="crossword__container--grid-wrapper">
+        <svg
+          viewBox={`0 0 ${width} ${height}`}
+          preserveAspectRatio="xMinYMin slice"
+          className="Grid"
+          id="grid"
+        >
+          {this.renderGrid()}
+        </svg>
       </div>
     );
   }
