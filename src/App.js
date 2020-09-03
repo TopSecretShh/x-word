@@ -6,8 +6,6 @@ import Login from "./Login";
 import SignUp from "./SignUp";
 import Home from "./Home";
 
-import Grid from "./Grid";
-import Clues from "./Clues";
 import PATTERNONE from "./Patterns.js";
 import Context from "./Context";
 import "./App.css";
@@ -84,61 +82,61 @@ export default class App extends React.Component {
     }
   };
 
-  // selectCell = (value) => {
-  //   this.setState({
-  //     selectedCell: value,
-  //   });
-  // };
+  selectCell = (value) => {
+    this.setState({
+      selectedCell: value,
+    });
+  };
 
-  // fillCell = (cell, character) => {
-  //   const rows = this.state.rows;
-  //   const cols = this.state.cols;
-  //   const totalSquares = rows * cols - 1;
-  //   const cellTwin = totalSquares - cell; // At 15 rows 10 cols for example, middle symmetry doesn't work
-  //   const blocks = this.state.blocks;
-  //   const nextCell = this.state.orientationIsHorizontal
-  //     ? cell + 1
-  //     : cell + cols;
+  fillCell = (cell, character) => {
+    const rows = this.state.rows;
+    const cols = this.state.cols;
+    const totalSquares = rows * cols - 1;
+    const cellTwin = totalSquares - cell; // At 15 rows 10 cols for example, middle symmetry doesn't work
+    const blocks = this.state.blocks;
+    const nextCell = this.state.orientationIsHorizontal
+      ? cell + 1
+      : cell + cols;
 
-  //   if (typeof character === "string") {
-  //     blocks[cell] = character.toUpperCase();
-  //     this.setState({
-  //       selectedCell: nextCell,
-  //     });
-  //     if (blocks[cellTwin] === true) blocks[cellTwin] = false;
-  //   } else {
-  //     blocks[cell] = !blocks[cell];
+    if (typeof character === "string") {
+      blocks[cell] = character.toUpperCase();
+      this.setState({
+        selectedCell: nextCell,
+      });
+      if (blocks[cellTwin] === true) blocks[cellTwin] = false;
+    } else {
+      blocks[cell] = !blocks[cell];
 
-  //     if (cell !== Math.floor(totalSquares / 2)) {
-  //       blocks[cellTwin] = !blocks[cellTwin];
-  //     }
-  //   }
+      if (cell !== Math.floor(totalSquares / 2)) {
+        blocks[cellTwin] = !blocks[cellTwin];
+      }
+    }
 
-  //   this.setState({
-  //     blocks: blocks,
-  //   });
-  //   console.log(this.state.blocks);
-  // };
+    this.setState({
+      blocks: blocks,
+    });
+    console.log(this.state.blocks);
+  };
 
-  // handleDoubleClick = () => {
-  //   this.setState((prevState) => {
-  //     return {
-  //       orientationIsHorizontal: !prevState.orientationIsHorizontal,
-  //     };
-  //   });
-  // };
+  handleDoubleClick = () => {
+    this.setState((prevState) => {
+      return {
+        orientationIsHorizontal: !prevState.orientationIsHorizontal,
+      };
+    });
+  };
 
-  // handleKeydown = (e) => {
-  //   const cell = this.state.selectedCell;
+  handleKeydown = (e) => {
+    const cell = this.state.selectedCell;
 
-  //   if (e.key === "." && (cell || cell === 0)) {
-  //     this.fillCell(cell);
-  //   }
-  //   // keyCode is depreciated, need to change
-  //   if (e.keyCode >= 65 && e.keyCode <= 90) {
-  //     this.fillCell(cell, e.key);
-  //   }
-  // };
+    if (e.key === "." && (cell || cell === 0)) {
+      this.fillCell(cell);
+    }
+    // keyCode is depreciated, need to change
+    if (e.keyCode >= 65 && e.keyCode <= 90) {
+      this.fillCell(cell, e.key);
+    }
+  };
 
   render() {
     const value = {
@@ -153,6 +151,7 @@ export default class App extends React.Component {
       setSize: this.setSize,
       handleSubmitCustom: this.handleSubmitCustom,
       handlePatternBtn: this.handlePatternBtn,
+      handleKeydown: this.handleKeydown,
     };
 
     // const custom = this.state.custom;

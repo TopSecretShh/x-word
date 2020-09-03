@@ -12,4 +12,5 @@ export default React.createContext({
   setSize: () => {},
   handleSubmitCustom: () => {},
   handlePatternBtn: () => {},
+  handleKeyDown: () => {},
 });
