@@ -19,6 +19,16 @@ export default class App extends React.Component {
   static contextType = Context;
 
   state = {
+    users: [
+      { id: 0, username: "Bob", password: "bob" },
+      {
+        id: 1,
+        username: "Bob",
+        password: "bad",
+      },
+    ],
+    currentUser: "",
+
     rows: 15,
     cols: 15,
     title: "Untitled",
@@ -28,7 +38,7 @@ export default class App extends React.Component {
     selectedCell: null,
     orientationIsHorizontal: true,
 
-    // grid: [
+    // grid/blocks: [
     //   {
     //     id: 0,
     //     block: false,
@@ -140,6 +150,7 @@ export default class App extends React.Component {
 
   render() {
     const value = {
+      users: this.state.users,
       rows: this.state.rows,
       cols: this.state.cols,
       custom: this.state.custom,

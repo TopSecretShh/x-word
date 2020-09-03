@@ -1,10 +1,11 @@
 import React from "react";
 
 export default React.createContext({
+  users: [],
   rows: "",
   cols: "",
   custom: false,
-  blocks: "",
+  blocks: [],
   title: "Untitled",
   author: "Anonymous",
   selectCell: () => {},

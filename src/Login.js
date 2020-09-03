@@ -8,13 +8,28 @@ export default class Login extends React.Component {
     error: null,
   };
 
-  handleSubmit = () => {
-    console.log("logged in");
-    this.handleLoginSuccess();
+  handleSubmit = (e) => {
+    const users = this.context.users;
+    const username = e.target.username.value;
+    const password = e.target.password.value;
+    const match = users
+      .filter((u) => u.username === username)
+      .filter((u) => u.password === password);
+
+    if (match.length) {
+      console.log("we have a match!");
+      this.handleLoginSuccess();
+    } else {
+      console.log("no such user");
+    }
   };
 
   handleLoginSuccess = () => {
     this.props.history.push("/home");
+  };
+
+  handleCancelBtn = () => {
+    this.props.history.push("/");
   };
 
   render() {
@@ -25,7 +40,7 @@ export default class Login extends React.Component {
           className="form-login"
           onSubmit={(e) => {
             e.preventDefault();
-            this.handleSubmit();
+            this.handleSubmit(e);
           }}
         >
           <fieldset>
@@ -60,6 +75,14 @@ export default class Login extends React.Component {
           <div>
             <button type="submit" className="btn-submit">
               Login
+            </button>
+
+            <button
+              type="button"
+              className="btn-cancel"
+              onClick={this.handleCancelBtn}
+            >
+              Cancel
             </button>
           </div>
         </form>
