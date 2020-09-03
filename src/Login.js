@@ -18,6 +18,7 @@ export default class Login extends React.Component {
 
     if (match.length) {
       console.log("we have a match!");
+      this.context.setCurrentUser(username);
       this.handleLoginSuccess();
     } else {
       console.log("no such user");

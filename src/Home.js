@@ -69,7 +69,7 @@ export default class Home extends React.Component {
         </nav>
         <header>
           <h1>{this.context.title}</h1>
-          <p>by {this.context.author}</p>
+          <p>by {this.context.currentUser}</p>
         </header>
 
         <main>

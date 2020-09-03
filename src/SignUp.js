@@ -1,5 +1,6 @@
 import React from "react";
 import Context from "./Context";
+import { Link } from "react-router-dom";
 
 export default class SignUp extends React.Component {
   static contextType = Context;
@@ -8,6 +9,7 @@ export default class SignUp extends React.Component {
     username: "",
     password: "",
     error: null,
+    match: null,
   };
 
   updateUsername(e) {
@@ -22,20 +24,41 @@ export default class SignUp extends React.Component {
     });
   }
 
-  handleSubmit = () => {
-    console.log("signed up");
-    this.props.history.push("/login");
+  handleSubmit = (e) => {
+    const users = this.context.users;
+    const username = e.target.username.value;
+    const password = e.target.password.value;
+
+    const match = users.filter((u) => u.username === username);
+
+    this.setState({
+      match: false,
+    });
+
+    if (match.length) {
+      console.log("user already exists");
+      this.setState({
+        match: true,
+      });
+    } else if (!match.length) {
+      this.context.addNewUser(username, password);
+      this.props.history.push("/login");
+    }
+  };
+
+  handleCancelBtn = () => {
+    this.props.history.push("/");
   };
 
   render() {
-    const { error } = this.state;
+    const { error, match } = this.state;
     return (
       <div className="SignUp">
         <form
           className="form-signup"
           onSubmit={(e) => {
             e.preventDefault();
-            this.handleSubmit();
+            this.handleSubmit(e);
           }}
         >
           <fieldset>
@@ -77,7 +100,23 @@ export default class SignUp extends React.Component {
           <button type="submit" className="btn-submit">
             Sign Up
           </button>
+          <button
+            type="button"
+            className="btn-cancel"
+            onClick={this.handleCancelBtn}
+          >
+            Cancel
+          </button>
         </form>
+        <div className="username-match">
+          {match && (
+            <p>
+              {this.state.username} already has an account. If you already have
+              an account <Link to="/login">Login</Link>. Otherwise, choose a
+              different user name and try again.
+            </p>
+          )}
+        </div>
         <div className="error">{error && <p>{error}</p>}</div>
       </div>
     );

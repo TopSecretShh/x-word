@@ -23,8 +23,8 @@ export default class App extends React.Component {
       { id: 0, username: "Bob", password: "bob" },
       {
         id: 1,
-        username: "Bob",
-        password: "bad",
+        username: "Jon",
+        password: "jon",
       },
     ],
     currentUser: "",
@@ -32,7 +32,6 @@ export default class App extends React.Component {
     rows: 15,
     cols: 15,
     title: "Untitled",
-    author: "Anonymous",
     custom: false,
     blocks: Array(225).fill(false),
     selectedCell: null,
@@ -46,6 +45,24 @@ export default class App extends React.Component {
     //     letter: "",
     //   },
     // ],
+  };
+
+  addNewUser = (username, password) => {
+    const newUser = {
+      id: this.state.users.length + 1,
+      username: username,
+      password: password,
+    };
+
+    this.setState({
+      users: [...this.state.users, newUser],
+    });
+  };
+
+  setCurrentUser = (username) => {
+    this.setState({
+      currentUser: username,
+    });
   };
 
   setSize = (value) => {
@@ -150,13 +167,15 @@ export default class App extends React.Component {
 
   render() {
     const value = {
+      addNewUser: this.addNewUser,
+      setCurrentUser: this.setCurrentUser,
+      currentUser: this.state.currentUser,
       users: this.state.users,
       rows: this.state.rows,
       cols: this.state.cols,
       custom: this.state.custom,
       blocks: this.state.blocks,
       title: this.state.title,
-      author: this.state.author,
       selectedCell: this.state.selectedCell,
       selectCell: this.selectCell,
       setSize: this.setSize,
