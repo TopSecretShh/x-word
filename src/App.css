@@ -32,13 +32,23 @@ p {
 
 .crossword__container--grid-wrapper {
   width: 500px;
+  height: 400px;
 }
 
 svg[viewBox] {
   background: black;
   user-select: none;
+}
+.view_box--tall {
+  height: 100%;
+  width: auto;
+}
+.view_box--wide {
+  height: auto;
   width: 100%;
 }
+
+
 
 .crossword__cell--selected {
   fill: lightsteelblue;

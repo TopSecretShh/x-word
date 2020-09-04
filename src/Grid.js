@@ -40,15 +40,18 @@ export default class Grid extends React.Component {
   };
 
   render() {
-    let width = this.context.cols * 33;
-    let height = this.context.rows * 33;
+    let rows = this.context.rows 
+    let cols = this.context.cols
+    let width = cols * 33;
+    let height = rows * 33;
     return (
       <div className="crossword__container--grid-wrapper">
         <svg
           viewBox={`0 0 ${width} ${height}`}
           preserveAspectRatio="xMinYMin slice"
-          className="Grid"
-          id="grid"
+          className={`Grid ${rows >= cols ?
+             'view_box--tall' : 'view_box--wide'}`}
+          id="grid"m
         >
           {this.renderGrid()}
         </svg>
