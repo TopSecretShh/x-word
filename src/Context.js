@@ -16,4 +16,5 @@ export default React.createContext({
   handleSubmitCustom: () => {},
   handlePatternBtn: () => {},
   handleKeyDown: () => {},
+  handleDoubleClick: () => {},
 });

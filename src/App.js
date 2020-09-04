@@ -14,6 +14,7 @@ import "./App.css";
 // Blocking a lettered square or lettering a block square, does not work symmetrically
 // Sunday letter and number positioning
 // Too many columns extend beyond area
+// can't select a cell that has a letter in it
 
 export default class App extends React.Component {
   static contextType = Context;
@@ -188,6 +189,7 @@ export default class App extends React.Component {
       handleSubmitCustom: this.handleSubmitCustom,
       handlePatternBtn: this.handlePatternBtn,
       handleKeydown: this.handleKeydown,
+      handleDoubleClick: this.handleDoubleClick,
     };
 
     return (
