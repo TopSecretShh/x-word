@@ -10,11 +10,30 @@ import PATTERNONE from "./Patterns.js";
 import Context from "./Context";
 import "./App.css";
 
-// Problems
-// Blocking a lettered square or lettering a block square, does not work symmetrically
-// Sunday letter and number positioning
-// Too many columns extend beyond area
-// sometimes, not always: can't select a cell that has a letter in it
+/*
+PROBLEMS
+Blocking a lettered square or lettering a block square, does not work symmetrically
+Too many columns extend beyond area
+sometimes, not always: can't select a cell that has a letter in it
+*/
+
+/*
+BEN THOUGHTS
+maybe need to differentiate between selected cell and highlighted?
+when you click a cell it is hightlight blue and has a blue border. when you enter a letter the next cell is highlighted, but the border remains
+tab moves the border
+ */
+
+/*
+ KEY BINDINGS
+keyboard bindings (feel free to adjust this, just compiling a list from using existing online tools and what intuitively makes sense to my little brain):
+
+- . = block
+- space = change orientation
+- tab & enter = next across/down word, depending on current orientation. skips next word if filled in aka 'next word' = next empty word. if next word is incomplete, highlight and select first empty cell in word. if last across word, next word = first empty down word and vice versa
+- arrow keys = navigate currently selected cell, orientation remains unchanged. if encounter block, jump all consecutive blocks to next non-block cell
+- delete = if letter in cell, delete letter from cell. if no letter in cell, delete letter in previous cell and select that same cell. Previous cell dictated by current orientation
+ */
 
 export default class App extends React.Component {
   static contextType = Context;
@@ -153,6 +172,7 @@ export default class App extends React.Component {
   };
 
   handleDoubleClick = () => {
+    // maybe change from double click to if already selected and click, change orientation?
     this.setState((prevState) => {
       return {
         orientationIsHorizontal: !prevState.orientationIsHorizontal,
@@ -169,6 +189,25 @@ export default class App extends React.Component {
     // keyCode is depreciated, need to change
     if (e.keyCode >= 65 && e.keyCode <= 90) {
       this.fillCell(cell, e.key);
+    }
+  };
+
+  selectWord = (selectedCell) => {
+    const horizontal = this.state.orientationIsHorizontal;
+    if (horizontal) {
+      // find nearest block to left of selectedCell
+      // selectedCell[cellNumber] - 1 -> is block, no: selectedCell[cellNumber] - 2 -> is block, no: selectedCell[cellNumber] - 3, etc
+      // is block, yes: leftBlock = selectedCell[cellNumber] - x
+      // find nearest block to right of selectedCell
+      // is block, yes: rightBlock = selectedCell[cellNumber] + x
+      // highlight all cells between the two blocks
+      // highglightedCells = cellNumber[leftBlock] to cellNumber[rightBlock]
+      // highlightedCells get highlighted class
+    } else if (!horizontal) {
+      // find nearest block above selectedCell
+      // selectedCell[cellNumber] - 15
+      // find nearest block below selectedCell
+      // highlight all cells between the two blocks
     }
   };
 
