@@ -139,7 +139,7 @@ export default class Home extends React.Component {
             <Grid
               selectedCell={this.context.selectedCell}
               selectCell={(cell) => this.context.selectCell(cell)}
-              blocks={this.context.blocks}
+              // blocks={this.context.blocks}
               cellNumber={cellNumber}
               inputCell={(cell) => this.context.handleKeydown(cell)}
             />
@@ -148,7 +148,7 @@ export default class Home extends React.Component {
         </main>
       </div>
     ) : (
-      <Redirect to={{ pathname: "/login" }} />
+      <Redirect to={{ pathname: "/" }} />
     );
   }
 }

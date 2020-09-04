@@ -16,7 +16,7 @@ export default class Grid extends React.Component {
 
   renderGrid = () => {
     let cols = this.context.cols;
-    let blocks = this.props.blocks;
+    let blocks = this.context.blocks;
 
     let grid = blocks.map((block, i) => {
       return (
