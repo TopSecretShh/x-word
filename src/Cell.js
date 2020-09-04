@@ -6,8 +6,6 @@ function Cell({
   row,
   col,
   cellNumber,
-  inputCell,
-  selectCell,
   selectedCell,
   blocked,
   cellNumberLabel,
@@ -25,9 +23,9 @@ function Cell({
         y={row * cellSize}
         width={cellSize - 1}
         height={cellSize - 1}
-        onClick={() => selectCell(cellNumber)}
+        onClick={() => value.selectCell(cellNumber)}
         onDoubleClick={() => value.handleDoubleClick()}
-        onKeyDown={(e) => inputCell(e)}
+        onKeyDown={(e) => value.handleKeydown(e)}
         tabIndex="0"
       ></rect>
       <text
