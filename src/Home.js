@@ -137,9 +137,7 @@ export default class Home extends React.Component {
 
           <div className="puzzle">
             <Grid
-              selectedCell={this.context.selectedCell}
               selectCell={(cell) => this.context.selectCell(cell)}
-              // blocks={this.context.blocks}
               cellNumber={cellNumber}
               inputCell={(cell) => this.context.handleKeydown(cell)}
             />
