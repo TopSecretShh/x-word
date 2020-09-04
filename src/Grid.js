@@ -40,8 +40,8 @@ export default class Grid extends React.Component {
   };
 
   render() {
-    let rows = this.context.rows 
-    let cols = this.context.cols
+    let rows = this.context.rows;
+    let cols = this.context.cols;
     let width = cols * 33;
     let height = rows * 33;
     return (
@@ -49,9 +49,10 @@ export default class Grid extends React.Component {
         <svg
           viewBox={`0 0 ${width} ${height}`}
           preserveAspectRatio="xMinYMin slice"
-          className={`Grid ${rows >= cols ?
-             'view_box--tall' : 'view_box--wide'}`}
-          id="grid"m
+          className={`Grid ${
+            rows >= cols ? "view_box--tall" : "view_box--wide"
+          }`}
+          id="grid"
         >
           {this.renderGrid()}
         </svg>

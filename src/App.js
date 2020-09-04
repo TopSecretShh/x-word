@@ -93,6 +93,12 @@ export default class App extends React.Component {
   };
 
   handleSubmitCustom = (e) => {
+    console.log(
+      "custom dimensions: ",
+      e.target.rows.value,
+      e.target.cols.value
+    );
+
     this.setState({
       rows: e.target.rows.value,
       cols: e.target.cols.value,
