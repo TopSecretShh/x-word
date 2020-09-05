@@ -6,27 +6,24 @@ import React from "react";
 // import SignUp from "./SignUp";
 // import Home from "./Home";
 
-import Grid from "./Grid";
 import Clues from "./Clues";
+import Grid from "./Grid";
 import PATTERNONE from "./Patterns.js";
 import Context from "./Context";
 import "./App.css";
 
-// Problems
-// Blocking a lettered square or lettering a block square, does not work symmetrically
-// Sunday letter and number positioning
-// Too many columns extend beyond area
+
 
 export default class App extends React.Component {
   static contextType = Context;
 
   state = {
-    rows: 5,
-    cols: 14,
+    rows: 3,
+    cols: 3,
     title: "Untitled",
     author: "Anonymous",
     custom: false,
-    blocks: Array(70).fill(false),
+    blocks: Array(9).fill(false),
     selectedCell: null,
     orientationIsHorizontal: true,
   };
@@ -58,10 +55,17 @@ export default class App extends React.Component {
     }
   };
 
+  updateGrid = () => {
+    let {rows, cols} = this.state
+    this.setState({
+      blocks:  Array(rows * cols).fill(false) 
+    })
+  } 
+
   handleSubmitCustom = (e) => {
     this.setState({
-      rows: e.target.rows.value,
-      cols: e.target.cols.value,
+      rows: parseInt(e.target.rows.value),
+      cols: parseInt(e.target.cols.value),
       blocks: Array(e.target.rows.value * e.target.cols.value).fill(false),
       selectedCell: null,
     });
@@ -80,12 +84,12 @@ export default class App extends React.Component {
       selectedCell: value,
     });
   };
-
+  
   fillCell = (cell, character) => {
     const rows = this.state.rows;
     const cols = this.state.cols;
     const totalSquares = rows * cols - 1;
-    const cellTwin = totalSquares - cell; // At 15 rows 10 cols for example, middle symmetry doesn't work
+    const cellTwin = totalSquares - cell; 
     const blocks = this.state.blocks;
     const nextCell = this.state.orientationIsHorizontal
       ? cell + 1
@@ -96,9 +100,14 @@ export default class App extends React.Component {
       this.setState({
         selectedCell: nextCell,
       });
-      if (blocks[cellTwin] === true) blocks[cellTwin] = false;
+      if (blocks[cellTwin] === true) blocks[cellTwin] = false
     } else {
+      if (typeof blocks[cell] === "string") {
+        blocks[cell] = true;
+        
+      } else {
       blocks[cell] = !blocks[cell];
+      }
 
       if (cell !== Math.floor(totalSquares / 2)) {
         blocks[cellTwin] = !blocks[cellTwin];
@@ -108,16 +117,15 @@ export default class App extends React.Component {
     this.setState({
       blocks: blocks,
     });
-    console.log(this.state.blocks);
   };
 
   handleDoubleClick = () => {
-    this.setState((prevState) => {
+    this.setState(prevState => {
       return {
-        orientationIsHorizontal: !prevState.orientationIsHorizontal,
-      };
-    });
-  };
+        orientationIsHorizontal: !prevState.orientationIsHorizontal
+      }
+    })
+  }
 
   handleKeydown = (e) => {
     const cell = this.state.selectedCell;
@@ -132,7 +140,6 @@ export default class App extends React.Component {
   };
 
   render() {
-    console.log(this.state.orientationIsHorizontal);
     const value = {
       rows: this.state.rows,
       cols: this.state.cols,
@@ -238,12 +245,20 @@ export default class App extends React.Component {
                   <fieldset className="custom-size">
                     <label>
                       # of rows:{"  "}
-                      <input type="number" name="rows" min={3} max={25} />
+                      <input 
+                        type="number" 
+                        name="rows" 
+                        min={3} max={25}
+                      />
                     </label>
                     <br />
                     <label>
                       # of columns:{" "}
-                      <input type="number" name="cols" min={3} max={25} />
+                      <input 
+                        type="number" 
+                        name="cols" 
+                        min={3} max={25} 
+                      />
                     </label>
                     <br />
                     <button type="submit">Enter</button>
@@ -266,11 +281,18 @@ export default class App extends React.Component {
               selectedCell={this.state.selectedCell}
               selectCell={(cell) => this.selectCell(cell)}
               blocks={this.state.blocks}
+              rows={this.state.rows}
+              cols={this.state.cols}
               cellNumber={cellNumber}
               inputCell={(cell) => this.handleKeydown(cell)}
               changeOrientation={() => this.handleDoubleClick()}
             />
-            <Clues cellOrientation={cellOrientation} cellNumber={cellNumber} />
+            <Clues 
+              cellOrientation={cellOrientation} 
+              cellNumber={cellNumber}
+              cols={this.state.cols}
+              rows={this.state.rows}
+            />
           </div>
         </div>
       </Context.Provider>

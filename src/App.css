@@ -5,15 +5,19 @@ p {
   margin: 0;
 }
 
+rect {
+  outline: 0;
+  stroke: black;
+  stroke-width: 0.5px;
+}
+
 .App {
   margin: 16px;
 }
 
 #grid {
   margin-top: 16px;
-  border: 1px solid black;
-  border-right: none;
-  border-bottom: none;
+  border: 2px solid black;
 }
 
 .clues {
@@ -36,15 +40,13 @@ p {
 }
 
 svg[viewBox] {
-  background: black;
+  /* background: black; */
   user-select: none;
 }
 .view_box--tall {
   height: 100%;
-  width: auto;
 }
 .view_box--wide {
-  height: auto;
   width: 100%;
 }
 
@@ -66,8 +68,16 @@ svg[viewBox] {
 .crossword__cell--number {
   font-family: Arial, Helvetica, sans-serif;
   fill: black;
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 500;
+  text-anchor: start;
+}
+
+@media (max-width: 440px) {
+  .crossword__cell--number {
+    font-size: 11px;
+    transform: translateY(1px);
+  }
 }
 
 .crossword__cell--letter {
@@ -75,16 +85,6 @@ svg[viewBox] {
   font-size: 17px;
   font-weight: 500;
   text-anchor: middle;
-}
-
-@media (max-width: 450px) {
-  .crossword__cell--number {
-    font-size: 13px;
-    transform: translateY(2px);
-  }
-  .crossword__cell--letter {
-    transform: translateY(2px);
-  }
 }
 
 ul {

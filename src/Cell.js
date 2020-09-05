@@ -21,12 +21,13 @@ function Cell(
             <rect
               x={col * cellSize}
               y={row * cellSize}
-              width={cellSize - 1} 
-              height={cellSize - 1}
+              width={cellSize} 
+              height={cellSize}
               onClick={() => selectCell(cellNumber)}
               onDoubleClick={() => changeOrientation()}
               onKeyDown={(e) => inputCell(e)}
               tabIndex="0"
+              vectorEffect="non-scaling-stroke"
               >
             </rect>
             <text 

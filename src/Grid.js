@@ -3,7 +3,7 @@ import Context from "./Context";
 import Cell from "./Cell";
 
 export default class Grid extends React.Component {
-  static contextType = Context;
+  // static contextType = Context;
 
   // daily puzzle size = 15 x 15
   // sunday puzzle size = 21 x 21
@@ -15,8 +15,9 @@ export default class Grid extends React.Component {
   // all letters should be in an across and down word
 
   renderGrid = () => {
-    let cols = this.context.cols;
+    // let cols = this.context.cols;
     let blocks = this.props.blocks;
+    let cols = this.props.cols
 
     let grid = blocks.map((block, i) => {
       return (
@@ -40,8 +41,10 @@ export default class Grid extends React.Component {
   };
 
   render() {
-    let rows = this.context.rows 
-    let cols = this.context.cols
+    // let rows = this.context.rows 
+    // let cols = this.context.cols
+    let rows = this.props.rows
+    let cols = this.props.cols
     let width = cols * 33;
     let height = rows * 33;
     return (
@@ -49,9 +52,9 @@ export default class Grid extends React.Component {
         <svg
           viewBox={`0 0 ${width} ${height}`}
           preserveAspectRatio="xMinYMin slice"
-          className={`Grid ${rows >= cols ?
+          className={`Grid ${rows > cols ?
              'view_box--tall' : 'view_box--wide'}`}
-          id="grid"m
+          id="grid"
         >
           {this.renderGrid()}
         </svg>

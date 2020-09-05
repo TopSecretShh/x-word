@@ -1,9 +1,24 @@
 import React from "react";
 
-function Clues({ cellOrientation, cellNumber }) {
+function Clues({ cellOrientation, cellNumber, cols, rows }) {
 let across = []
 let down = []
 
+let ranges = cellOrientation.map((c, i, arr) => {
+  if (c === "across") {
+    let next = arr.indexOf('across', i + 1)
+   return  next > 0 ? next - i : cols - i % cols 
+  } else if (c === "down") {
+    let next = arr.findIndex((c, j) => {
+      return (c === "down" && j > i) && j % cols === 0 
+    })
+    // console.log(next)
+    return next > 0 ? next : rows
+  }
+  return null
+})
+
+console.log(ranges)
 
 // could fill in cells by number, for example, 1, 1, 1, 2, 2, 3, 3, 
 
