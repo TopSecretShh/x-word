@@ -11,7 +11,8 @@ function Cell({
   cellNumberLabel,
   cellCharacterLabel,
 }) {
-  const value = useContext(Context);
+  const context = useContext(Context);
+
   return (
     <g
       className={`crossword__cell ${
@@ -23,9 +24,12 @@ function Cell({
         y={row * cellSize}
         width={cellSize - 1}
         height={cellSize - 1}
-        onClick={() => value.selectCell(cellNumber)}
-        onDoubleClick={() => value.handleDoubleClick()}
-        onKeyDown={(e) => value.handleKeydown(e)}
+        onClick={() => {
+          context.selectCell(cellNumber);
+          context.selectWord(cellNumber);
+        }}
+        onDoubleClick={() => context.handleDoubleClick()}
+        onKeyDown={(e) => context.handleKeydown(e)}
         tabIndex="0"
       ></rect>
       <text

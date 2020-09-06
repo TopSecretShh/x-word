@@ -168,7 +168,7 @@ export default class App extends React.Component {
     this.setState({
       blocks: blocks,
     });
-    console.log(this.state.blocks);
+    // console.log(this.state.blocks);
   };
 
   handleDoubleClick = () => {
@@ -195,13 +195,23 @@ export default class App extends React.Component {
   selectWord = (selectedCell) => {
     const horizontal = this.state.orientationIsHorizontal;
     if (horizontal) {
-      // find nearest block to left of selectedCell
-      // selectedCell[cellNumber] - 1 -> is block, no: selectedCell[cellNumber] - 2 -> is block, no: selectedCell[cellNumber] - 3, etc
-      // is block, yes: leftBlock = selectedCell[cellNumber] - x
-      // find nearest block to right of selectedCell
-      // is block, yes: rightBlock = selectedCell[cellNumber] + x
-      // highlight all cells between the two blocks
-      // highglightedCells = cellNumber[leftBlock] to cellNumber[rightBlock]
+      const allCells = this.state.blocks;
+
+      for (let j = selectedCell; j > 0; j--) {
+        if (allCells[j]) {
+          console.log("lower block: ", j);
+          break;
+        }
+      }
+      console.log("selectedCell: ", selectedCell);
+      for (let i = selectedCell; i < allCells.length; i++) {
+        if (allCells[i]) {
+          console.log("upper block: ", i);
+          break;
+        }
+      }
+
+      // highlight all cells between the upper and lower blocks
       // highlightedCells get highlighted class
     } else if (!horizontal) {
       // find nearest block above selectedCell
@@ -229,6 +239,7 @@ export default class App extends React.Component {
       handlePatternBtn: this.handlePatternBtn,
       handleKeydown: this.handleKeydown,
       handleDoubleClick: this.handleDoubleClick,
+      selectWord: this.selectWord,
     };
 
     return (

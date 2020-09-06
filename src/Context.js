@@ -17,4 +17,5 @@ export default React.createContext({
   handlePatternBtn: () => {},
   handleKeyDown: () => {},
   handleDoubleClick: () => {},
+  selectWord: () => {},
 });
