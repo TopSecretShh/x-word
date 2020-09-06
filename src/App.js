@@ -63,6 +63,7 @@ export default class App extends React.Component {
     //     block: false,
     //     number: "",
     //     letter: "",
+    //     highlighted: false
     //   },
     // ],
   };
