@@ -188,8 +188,45 @@ export default class App extends React.Component {
       this.fillCell(cell);
     }
     // keyCode is depreciated, need to change
-    if (e.keyCode >= 65 && e.keyCode <= 90) {
+    // if (e.keyCode >= 65 && e.keyCode <= 90) {
+    //   this.fillCell(cell, e.key);
+    // }
+    // this regex should work, but double check
+    if (e.key.match(/^[a-z]+$/)) {
       this.fillCell(cell, e.key);
+    }
+    if (e.key.match(/\s/g)) {
+      if (this.state.orientationIsHorizontal) {
+        this.setState({
+          orientationIsHorizontal: false,
+        });
+      } else if (!this.state.orientationIsHorizontal) {
+        this.setState({
+          orientationIsHorizontal: true,
+        });
+      }
+    }
+    // need to stop arrows from navigating off the grid and wrapping to next row
+    if (e.key === "ArrowRight") {
+      this.setState({
+        selectedCell: cell + 1,
+      });
+    }
+    if (e.key === "ArrowLeft") {
+      this.setState({
+        selectedCell: cell - 1,
+      });
+    }
+    if (e.key === "ArrowUp") {
+      this.setState({
+        selectedCell: cell - this.state.cols,
+      });
+    }
+    // for some reason this doesn't work in custom grids
+    if (e.key === "ArrowDown") {
+      this.setState({
+        selectedCell: cell + this.state.rows,
+      });
     }
   };
 
