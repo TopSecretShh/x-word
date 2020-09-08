@@ -11,6 +11,8 @@ rect {
   stroke-width: 0.5px;
 }
 
+
+
 .App {
   margin: 16px;
 }
@@ -22,6 +24,15 @@ rect {
 
 .clues {
   display: flex;
+  padding: 16px;
+}
+
+.clues > div {
+  padding: 8px;
+}
+
+.clues__list li {
+  cursor: pointer;
 }
 
 .puzzle-options {
@@ -50,10 +61,12 @@ svg[viewBox] {
   width: 100%;
 }
 
-
+.crossword__cell--highlighted {
+  fill: rgb(252, 191, 25);
+}
 
 .crossword__cell--selected {
-  fill: lightsteelblue;
+  fill: rgb(255, 241, 110);
 }
 
 .crossword__cell--filled {
@@ -94,4 +107,8 @@ ul {
 .puzzle {
   display: flex;
   flex-wrap: wrap;
+}
+
+.fills {
+ padding: 16px;
 }

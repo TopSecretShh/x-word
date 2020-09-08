@@ -15,9 +15,8 @@ export default class Grid extends React.Component {
   // all letters should be in an across and down word
 
   renderGrid = () => {
-    // let cols = this.context.cols;
-    let blocks = this.props.blocks;
-    let cols = this.props.cols
+    let {blocks, cols, highlightedCells} = this.props
+
 
     let grid = blocks.map((block, i) => {
       return (
@@ -34,6 +33,7 @@ export default class Grid extends React.Component {
           blocked={block === true}
           cellCharacterLabel={block}
           cellNumberLabel={this.props.cellNumber[i]}
+          highlightedCells={highlightedCells}
         />
       );
     });

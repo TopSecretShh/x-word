@@ -8,25 +8,28 @@ import React from "react";
 
 import Clues from "./Clues";
 import Grid from "./Grid";
+import Fills from "./Fills"
 import PATTERNONE from "./Patterns.js";
 import Context from "./Context";
 import "./App.css";
-
 
 
 export default class App extends React.Component {
   static contextType = Context;
 
   state = {
-    rows: 3,
-    cols: 3,
+    rows: 5,
+    cols: 5,
     title: "Untitled",
     author: "Anonymous",
     custom: false,
-    blocks: Array(9).fill(false),
+    blocks: Array(25).fill(false),
     selectedCell: null,
+    highlightedCells: null,
     orientationIsHorizontal: true,
   };
+
+  
 
   setSize = (value) => {
     if (value === "daily") {
@@ -84,6 +87,13 @@ export default class App extends React.Component {
       selectedCell: value,
     });
   };
+
+  setGroup = (i) => {
+    this.setState({
+      highlightedCells: i,
+      selectedCell: i[0]
+    })
+  }
   
   fillCell = (cell, character) => {
     const rows = this.state.rows;
@@ -138,6 +148,24 @@ export default class App extends React.Component {
       this.fillCell(cell, e.key);
     }
   };
+  
+  checkLength = (clue, direction) => {
+    let {cols, rows, blocks} = this.state
+    let arr = [clue]
+    
+    if (direction === 'across') {
+      for (let i = clue + 1; blocks[i] !== true && i % cols !== 0; i++) {
+        arr.push(i)
+      }
+    }
+
+    if (direction === 'down') {
+      for (let i = clue + cols; blocks[i] !== true && i < rows * cols; i += cols) {
+        arr.push(i)
+      }
+    }
+    return arr
+  }
 
   render() {
     const value = {
@@ -156,6 +184,8 @@ export default class App extends React.Component {
     let counter = 0;
     let cellOrientation = [];
     let cellNumber = [];
+    let downAnswers = [];
+    let acrossAnswers = [];
 
     blocks.forEach((_, i) => {
       let isBlockFilled = blocks[i] === true;
@@ -183,19 +213,29 @@ export default class App extends React.Component {
         counter++;
         cellNumber.push(counter);
         cellOrientation.push("acrossdown"); // This should add down and across, not 'acrossdown'
+        downAnswers.push(this.checkLength(i, 'down'))
+        acrossAnswers.push(this.checkLength(i, 'across'))
       } else if (isBlockBeforeFilled && !isBlockAfterFilled) {
         counter++;
         cellNumber.push(counter);
         cellOrientation.push("across");
+        acrossAnswers.push(this.checkLength(i, 'across'))
       } else if (isBlockAboveFilled && !isBlockBelowFilled) {
         counter++;
         cellNumber.push(counter);
         cellOrientation.push("down");
+        downAnswers.push(this.checkLength(i, 'down'))
       } else {
         cellOrientation.push(null);
         cellNumber.push(null);
       }
     });
+
+    let highlights = this.state.highlightedCells || []
+    let word = highlights.map(cell => {
+      return blocks[cell]
+    })
+
     return (
       <Context.Provider value={value}>
         <div className="App">
@@ -286,12 +326,17 @@ export default class App extends React.Component {
               cellNumber={cellNumber}
               inputCell={(cell) => this.handleKeydown(cell)}
               changeOrientation={() => this.handleDoubleClick()}
+              highlightedCells={this.state.highlightedCells}
             />
             <Clues 
-              cellOrientation={cellOrientation} 
+              cellOrientation={cellOrientation}
               cellNumber={cellNumber}
-              cols={this.state.cols}
-              rows={this.state.rows}
+              downAnswers={downAnswers}
+              acrossAnswers={acrossAnswers}
+              setGroup={(i) => this.setGroup(i)}
+            />
+            <Fills 
+            word={word}
             />
           </div>
         </div>
