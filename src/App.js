@@ -121,8 +121,8 @@ export default class App extends React.Component {
     );
 
     this.setState({
-      rows: e.target.rows.value,
-      cols: e.target.cols.value,
+      rows: parseInt(e.target.rows.value),
+      cols: parseInt(e.target.cols.value),
       blocks: Array(e.target.rows.value * e.target.cols.value).fill(false),
       selectedCell: null,
     });
@@ -238,7 +238,8 @@ export default class App extends React.Component {
         selectedCell: cell - this.state.cols,
       });
     }
-    // for some reason this doesn't work in custom grids
+    // for some reason this doesn't work in custom grids 
+    // When custom sizing is set, the value comes out as a string (I don't know why they have it this way) I put parseInt in handleSubmitCustom for now, which fixes this (and the numbering)
     if (e.key === "ArrowDown") {
       this.setState({
         selectedCell: cell + this.state.cols,
