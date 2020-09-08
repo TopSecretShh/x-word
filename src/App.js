@@ -153,6 +153,7 @@ export default class App extends React.Component {
       : cell + cols;
 
     if (typeof character === "string") {
+      // this works but maybe shouldn't? we're modifying state without calling setState?
       blocks[cell] = character.toUpperCase();
       this.setState({
         selectedCell: nextCell,
@@ -183,6 +184,7 @@ export default class App extends React.Component {
 
   handleKeydown = (e) => {
     const cell = this.state.selectedCell;
+    const blocks = this.state.blocks;
 
     if (e.key === "." && (cell || cell === 0)) {
       this.fillCell(cell);
@@ -191,7 +193,6 @@ export default class App extends React.Component {
     // if (e.keyCode >= 65 && e.keyCode <= 90) {
     //   this.fillCell(cell, e.key);
     // }
-    // this regex should work, but double check
     if (e.key.match(/^[a-z]+$/)) {
       this.fillCell(cell, e.key);
     }
@@ -206,16 +207,31 @@ export default class App extends React.Component {
         });
       }
     }
-    // need to stop arrows from navigating off the grid and wrapping to next row
+    // need to stop  up/down arrows from navigating off the grid and wrapping to next row
     if (e.key === "ArrowRight") {
-      this.setState({
-        selectedCell: cell + 1,
-      });
+      if (
+        ((cell + 1) / this.state.cols) % 2 === 0 ||
+        ((cell + 1) / this.state.cols) % 2 === 1
+      ) {
+        console.log("right edge");
+      } else {
+        this.setState({
+          selectedCell: cell + 1,
+        });
+      }
     }
     if (e.key === "ArrowLeft") {
-      this.setState({
-        selectedCell: cell - 1,
-      });
+      if (
+        cell === 0 ||
+        (cell / this.state.cols) % 2 === 0 ||
+        (cell / this.state.cols) % 2 === 1
+      ) {
+        console.log("left edge");
+      } else {
+        this.setState({
+          selectedCell: cell - 1,
+        });
+      }
     }
     if (e.key === "ArrowUp") {
       this.setState({
@@ -225,9 +241,26 @@ export default class App extends React.Component {
     // for some reason this doesn't work in custom grids
     if (e.key === "ArrowDown") {
       this.setState({
-        selectedCell: cell + this.state.rows,
+        selectedCell: cell + this.state.cols,
       });
     }
+
+    if (e.key === "Backspace") {
+      if (this.state.orientationIsHorizontal) {
+        if (typeof this.state.blocks[cell] === "string") {
+          // this works but maybe shouldn't? we're modifying state without calling setState?
+          blocks[cell] = false;
+        }
+        this.setState({
+          selectedCell: cell - 1,
+        });
+      } else {
+        this.setState({
+          selectedCell: cell - this.state.cols,
+        });
+      }
+    }
+    console.log(e.key);
   };
 
   selectWord = (selectedCell) => {
