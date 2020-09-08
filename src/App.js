@@ -116,8 +116,8 @@ export default class App extends React.Component {
   handleSubmitCustom = (e) => {
     console.log(
       "custom dimensions: ",
-      e.target.rows.value,
-      e.target.cols.value
+      Number(e.target.rows.value),
+      parseInt(e.target.cols.value)
     );
 
     this.setState({
@@ -189,10 +189,6 @@ export default class App extends React.Component {
     if (e.key === "." && (cell || cell === 0)) {
       this.fillCell(cell);
     }
-    // keyCode is depreciated, need to change
-    // if (e.keyCode >= 65 && e.keyCode <= 90) {
-    //   this.fillCell(cell, e.key);
-    // }
     if (e.key.match(/^[a-z]+$/)) {
       this.fillCell(cell, e.key);
     }
@@ -207,7 +203,6 @@ export default class App extends React.Component {
         });
       }
     }
-    // need to stop  up/down arrows from navigating off the grid and wrapping to next row
     if (e.key === "ArrowRight") {
       if (
         ((cell + 1) / this.state.cols) % 2 === 0 ||
@@ -234,16 +229,17 @@ export default class App extends React.Component {
       }
     }
     if (e.key === "ArrowUp") {
-      this.setState({
-        selectedCell: cell - this.state.cols,
-      });
+      if (cell > this.state.cols - 1) {
+        this.setState({
+          selectedCell: cell - this.state.cols,
+        });
+      }
     }
-    // for some reason this doesn't work in custom grids 
-    // When custom sizing is set, the value comes out as a string (I don't know why they have it this way) I put parseInt in handleSubmitCustom for now, which fixes this (and the numbering)
     if (e.key === "ArrowDown") {
-      this.setState({
-        selectedCell: cell + this.state.cols,
-      });
+      if (cell < this.state.cols * this.state.rows - this.state.cols)
+        this.setState({
+          selectedCell: cell + this.state.cols,
+        });
     }
 
     if (e.key === "Backspace") {
