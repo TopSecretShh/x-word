@@ -10,15 +10,27 @@ function Cell(
   inputCell, 
   selectCell, 
   selectedCell, 
+  selectAnswer,
+  selectedAnswer,
   blocked, 
   cellNumberLabel, 
   cellCharacterLabel,
   changeOrientation,
-  highlightedCells}
+  highlightedCells,
+  cells}
   ) 
 { 
   let highlighted = highlightedCells || []
   let isHighlighted = highlighted.includes(cellNumber)
+
+  
+  
+  
+  function handleClick (cell) {
+    selectAnswer(cell)
+    selectCell(cell.id)
+  }
+  
   return <g   
           className={`crossword__cell 
             ${selectedCell ?
@@ -27,6 +39,8 @@ function Cell(
             'crossword__cell--filled' : ""}
             ${isHighlighted ?
             'crossword__cell--highlighted' : ""}
+            ${selectedAnswer ?
+            'crossword__cell--highlighted' : ""}
             `}
           >
             <rect
@@ -34,7 +48,7 @@ function Cell(
               y={row * cellSize}
               width={cellSize} 
               height={cellSize}
-              onClick={() => selectCell(cellNumber)}
+              onClick={() => handleClick(cells)}
               onDoubleClick={() => changeOrientation()}
               onKeyDown={(e) => inputCell(e)} 
               tabIndex="0"

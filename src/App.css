@@ -1,3 +1,4 @@
+
 h1,
 h2,
 h3,
@@ -15,6 +16,12 @@ rect {
 
 .App {
   margin: 16px;
+}
+
+@media (max-width: 400px) {
+  .App {
+    margin: 8px;
+  }
 }
 
 #grid {
@@ -86,10 +93,11 @@ svg[viewBox] {
   text-anchor: start;
 }
 
-@media (max-width: 440px) {
+@media (max-width: 400px) {
   .crossword__cell--number {
     font-size: 11px;
     transform: translateY(1px);
+    font-weight: bold;
   }
 }
 

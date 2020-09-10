@@ -1,35 +1,26 @@
 import React from "react";
 
-function Clues({ cellOrientation, cellNumber, downAnswers, acrossAnswers, setGroup}) {
+function Clues({ cellOrientation, cellNumber, selectCell, selectAnswer, cells}) {
 let across = []
 let down = []
-let acrossCounter = 0;
-let downCounter = 0;
 
-function selectGroup(i) {
-  setGroup(i)
+
+function handleClick(i, direction) {
+  selectCell(cellNumber[i])
+  selectAnswer(cells[i], direction)
+  console.log(direction)
 }
 
 cellOrientation.forEach((b, i) => {
   if (b === "across") {
-    let group = acrossAnswers[acrossCounter]
-    across.push(<li onClick={() => selectGroup(group)} key={i}>{cellNumber[i]}</li>)
-    acrossCounter++
+    across.push(<li onClick={() => handleClick(i, true)} key={i}>{cellNumber[i]}</li>)
   } else if (b === "down") {
-    let group = downAnswers[downCounter]
-    down.push(<li onClick={() => selectGroup(group)} key={i}>{cellNumber[i]}</li>)
-    downCounter++
+    down.push(<li onClick={() => handleClick(i, false)} key={i}>{cellNumber[i]}</li>)
   } else if (b === "acrossdown") {
-    let downGroup = downAnswers[downCounter]
-    let acrossGroup = acrossAnswers[acrossCounter]
-    down.push(<li onClick={() => selectGroup(downGroup)} key={i}>{cellNumber[i]}</li>)
-    across.push(<li onClick={() => selectGroup(acrossGroup)} key={i}>{cellNumber[i]}</li>)
-    acrossCounter++ 
-    downCounter++
+    down.push(<li onClick={() => handleClick(i, false)} key={i}>{cellNumber[i]}</li>)
+    across.push(<li onClick={() => handleClick(i, true)} key={i}>{cellNumber[i]}</li>)
   }
 })
-
-
 
   return (
     <>
@@ -45,7 +36,7 @@ cellOrientation.forEach((b, i) => {
       </div>
     </div>
     </>
-    
+ 
   );
 }
 export default Clues;

@@ -18,18 +18,17 @@ export default class App extends React.Component {
   static contextType = Context;
 
   state = {
-    rows: 5,
-    cols: 5,
+    rows: 15,
+    cols: 15,
     title: "Untitled",
     author: "Anonymous",
     custom: false,
-    blocks: Array(25).fill(false),
+    blocks: Array(225).fill(false),
     selectedCell: null,
+    selectedAnswer: [],
     highlightedCells: null,
     orientationIsHorizontal: true,
   };
-
-  
 
   setSize = (value) => {
     if (value === "daily") {
@@ -88,13 +87,12 @@ export default class App extends React.Component {
     });
   };
 
-  setGroup = (i) => {
-    this.setState({
-      highlightedCells: i,
-      selectedCell: i[0]
-    })
-  }
-  
+  selectAnswer = ({across, down}) => {
+    this.setState(prevState => ({
+      selectedAnswer: prevState.orientationIsHorizontal ? across : down
+    }));
+  };
+
   fillCell = (cell, character) => {
     const rows = this.state.rows;
     const cols = this.state.cols;
@@ -148,7 +146,7 @@ export default class App extends React.Component {
       this.fillCell(cell, e.key);
     }
   };
-  
+  // May be best to create a list of answer groups and then find
   checkLength = (clue, direction) => {
     let {cols, rows, blocks} = this.state
     let arr = [clue]
@@ -167,13 +165,15 @@ export default class App extends React.Component {
     return arr
   }
 
+ 
+
   render() {
     const value = {
-      rows: this.state.rows,
-      cols: this.state.cols,
+      // rows: this.state.rows,
+      // cols: this.state.cols,
       title: this.state.title,
       author: this.state.author,
-      selectCell: this.selectCell,
+      // selectCell: this.selectCell,
     };
 
     const custom = this.state.custom;
@@ -186,6 +186,7 @@ export default class App extends React.Component {
     let cellNumber = [];
     let downAnswers = [];
     let acrossAnswers = [];
+    let cells = []
 
     blocks.forEach((_, i) => {
       let isBlockFilled = blocks[i] === true;
@@ -199,9 +200,47 @@ export default class App extends React.Component {
       let isBlockBelowFilled =
         blocks[i + cols] === true || i + cols >= rows * cols;
 
+      cells.push({
+        id: i,
+        block: this.state.blocks[i], // May not be needed
+        number: null,
+        character: this.state.blocks[i] ? this.state.blocks[i] : "", // May not be needed
+        across: findSiblings(i, 'across'),
+        down: findSiblings(i, 'down')
+      })
+
+      
+      function findSiblings(clue, direction) {
+        if (blocks[clue] === true) return []
+        let arr = [clue]
+        
+        if (direction === 'across') {
+          for (let i = clue + 1; blocks[i] !== true && i % cols !== 0; i++) {
+            arr.push(i)
+          }
+          if (clue % cols !== 0) {
+            for (let i = clue - 1; i >= 0 && blocks[i] !== true && (i + 1) % cols !== 0; i--) {
+              arr.push(i)
+            }
+          }
+        }
+      
+        if (direction === 'down') {
+          for (let i = clue - cols; blocks[i] !== true && i >= 0; i -= cols ) {
+            arr.push(i)
+          }
+          for (let i = clue + cols; blocks[i] !== true && i < rows * cols; i += cols) {
+            arr.push(i)
+          }
+        }
+
+        return arr.sort()
+      }
+
       if (isBlockFilled) {
         cellOrientation.push(null);
         cellNumber.push(null);
+        cells[i].block = true;
         return;
       }
       if (
@@ -212,17 +251,20 @@ export default class App extends React.Component {
       ) {
         counter++;
         cellNumber.push(counter);
+        cells[i].number = counter;
         cellOrientation.push("acrossdown"); // This should add down and across, not 'acrossdown'
         downAnswers.push(this.checkLength(i, 'down'))
         acrossAnswers.push(this.checkLength(i, 'across'))
       } else if (isBlockBeforeFilled && !isBlockAfterFilled) {
         counter++;
         cellNumber.push(counter);
+        cells[i].number = counter;
         cellOrientation.push("across");
         acrossAnswers.push(this.checkLength(i, 'across'))
       } else if (isBlockAboveFilled && !isBlockBelowFilled) {
         counter++;
         cellNumber.push(counter);
+        cells[i].number = counter;
         cellOrientation.push("down");
         downAnswers.push(this.checkLength(i, 'down'))
       } else {
@@ -320,9 +362,12 @@ export default class App extends React.Component {
             <Grid
               selectedCell={this.state.selectedCell}
               selectCell={(cell) => this.selectCell(cell)}
+              selectedAnswer={this.state.selectedAnswer}
+              selectAnswer={(answer) => this.selectAnswer(answer)}
               blocks={this.state.blocks}
               rows={this.state.rows}
               cols={this.state.cols}
+              cells={cells}
               cellNumber={cellNumber}
               inputCell={(cell) => this.handleKeydown(cell)}
               changeOrientation={() => this.handleDoubleClick()}
@@ -331,9 +376,9 @@ export default class App extends React.Component {
             <Clues 
               cellOrientation={cellOrientation}
               cellNumber={cellNumber}
-              downAnswers={downAnswers}
-              acrossAnswers={acrossAnswers}
-              setGroup={(i) => this.setGroup(i)}
+              selectCell={(cell) => this.selectCell(cell)}
+              selectAnswer={(answer) => this.selectAnswer(answer)}
+              cells={cells}
             />
             <Fills 
             word={word}

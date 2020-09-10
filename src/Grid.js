@@ -27,13 +27,16 @@ export default class Grid extends React.Component {
           col={i % cols}
           cellNumber={i}
           selectCell={this.props.selectCell}
+          selectAnswer={this.props.selectAnswer}
           changeOrientation={this.props.changeOrientation}
           inputCell={this.props.inputCell}
           selectedCell={i === this.props.selectedCell}
+          selectedAnswer={this.props.selectedAnswer.includes(i)}
           blocked={block === true}
           cellCharacterLabel={block}
           cellNumberLabel={this.props.cellNumber[i]}
           highlightedCells={highlightedCells}
+          cells={this.props.cells[i]}
         />
       );
     });
