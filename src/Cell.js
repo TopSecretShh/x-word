@@ -1,5 +1,4 @@
-import React, { useContext } from "react";
-import Context from "./Context";
+import React from "react";
 
 function Cell({
   cellSize,
@@ -12,9 +11,8 @@ function Cell({
   cellNumberLabel,
   cellCharacterLabel,
   handleKeydown,
+  handleDoubleClick,
 }) {
-  const context = useContext(Context);
-
   return (
     <g
       className={`crossword__cell ${
@@ -29,7 +27,7 @@ function Cell({
         onClick={() => {
           selectCell(cellNumber);
         }}
-        onDoubleClick={() => context.handleDoubleClick()}
+        onDoubleClick={() => handleDoubleClick()}
         onKeyDown={(e) => handleKeydown(e)}
         tabIndex="0"
       ></rect>

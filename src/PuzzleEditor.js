@@ -76,6 +76,15 @@ export default class PuzzleEditor extends React.Component {
     });
   };
 
+  handleDoubleClick = () => {
+    // maybe change from double click to if already selected and click, change orientation? unnecessary?
+    this.setState((prevState) => {
+      return {
+        orientationIsHorizontal: !prevState.orientationIsHorizontal,
+      };
+    });
+  };
+
   fillCell = (cell, character) => {
     const rows = this.state.rows;
     const cols = this.state.cols;
@@ -204,6 +213,7 @@ export default class PuzzleEditor extends React.Component {
           cellCharacterLabel={block}
           cellNumberLabel={cellNumber[i]}
           handleKeydown={this.handleKeydown}
+          handleDoubleClick={this.handleDoubleClick}
         />
       );
     });

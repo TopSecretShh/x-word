@@ -84,15 +84,6 @@ export default class App extends React.Component {
     });
   };
 
-  handleDoubleClick = () => {
-    // maybe change from double click to if already selected and click, change orientation? unnecessary?
-    this.setState((prevState) => {
-      return {
-        orientationIsHorizontal: !prevState.orientationIsHorizontal,
-      };
-    });
-  };
-
   render() {
     const value = {
       addNewUser: this.addNewUser,
