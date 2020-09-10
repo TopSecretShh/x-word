@@ -1,24 +1,46 @@
 import React from "react";
 
-function Clues({ cellOrientation, cellNumber }) {
-let across = []
-let down = []
+function Clues({
+  cellOrientation,
+  cellNumber,
+  selectCell,
+  selectAnswer,
+  cells,
+}) {
+  let across = [];
+  let down = [];
 
-
-// could fill in cells by number, for example, 1, 1, 1, 2, 2, 3, 3, 
-
-cellOrientation.forEach((b, i) => {
-  if (b === "across") {
-    across.push(<li key={i}>{cellNumber[i]}</li>)
-  } else if (b === "down") {
-    down.push(<li key={i}>{cellNumber[i]}</li>)
-  } else if (b === "acrossdown") {
-    across.push(<li key={i}>{cellNumber[i]}</li>)
-    down.push(<li key={i}>{cellNumber[i]}</li>)
+  function handleClick(i, direction) {
+    selectCell(cellNumber[i]);
+    selectAnswer(cells[i], direction);
   }
-})
 
-
+  cellOrientation.forEach((b, i) => {
+    if (b === "across") {
+      across.push(
+        <li key={i} onClick={() => handleClick(i, true)}>
+          {cellNumber[i]}
+        </li>
+      );
+    } else if (b === "down") {
+      down.push(
+        <li key={i} onClick={() => handleClick(i, false)}>
+          {cellNumber[i]}
+        </li>
+      );
+    } else if (b === "acrossdown") {
+      across.push(
+        <li key={i} onClick={() => handleClick(i, true)}>
+          {cellNumber[i]}
+        </li>
+      );
+      down.push(
+        <li key={i} onClick={() => handleClick(i, false)}>
+          {cellNumber[i]}
+        </li>
+      );
+    }
+  });
 
   return (
     <div className="clues">
