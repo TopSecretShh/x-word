@@ -46,24 +46,6 @@ export default class App extends React.Component {
       },
     ],
     currentUser: "",
-
-    rows: 15,
-    cols: 15,
-    title: "Untitled",
-    custom: false,
-    blocks: Array(225).fill(false),
-    selectedCell: null,
-    orientationIsHorizontal: true,
-
-    // grid/blocks: [
-    //   {
-    //     id: 0,
-    //     block: false,
-    //     number: "",
-    //     letter: "",
-    //     highlighted: false
-    //   },
-    // ],
   };
 
   addNewUser = (username, password) => {
@@ -86,20 +68,10 @@ export default class App extends React.Component {
 
   render() {
     const value = {
+      users: this.state.users,
+      currentUser: this.state.currentUser,
       addNewUser: this.addNewUser,
       setCurrentUser: this.setCurrentUser,
-      currentUser: this.state.currentUser,
-      users: this.state.users,
-      rows: this.state.rows,
-      cols: this.state.cols,
-      custom: this.state.custom,
-      blocks: this.state.blocks,
-      title: this.state.title,
-      selectedCell: this.state.selectedCell,
-      selectCell: this.selectCell,
-
-      handleKeydown: this.handleKeydown,
-      handleDoubleClick: this.handleDoubleClick,
     };
 
     return (
