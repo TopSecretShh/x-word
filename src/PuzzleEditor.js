@@ -79,6 +79,12 @@ export default class PuzzleEditor extends React.Component {
     });
   };
 
+  selectAnswer = ({ across, down }) => {
+    this.setState((prevState) => ({
+      selectedAnswer: prevState.orientationIsHorizontal ? across : down,
+    }));
+  };
+
   handleDoubleClick = () => {
     // maybe change from double click to if already selected and click, change orientation? unnecessary?
     this.setState((prevState) => {
@@ -198,7 +204,7 @@ export default class PuzzleEditor extends React.Component {
     console.log(e.key);
   };
 
-  renderGrid = (cellNumber) => {
+  renderGrid = (cellNumber, cells) => {
     let cols = this.state.cols;
     let blocks = this.state.blocks;
 
@@ -212,11 +218,15 @@ export default class PuzzleEditor extends React.Component {
           cellNumber={i}
           selectCell={this.selectCell}
           selectedCell={i === this.state.selectedCell}
+          selectAnswer={this.selectAnswer}
+          selectedAnswer={this.state.selectedAnswer.includes(i)}
           blocked={block === true}
           cellCharacterLabel={block}
           cellNumberLabel={cellNumber[i]}
           handleKeydown={this.handleKeydown}
           handleDoubleClick={this.handleDoubleClick}
+          highlightedCells={this.state.highlightedCells}
+          cells={cells[i]}
         />
       );
     });
@@ -451,13 +461,19 @@ export default class PuzzleEditor extends React.Component {
               }`}
               id="grid"
             >
-              {this.renderGrid(cellNumber)}
+              {this.renderGrid(cellNumber, cells)}
             </svg>
           </div>
 
           <div>
             {/* not-grid puzzle stuff */}
-            <Clues cellOrientation={cellOrientation} cellNumber={cellNumber} />
+            <Clues
+              cellOrientation={cellOrientation}
+              cellNumber={cellNumber}
+              selectCell={this.selectCell}
+              selectAnswer={this.selectAnswer}
+              cells={cells}
+            />
             <Fills word={word} />
           </div>
         </main>

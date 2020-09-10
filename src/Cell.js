@@ -7,17 +7,32 @@ function Cell({
   cellNumber,
   selectCell,
   selectedCell,
+  selectAnswer,
+  selectedAnswer,
   blocked,
   cellNumberLabel,
   cellCharacterLabel,
   handleKeydown,
   handleDoubleClick,
+  highlightedCells,
+  cells,
 }) {
+  let highlighted = highlightedCells || [];
+  let isHighlighted = highlighted.includes(cellNumber);
+
+  function handleClick(cell) {
+    selectAnswer(cell);
+    selectCell(cell.id);
+  }
+
   return (
     <g
-      className={`crossword__cell ${
-        selectedCell ? "crossword__cell--selected" : ""
-      } ${blocked ? "crossword__cell--filled" : ""}`}
+      className={`crossword__cell 
+            ${selectedCell ? "crossword__cell--selected" : ""} 
+            ${blocked ? "crossword__cell--filled" : ""}
+            ${isHighlighted ? "crossword__cell--highlighted" : ""}
+            ${selectedAnswer ? "crossword__cell--highlighted" : ""}
+            `}
     >
       <rect
         x={col * cellSize}
@@ -25,7 +40,7 @@ function Cell({
         width={cellSize - 1}
         height={cellSize - 1}
         onClick={() => {
-          selectCell(cellNumber);
+          handleClick(cells);
         }}
         onDoubleClick={() => handleDoubleClick()}
         onKeyDown={(e) => handleKeydown(e)}

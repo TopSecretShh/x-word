@@ -48,10 +48,12 @@ svg[viewBox] {
   width: 100%;
 }
 
-
+.crossword__cell--highlighted {
+  fill: rgb(252, 191, 25);
+}
 
 .crossword__cell--selected {
-  fill: lightsteelblue;
+  fill: rgb(255, 241, 110);
 }
 
 .crossword__cell--filled {
