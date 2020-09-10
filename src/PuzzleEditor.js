@@ -203,6 +203,7 @@ export default class PuzzleEditor extends React.Component {
           blocked={block === true}
           cellCharacterLabel={block}
           cellNumberLabel={cellNumber[i]}
+          handleKeydown={this.handleKeydown}
         />
       );
     });

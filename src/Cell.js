@@ -11,6 +11,7 @@ function Cell({
   blocked,
   cellNumberLabel,
   cellCharacterLabel,
+  handleKeydown,
 }) {
   const context = useContext(Context);
 
@@ -29,7 +30,7 @@ function Cell({
           selectCell(cellNumber);
         }}
         onDoubleClick={() => context.handleDoubleClick()}
-        onKeyDown={(e) => context.handleKeydown(e)}
+        onKeyDown={(e) => handleKeydown(e)}
         tabIndex="0"
       ></rect>
       <text
