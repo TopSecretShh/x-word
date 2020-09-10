@@ -228,6 +228,7 @@ export default class App extends React.Component {
         });
       }
     }
+    // TODO up/down arrows scroll the browser window
     if (e.key === "ArrowUp") {
       if (cell > this.state.cols - 1) {
         this.setState({
@@ -243,6 +244,7 @@ export default class App extends React.Component {
     }
 
     if (e.key === "Backspace") {
+      // TODO need to add for vertical also
       if (this.state.orientationIsHorizontal) {
         if (typeof this.state.blocks[cell] === "string") {
           // this works but maybe shouldn't? we're modifying state without calling setState?
