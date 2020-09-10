@@ -2,7 +2,7 @@ import React from "react";
 import Context from "./Context";
 import Cell from "./Cell";
 
-export default class Grid extends React.Component {
+export default class PuzzleEditor extends React.Component {
   static contextType = Context;
 
   // daily puzzle size = 15 x 15

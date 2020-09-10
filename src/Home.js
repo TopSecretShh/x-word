@@ -2,7 +2,7 @@ import React from "react";
 import { Link, Redirect } from "react-router-dom";
 import Context from "./Context";
 
-import Grid from "./Grid";
+import PuzzleEditor from "./PuzzleEditor";
 import Clues from "./Clues";
 
 import "./App.css";
@@ -136,7 +136,7 @@ export default class Home extends React.Component {
           </div>
 
           <div className="puzzle">
-            <Grid cellNumber={cellNumber} />
+            <PuzzleEditor cellNumber={cellNumber} />
             <Clues cellOrientation={cellOrientation} cellNumber={cellNumber} />
           </div>
         </main>
