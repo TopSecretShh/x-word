@@ -10,12 +10,8 @@ export default React.createContext({
   custom: false,
   blocks: [],
   title: "Untitled",
-  selectCell: () => {},
   selectedCell: "",
-  setSize: () => {},
-  handleSubmitCustom: () => {},
-  handlePatternBtn: () => {},
+
   handleKeyDown: () => {},
   handleDoubleClick: () => {},
-  selectWord: () => {},
 });

@@ -5,8 +5,6 @@ import Landing from "./Landing";
 import Login from "./Login";
 import SignUp from "./SignUp";
 import Home from "./Home";
-
-import PATTERNONE from "./Patterns.js";
 import Context from "./Context";
 import "./App.css";
 
@@ -86,167 +84,13 @@ export default class App extends React.Component {
     });
   };
 
-  handlePatternBtn = () => {
-    if (this.state.rows === 15) {
-      this.setState({
-        blocks: PATTERNONE,
-      });
-    }
-  };
-
-  selectCell = (value) => {
-    this.setState({
-      selectedCell: value,
-    });
-  };
-
-  fillCell = (cell, character) => {
-    const rows = this.state.rows;
-    const cols = this.state.cols;
-    const totalSquares = rows * cols - 1;
-    const cellTwin = totalSquares - cell; // At 15 rows 10 cols for example, middle symmetry doesn't work
-    const blocks = this.state.blocks;
-    const nextCell = this.state.orientationIsHorizontal
-      ? cell + 1
-      : cell + cols;
-
-    if (typeof character === "string") {
-      // this works but maybe shouldn't? we're modifying state without calling setState?
-      blocks[cell] = character.toUpperCase();
-      this.setState({
-        selectedCell: nextCell,
-      });
-      if (blocks[cellTwin] === true) blocks[cellTwin] = false;
-    } else {
-      blocks[cell] = !blocks[cell];
-
-      if (cell !== Math.floor(totalSquares / 2)) {
-        blocks[cellTwin] = !blocks[cellTwin];
-      }
-    }
-
-    this.setState({
-      blocks: blocks,
-    });
-    // console.log(this.state.blocks);
-  };
-
   handleDoubleClick = () => {
-    // maybe change from double click to if already selected and click, change orientation?
+    // maybe change from double click to if already selected and click, change orientation? unnecessary?
     this.setState((prevState) => {
       return {
         orientationIsHorizontal: !prevState.orientationIsHorizontal,
       };
     });
-  };
-
-  handleKeydown = (e) => {
-    const cell = this.state.selectedCell;
-    const blocks = this.state.blocks;
-
-    if (e.key === "." && (cell || cell === 0)) {
-      this.fillCell(cell);
-    }
-    if (e.key.match(/^[a-z]+$/)) {
-      this.fillCell(cell, e.key);
-    }
-    if (e.key.match(/\s/g)) {
-      if (this.state.orientationIsHorizontal) {
-        this.setState({
-          orientationIsHorizontal: false,
-        });
-      } else if (!this.state.orientationIsHorizontal) {
-        this.setState({
-          orientationIsHorizontal: true,
-        });
-      }
-    }
-    if (e.key === "ArrowRight") {
-      if (
-        ((cell + 1) / this.state.cols) % 2 === 0 ||
-        ((cell + 1) / this.state.cols) % 2 === 1
-      ) {
-        console.log("right edge");
-      } else {
-        this.setState({
-          selectedCell: cell + 1,
-        });
-      }
-    }
-    if (e.key === "ArrowLeft") {
-      if (
-        cell === 0 ||
-        (cell / this.state.cols) % 2 === 0 ||
-        (cell / this.state.cols) % 2 === 1
-      ) {
-        console.log("left edge");
-      } else {
-        this.setState({
-          selectedCell: cell - 1,
-        });
-      }
-    }
-    // TODO up/down arrows scroll the browser window
-    if (e.key === "ArrowUp") {
-      if (cell > this.state.cols - 1) {
-        this.setState({
-          selectedCell: cell - this.state.cols,
-        });
-      }
-    }
-    if (e.key === "ArrowDown") {
-      if (cell < this.state.cols * this.state.rows - this.state.cols)
-        this.setState({
-          selectedCell: cell + this.state.cols,
-        });
-    }
-
-    if (e.key === "Backspace") {
-      // TODO need to add for vertical also
-      if (this.state.orientationIsHorizontal) {
-        if (typeof this.state.blocks[cell] === "string") {
-          // this works but maybe shouldn't? we're modifying state without calling setState?
-          blocks[cell] = false;
-        }
-        this.setState({
-          selectedCell: cell - 1,
-        });
-      } else {
-        this.setState({
-          selectedCell: cell - this.state.cols,
-        });
-      }
-    }
-    console.log(e.key);
-  };
-
-  selectWord = (selectedCell) => {
-    const horizontal = this.state.orientationIsHorizontal;
-    if (horizontal) {
-      const allCells = this.state.blocks;
-
-      for (let j = selectedCell; j > 0; j--) {
-        if (allCells[j]) {
-          console.log("lower block: ", j);
-          break;
-        }
-      }
-      console.log("selectedCell: ", selectedCell);
-      for (let i = selectedCell; i < allCells.length; i++) {
-        if (allCells[i]) {
-          console.log("upper block: ", i);
-          break;
-        }
-      }
-
-      // highlight all cells between the upper and lower blocks
-      // highlightedCells get highlighted class
-    } else if (!horizontal) {
-      // find nearest block above selectedCell
-      // selectedCell[cellNumber] - 15
-      // find nearest block below selectedCell
-      // highlight all cells between the two blocks
-    }
   };
 
   render() {
@@ -262,12 +106,9 @@ export default class App extends React.Component {
       title: this.state.title,
       selectedCell: this.state.selectedCell,
       selectCell: this.selectCell,
-      setSize: this.setSize,
-      handleSubmitCustom: this.handleSubmitCustom,
-      handlePatternBtn: this.handlePatternBtn,
+
       handleKeydown: this.handleKeydown,
       handleDoubleClick: this.handleDoubleClick,
-      selectWord: this.selectWord,
     };
 
     return (

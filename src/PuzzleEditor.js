@@ -18,6 +18,7 @@ export default class PuzzleEditor extends React.Component {
     orientationIsHorizontal: true,
   };
 
+  /* BEGIN PUZZLE OPTIONS (sizing, pattern) */
   setSize = (value) => {
     if (value === "daily") {
       this.setState({
@@ -60,6 +61,131 @@ export default class PuzzleEditor extends React.Component {
     });
   };
 
+  handlePatternBtn = () => {
+    if (this.state.rows === 15) {
+      this.setState({
+        blocks: PATTERNONE,
+      });
+    }
+  };
+  /* END PUZZLE OPTIONS (sizing, pattern) */
+
+  selectCell = (value) => {
+    this.setState({
+      selectedCell: value,
+    });
+  };
+
+  fillCell = (cell, character) => {
+    const rows = this.state.rows;
+    const cols = this.state.cols;
+    const totalSquares = rows * cols - 1;
+    const cellTwin = totalSquares - cell; // At 15 rows 10 cols for example, middle symmetry doesn't work
+    const blocks = this.state.blocks;
+    const nextCell = this.state.orientationIsHorizontal
+      ? cell + 1
+      : cell + cols;
+
+    if (typeof character === "string") {
+      // this works but maybe shouldn't? we're modifying state without calling setState?
+      blocks[cell] = character.toUpperCase();
+      this.setState({
+        selectedCell: nextCell,
+      });
+      if (blocks[cellTwin] === true) blocks[cellTwin] = false;
+    } else {
+      blocks[cell] = !blocks[cell];
+
+      if (cell !== Math.floor(totalSquares / 2)) {
+        blocks[cellTwin] = !blocks[cellTwin];
+      }
+    }
+
+    this.setState({
+      blocks: blocks,
+    });
+  };
+
+  handleKeydown = (e) => {
+    const cell = this.state.selectedCell;
+    const blocks = this.state.blocks;
+
+    if (e.key === "." && (cell || cell === 0)) {
+      this.fillCell(cell);
+    }
+    if (e.key.match(/^[a-z]+$/)) {
+      this.fillCell(cell, e.key);
+    }
+    if (e.key.match(/\s/g)) {
+      if (this.state.orientationIsHorizontal) {
+        this.setState({
+          orientationIsHorizontal: false,
+        });
+      } else if (!this.state.orientationIsHorizontal) {
+        this.setState({
+          orientationIsHorizontal: true,
+        });
+      }
+    }
+    if (e.key === "ArrowRight") {
+      if (
+        ((cell + 1) / this.state.cols) % 2 === 0 ||
+        ((cell + 1) / this.state.cols) % 2 === 1
+      ) {
+        console.log("right edge");
+      } else {
+        this.setState({
+          selectedCell: cell + 1,
+        });
+      }
+    }
+    if (e.key === "ArrowLeft") {
+      if (
+        cell === 0 ||
+        (cell / this.state.cols) % 2 === 0 ||
+        (cell / this.state.cols) % 2 === 1
+      ) {
+        console.log("left edge");
+      } else {
+        this.setState({
+          selectedCell: cell - 1,
+        });
+      }
+    }
+    // TODO up/down arrows scroll the browser window
+    if (e.key === "ArrowUp") {
+      if (cell > this.state.cols - 1) {
+        this.setState({
+          selectedCell: cell - this.state.cols,
+        });
+      }
+    }
+    if (e.key === "ArrowDown") {
+      if (cell < this.state.cols * this.state.rows - this.state.cols)
+        this.setState({
+          selectedCell: cell + this.state.cols,
+        });
+    }
+
+    if (e.key === "Backspace") {
+      // TODO need to add for vertical also
+      if (this.state.orientationIsHorizontal) {
+        if (typeof this.state.blocks[cell] === "string") {
+          // this works but maybe shouldn't? we're modifying state without calling setState?
+          blocks[cell] = false;
+        }
+        this.setState({
+          selectedCell: cell - 1,
+        });
+      } else {
+        this.setState({
+          selectedCell: cell - this.state.cols,
+        });
+      }
+    }
+    console.log(e.key);
+  };
+
   renderGrid = (cellNumber) => {
     let cols = this.state.cols;
     let blocks = this.state.blocks;
@@ -72,7 +198,8 @@ export default class PuzzleEditor extends React.Component {
           row={Math.floor(i / cols)}
           col={i % cols}
           cellNumber={i}
-          selectedCell={i === this.context.selectedCell}
+          selectCell={this.selectCell}
+          selectedCell={i === this.state.selectedCell}
           blocked={block === true}
           cellCharacterLabel={block}
           cellNumberLabel={cellNumber[i]}
@@ -195,10 +322,7 @@ export default class PuzzleEditor extends React.Component {
             </div>
             <div className="pattern-btn">
               <h3>Pattern</h3>
-              <button
-                type="button"
-                onClick={() => this.context.handlePatternBtn()}
-              >
+              <button type="button" onClick={() => this.handlePatternBtn()}>
                 Pattern
               </button>
             </div>
@@ -218,6 +342,7 @@ export default class PuzzleEditor extends React.Component {
           </div>
 
           <div>
+            {/* not-grid puzzle stuff */}
             <Clues cellOrientation={cellOrientation} cellNumber={cellNumber} />
           </div>
         </main>

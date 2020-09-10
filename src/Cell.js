@@ -6,6 +6,7 @@ function Cell({
   row,
   col,
   cellNumber,
+  selectCell,
   selectedCell,
   blocked,
   cellNumberLabel,
@@ -25,8 +26,7 @@ function Cell({
         width={cellSize - 1}
         height={cellSize - 1}
         onClick={() => {
-          context.selectCell(cellNumber);
-          context.selectWord(cellNumber);
+          selectCell(cellNumber);
         }}
         onDoubleClick={() => context.handleDoubleClick()}
         onKeyDown={(e) => context.handleKeydown(e)}
