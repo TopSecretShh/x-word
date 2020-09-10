@@ -3,6 +3,7 @@ import { Redirect } from "react-router-dom";
 import Context from "./Context";
 import Cell from "./Cell";
 import Clues from "./Clues";
+import PATTERNONE from "./Patterns.js";
 
 export default class PuzzleEditor extends React.Component {
   static contextType = Context;
@@ -17,9 +18,51 @@ export default class PuzzleEditor extends React.Component {
     orientationIsHorizontal: true,
   };
 
+  setSize = (value) => {
+    if (value === "daily") {
+      this.setState({
+        rows: 15,
+        cols: 15,
+        blocks: Array(225).fill(false),
+        selectedCell: null,
+      });
+    } else if (value === "sunday") {
+      this.setState({
+        rows: 21,
+        cols: 21,
+        blocks: Array(441).fill(false),
+        selectedCell: null,
+      });
+    } else if (value === "custom") {
+      this.setState({
+        custom: true,
+      });
+    }
+    if (this.state.custom) {
+      this.setState({
+        custom: false,
+      });
+    }
+  };
+
+  handleSubmitCustom = (e) => {
+    console.log(
+      "custom dimensions: ",
+      Number(e.target.rows.value),
+      parseInt(e.target.cols.value)
+    );
+
+    this.setState({
+      rows: parseInt(e.target.rows.value),
+      cols: parseInt(e.target.cols.value),
+      blocks: Array(e.target.rows.value * e.target.cols.value).fill(false),
+      selectedCell: null,
+    });
+  };
+
   renderGrid = (cellNumber) => {
-    let cols = this.context.cols;
-    let blocks = this.context.blocks;
+    let cols = this.state.cols;
+    let blocks = this.state.blocks;
 
     let grid = blocks.map((block, i) => {
       return (
@@ -42,13 +85,13 @@ export default class PuzzleEditor extends React.Component {
   render() {
     const user = this.context.currentUser;
 
-    const rows = this.context.rows;
-    const cols = this.context.cols;
+    const rows = this.state.rows;
+    const cols = this.state.cols;
     const width = cols * 33;
     const height = rows * 33;
-    const custom = this.context.custom;
+    const custom = this.state.custom;
 
-    const blocks = this.context.blocks;
+    const blocks = this.state.blocks;
     let counter = 0;
     let cellOrientation = [];
     let cellNumber = [];
@@ -107,21 +150,21 @@ export default class PuzzleEditor extends React.Component {
               <button
                 type="button"
                 value="daily"
-                onClick={(e) => this.context.setSize(e.target.value)}
+                onClick={(e) => this.setSize(e.target.value)}
               >
                 Daily
               </button>
               <button
                 type="button"
                 value="sunday"
-                onClick={(e) => this.context.setSize(e.target.value)}
+                onClick={(e) => this.setSize(e.target.value)}
               >
                 Sunday
               </button>
               <button
                 type="button"
                 value="custom"
-                onClick={(e) => this.context.setSize(e.target.value)}
+                onClick={(e) => this.setSize(e.target.value)}
               >
                 Custom
               </button>
@@ -129,7 +172,7 @@ export default class PuzzleEditor extends React.Component {
                 <form
                   onSubmit={(e) => {
                     e.preventDefault();
-                    this.context.handleSubmitCustom(e);
+                    this.handleSubmitCustom(e);
                   }}
                 >
                   <fieldset className="custom-size">

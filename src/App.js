@@ -86,48 +86,6 @@ export default class App extends React.Component {
     });
   };
 
-  setSize = (value) => {
-    if (value === "daily") {
-      this.setState({
-        rows: 15,
-        cols: 15,
-        blocks: Array(225).fill(false),
-        selectedCell: null,
-      });
-    } else if (value === "sunday") {
-      this.setState({
-        rows: 21,
-        cols: 21,
-        blocks: Array(441).fill(false),
-        selectedCell: null,
-      });
-    } else if (value === "custom") {
-      this.setState({
-        custom: true,
-      });
-    }
-    if (this.state.custom) {
-      this.setState({
-        custom: false,
-      });
-    }
-  };
-
-  handleSubmitCustom = (e) => {
-    console.log(
-      "custom dimensions: ",
-      Number(e.target.rows.value),
-      parseInt(e.target.cols.value)
-    );
-
-    this.setState({
-      rows: parseInt(e.target.rows.value),
-      cols: parseInt(e.target.cols.value),
-      blocks: Array(e.target.rows.value * e.target.cols.value).fill(false),
-      selectedCell: null,
-    });
-  };
-
   handlePatternBtn = () => {
     if (this.state.rows === 15) {
       this.setState({
