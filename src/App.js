@@ -9,29 +9,15 @@ import Context from "./Context";
 import "./App.css";
 
 /*
-PROBLEMS
-Blocking a lettered square or lettering a block square, does not work symmetrically
-Too many columns extend beyond area
-sometimes, not always: can't select a cell that has a letter in it
+PROBLEMS/ISSUES/ROOM FOR IMPROVEMENT
+- Ben is going to drop little TODO notes on things he's planning to work on soon. Feel free to work on those or not as you like, just remove the TODO if you finish it off.
+
+- double click/pressing space bar do change the orientation, but the highlighted cells/selected answer doesn't change until a new click
+- arrow keys cannot select answer
+- Blocking a lettered square or lettering a block square, does not work symmetrically
+- Too many columns extend beyond area
+- sometimes, not always: can't select a cell that has a letter in it
 */
-
-/*
-BEN THOUGHTS
-maybe need to differentiate between selected cell and highlighted?
-when you click a cell it is hightlight blue and has a blue border. when you enter a letter the next cell is highlighted, but the border remains
-tab moves the border
- */
-
-/*
- KEY BINDINGS
-keyboard bindings (feel free to adjust this, just compiling a list from using existing online tools and what intuitively makes sense to my little brain):
-
-- . = block
-- space = change orientation
-- tab & enter = next across/down word, depending on current orientation. skips next word if filled in aka 'next word' = next empty word. if next word is incomplete, highlight and select first empty cell in word. if last across word, next word = first empty down word and vice versa
-- arrow keys = navigate currently selected cell, orientation remains unchanged. if encounter block, jump all consecutive blocks to next non-block cell
-- delete = if letter in cell, delete letter from cell. if no letter in cell, delete letter in previous cell and select that same cell. Previous cell dictated by current orientation
- */
 
 export default class App extends React.Component {
   static contextType = Context;

@@ -170,7 +170,7 @@ export default class PuzzleEditor extends React.Component {
         });
       }
     }
-    // TODO up/down arrows scroll the browser window
+    // TODO up/down arrows scroll the browser window, but we don't want them to
     if (e.key === "ArrowUp") {
       if (cell > this.state.cols - 1) {
         this.setState({
@@ -187,6 +187,7 @@ export default class PuzzleEditor extends React.Component {
 
     if (e.key === "Backspace") {
       // TODO need to add for vertical also
+      // TODO needs boundaries just like arrow keys
       if (this.state.orientationIsHorizontal) {
         if (typeof this.state.blocks[cell] === "string") {
           // this works but maybe shouldn't? we're modifying state without calling setState?
@@ -201,7 +202,6 @@ export default class PuzzleEditor extends React.Component {
         });
       }
     }
-    console.log(e.key);
   };
 
   renderGrid = (cellNumber, cells) => {
@@ -233,7 +233,7 @@ export default class PuzzleEditor extends React.Component {
     return grid;
   };
 
-  /* BEGIN BEN'S ATTEMPT TO COPY/PASTE CODE FROM ANOTHER BRANCH... */
+  /* BEGIN NEW STUFF */
   checkLength = (clue, direction) => {
     let { cols, rows, blocks } = this.state;
     let arr = [clue];
@@ -255,7 +255,7 @@ export default class PuzzleEditor extends React.Component {
     }
     return arr;
   };
-  /* END BEN'S ATTEMPT TO COPY/PASTE CODE FROM ANOTHER BRANCH... */
+  /* END NEW STUFF */
 
   render() {
     const user = this.context.currentUser;
