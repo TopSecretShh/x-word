@@ -12,6 +12,9 @@ import "./App.css";
 PROBLEMS/ISSUES/ROOM FOR IMPROVEMENT
 - Ben is going to drop little TODO notes on things he's planning to work on soon. Feel free to work on those or not as you like, just remove the TODO if you finish it off.
 
+- try this: set orientation to not horizontal, select last cell in first col. pick a letter, any letter, hit it once to fill cell, twice to add a new row/number to across clues, three times for an error 
+- also this (probably related): orientation horizontal, (small custom size makes this more obvious). start in the last cell and add letters. it adds more rows, I think, or at least more numbers appear in the across clues
+
 - double click/pressing space bar do change the orientation, but the highlighted cells/selected answer doesn't change until a new click
 - arrow keys cannot select answer
 - Blocking a lettered square or lettering a block square, does not work symmetrically

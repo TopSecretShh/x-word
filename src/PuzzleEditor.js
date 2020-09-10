@@ -134,6 +134,7 @@ export default class PuzzleEditor extends React.Component {
     if (e.key.match(/^[a-z]+$/)) {
       this.fillCell(cell, e.key);
     }
+    // TODO space bar scrolls to bottom of page (must be default behavior, how do we turn it off?)
     if (e.key.match(/\s/g)) {
       if (this.state.orientationIsHorizontal) {
         this.setState({
@@ -170,7 +171,7 @@ export default class PuzzleEditor extends React.Component {
         });
       }
     }
-    // TODO up/down arrows scroll the browser window, but we don't want them to
+    // TODO up/down arrows scroll the browser window (must be default behavior, how do we turn it off?)
     if (e.key === "ArrowUp") {
       if (cell > this.state.cols - 1) {
         this.setState({
@@ -186,20 +187,39 @@ export default class PuzzleEditor extends React.Component {
     }
 
     if (e.key === "Backspace") {
-      // TODO need to add for vertical also
-      // TODO needs boundaries just like arrow keys
       if (this.state.orientationIsHorizontal) {
         if (typeof this.state.blocks[cell] === "string") {
           // this works but maybe shouldn't? we're modifying state without calling setState?
           blocks[cell] = false;
         }
-        this.setState({
-          selectedCell: cell - 1,
-        });
+        if (
+          cell === 0 ||
+          (cell / this.state.cols) % 2 === 0 ||
+          (cell / this.state.cols) % 2 === 1
+        ) {
+          this.setState({
+            selectedCell: cell,
+          });
+        } else {
+          this.setState({
+            selectedCell: cell - 1,
+          });
+        }
       } else {
-        this.setState({
-          selectedCell: cell - this.state.cols,
-        });
+        if (typeof this.state.blocks[cell] === "string") {
+          // this works but maybe shouldn't? we're modifying state without calling setState?
+          blocks[cell] = false;
+        }
+        if (cell > this.state.cols - 1) {
+          console.log("not top edge");
+          this.setState({
+            selectedCell: cell - this.state.cols,
+          });
+        } else {
+          this.setState({
+            selectedCell: cell,
+          });
+        }
       }
     }
   };
