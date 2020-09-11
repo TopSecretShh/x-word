@@ -4,24 +4,24 @@ function Cell({
   cellSize,
   row,
   col,
-  cellNumber,
   selectCell,
   selectedCell,
-  selectAnswer,
   selectedAnswer,
   blocked,
   cellNumberLabel,
   cellCharacterLabel,
   handleKeydown,
   handleDoubleClick,
-  highlightedCells,
   cells,
 }) {
-  let highlighted = highlightedCells || [];
-  let isHighlighted = highlighted.includes(cellNumber);
+//
+  // let highlighted = highlightedCells || [];
+  // let isHighlighted = highlighted.includes(cellNumber);
+
+  let highlight = selectedAnswer.some(a => a === cells.id)
+
 
   function handleClick(cell) {
-    selectAnswer(cell);
     selectCell(cell.id);
   }
 
@@ -30,21 +30,21 @@ function Cell({
       className={`crossword__cell 
             ${selectedCell ? "crossword__cell--selected" : ""} 
             ${blocked ? "crossword__cell--filled" : ""}
-            ${isHighlighted ? "crossword__cell--highlighted" : ""}
-            ${selectedAnswer ? "crossword__cell--highlighted" : ""}
+            ${highlight ? "crossword__cell--highlighted" : ""}
             `}
     >
       <rect
         x={col * cellSize}
         y={row * cellSize}
-        width={cellSize - 1}
-        height={cellSize - 1}
+        width={cellSize}
+        height={cellSize}
         onClick={() => {
           handleClick(cells);
         }}
         onDoubleClick={() => handleDoubleClick()}
         onKeyDown={(e) => handleKeydown(e)}
         tabIndex="0"
+        vectorEffect="non-scaling-stroke"
       ></rect>
       <text
         className="crossword__cell--letter"

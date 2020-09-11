@@ -1,3 +1,4 @@
+
 h1,
 h2,
 h3,
@@ -5,19 +6,40 @@ p {
   margin: 0;
 }
 
+rect {
+  outline: 0;
+  stroke: black;
+  stroke-width: 0.5px;
+}
+
+
+
 .App {
   margin: 16px;
 }
 
+@media (max-width: 400px) {
+  .App {
+    margin: 8px;
+  }
+}
+
 #grid {
   margin-top: 16px;
-  border: 1px solid black;
-  border-right: none;
-  border-bottom: none;
+  border: 2px solid black;
 }
 
 .clues {
   display: flex;
+  padding: 16px;
+}
+
+.clues > div {
+  padding: 8px;
+}
+
+.clues__list li {
+  cursor: pointer;
 }
 
 .puzzle-options {
@@ -36,15 +58,13 @@ p {
 }
 
 svg[viewBox] {
-  background: black;
+  /* background: black; */
   user-select: none;
 }
 .view_box--tall {
   height: 100%;
-  width: auto;
 }
 .view_box--wide {
-  height: auto;
   width: 100%;
 }
 
@@ -68,8 +88,16 @@ svg[viewBox] {
 .crossword__cell--number {
   font-family: Arial, Helvetica, sans-serif;
   fill: black;
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 500;
+  text-anchor: start;
+}
+
+@media (max-width: 400px) {
+  .crossword__cell--number {
+    font-size: 11px;
+    transform: translateY(1px);
+  }
 }
 
 .crossword__cell--letter {
@@ -79,16 +107,6 @@ svg[viewBox] {
   text-anchor: middle;
 }
 
-@media (max-width: 450px) {
-  .crossword__cell--number {
-    font-size: 13px;
-    transform: translateY(2px);
-  }
-  .crossword__cell--letter {
-    transform: translateY(2px);
-  }
-}
-
 ul {
   list-style-type: none;
 }
@@ -96,4 +114,8 @@ ul {
 .puzzle {
   display: flex;
   flex-wrap: wrap;
+}
+
+.fills {
+ padding: 16px;
 }

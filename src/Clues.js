@@ -4,15 +4,14 @@ function Clues({
   cellOrientation,
   cellNumber,
   selectCell,
-  selectAnswer,
-  cells,
+  handleDoubleClick
 }) {
   let across = [];
   let down = [];
 
   function handleClick(i, direction) {
-    selectCell(cellNumber[i]);
-    selectAnswer(cells[i], direction);
+    selectCell(i);
+    handleDoubleClick(direction);
   }
 
   cellOrientation.forEach((b, i) => {
