@@ -18,14 +18,13 @@ export default class App extends React.Component {
   static contextType = Context;
 
   state = {
-    rows: 15,
-    cols: 15,
+    rows: 3,
+    cols: 3,
     title: "Untitled",
     author: "Anonymous",
     custom: false,
-    blocks: Array(225).fill(false),
+    blocks: Array(9).fill(false),
     selectedCell: null,
-    selectedAnswer: [],
     highlightedCells: null,
     orientationIsHorizontal: true,
   };
@@ -87,12 +86,6 @@ export default class App extends React.Component {
     });
   };
 
-  selectAnswer = ({across, down}) => {
-    this.setState(prevState => ({
-      selectedAnswer: prevState.orientationIsHorizontal ? across : down
-    }));
-  };
-
   fillCell = (cell, character) => {
     const rows = this.state.rows;
     const cols = this.state.cols;
@@ -127,12 +120,18 @@ export default class App extends React.Component {
     });
   };
 
-  handleDoubleClick = () => {
-    this.setState(prevState => {
-      return {
-        orientationIsHorizontal: !prevState.orientationIsHorizontal
-      }
-    })
+  handleDoubleClick = (input) => {
+    if (input !== undefined) {
+      this.setState({
+        orientationIsHorizontal: input
+      })
+    } else {
+      this.setState(prevState => {
+        return {
+          orientationIsHorizontal: input || !prevState.orientationIsHorizontal
+        }
+      })
+    }
   }
 
   handleKeydown = (e) => {
@@ -169,24 +168,20 @@ export default class App extends React.Component {
 
   render() {
     const value = {
-      // rows: this.state.rows,
-      // cols: this.state.cols,
       title: this.state.title,
       author: this.state.author,
-      // selectCell: this.selectCell,
     };
 
     const custom = this.state.custom;
-
     let rows = this.state.rows;
     let cols = this.state.cols;
     let blocks = this.state.blocks;
     let counter = 0;
     let cellOrientation = [];
     let cellNumber = [];
-    let downAnswers = [];
-    let acrossAnswers = [];
     let cells = []
+    let groupAcross = []
+    let groupDown = []
 
     blocks.forEach((_, i) => {
       let isBlockFilled = blocks[i] === true;
@@ -234,7 +229,7 @@ export default class App extends React.Component {
           }
         }
 
-        return arr.sort()
+        return arr.sort((a, b) => a - b)
       }
 
       if (isBlockFilled) {
@@ -252,31 +247,39 @@ export default class App extends React.Component {
         counter++;
         cellNumber.push(counter);
         cells[i].number = counter;
-        cellOrientation.push("acrossdown"); // This should add down and across, not 'acrossdown'
-        downAnswers.push(this.checkLength(i, 'down'))
-        acrossAnswers.push(this.checkLength(i, 'across'))
+        cellOrientation.push("acrossdown");
+        groupAcross.push(findSiblings(i, 'across'))
+        groupDown.push(findSiblings(i, 'down'))
       } else if (isBlockBeforeFilled && !isBlockAfterFilled) {
         counter++;
         cellNumber.push(counter);
         cells[i].number = counter;
         cellOrientation.push("across");
-        acrossAnswers.push(this.checkLength(i, 'across'))
+        groupAcross.push(findSiblings(i, 'across'))
       } else if (isBlockAboveFilled && !isBlockBelowFilled) {
         counter++;
         cellNumber.push(counter);
         cells[i].number = counter;
         cellOrientation.push("down");
-        downAnswers.push(this.checkLength(i, 'down'))
+        groupDown.push(findSiblings(i, 'down'))
       } else {
         cellOrientation.push(null);
         cellNumber.push(null);
       }
     });
+    
 
-    let highlights = this.state.highlightedCells || []
-    let word = highlights.map(cell => {
-      return blocks[cell]
-    })
+    let subgroup = (this.state.orientationIsHorizontal ? groupAcross : groupDown) || []
+
+    let selectedAnswer = subgroup.find(g => g.some(x => x === this.state.selectedCell)) || []
+
+
+
+
+    // let highlights = this.state.highlightedCells || []
+    // let word = highlights.map(cell => {
+    //   return blocks[cell]
+    // })
 
     return (
       <Context.Provider value={value}>
@@ -362,8 +365,6 @@ export default class App extends React.Component {
             <Grid
               selectedCell={this.state.selectedCell}
               selectCell={(cell) => this.selectCell(cell)}
-              selectedAnswer={this.state.selectedAnswer}
-              selectAnswer={(answer) => this.selectAnswer(answer)}
               blocks={this.state.blocks}
               rows={this.state.rows}
               cols={this.state.cols}
@@ -371,17 +372,16 @@ export default class App extends React.Component {
               cellNumber={cellNumber}
               inputCell={(cell) => this.handleKeydown(cell)}
               changeOrientation={() => this.handleDoubleClick()}
-              highlightedCells={this.state.highlightedCells}
+              selectedAnswer={selectedAnswer}
             />
             <Clues 
               cellOrientation={cellOrientation}
               cellNumber={cellNumber}
               selectCell={(cell) => this.selectCell(cell)}
-              selectAnswer={(answer) => this.selectAnswer(answer)}
               cells={cells}
+              changeOrientation={(direction) => this.handleDoubleClick(direction)}
             />
             <Fills 
-            word={word}
             />
           </div>
         </div>

@@ -1,14 +1,13 @@
 import React from "react";
 
-function Clues({ cellOrientation, cellNumber, selectCell, selectAnswer, cells}) {
+function Clues({ cellOrientation, cellNumber, selectCell, changeOrientation}) {
 let across = []
 let down = []
 
 
 function handleClick(i, direction) {
-  selectCell(cellNumber[i])
-  selectAnswer(cells[i], direction)
-  console.log(direction)
+  selectCell(i);
+  changeOrientation(direction);
 }
 
 cellOrientation.forEach((b, i) => {

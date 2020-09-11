@@ -10,36 +10,30 @@ function Cell(
   inputCell, 
   selectCell, 
   selectedCell, 
-  selectAnswer,
-  selectedAnswer,
   blocked, 
   cellNumberLabel, 
   cellCharacterLabel,
   changeOrientation,
-  highlightedCells,
-  cells}
+  cells,
+  selectedAnswer}
   ) 
 { 
-  let highlighted = highlightedCells || []
-  let isHighlighted = highlighted.includes(cellNumber)
 
-  
-  
-  
   function handleClick (cell) {
-    selectAnswer(cell)
     selectCell(cell.id)
+    
   }
   
+  let highlight = selectedAnswer.some(a => a === cells.id)
+
+
   return <g   
           className={`crossword__cell 
             ${selectedCell ?
             'crossword__cell--selected' : ""} 
             ${blocked ?
             'crossword__cell--filled' : ""}
-            ${isHighlighted ?
-            'crossword__cell--highlighted' : ""}
-            ${selectedAnswer ?
+            ${highlight ?
             'crossword__cell--highlighted' : ""}
             `}
           >
