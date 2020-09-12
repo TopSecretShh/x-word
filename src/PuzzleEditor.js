@@ -73,7 +73,6 @@ export default class PuzzleEditor extends React.Component {
   };
 
   handleClearGrid = () => {
-    console.log(this.state.blocks);
     let grid = this.state.blocks;
     let emptyGrid = grid.map((cell) =>
       typeof cell === "string" ? (cell = false) : cell
@@ -123,10 +122,20 @@ export default class PuzzleEditor extends React.Component {
 
     if (typeof character === "string") {
       // this works but maybe shouldn't? we're modifying state without calling setState?
-      blocks[cell] = character.toUpperCase();
+
+      // blocks[cell] = character.toUpperCase();
+
+      // TODO some extra steps, but seems to work
+      let newBlocks = blocks;
+      let newCell = newBlocks[cell];
+      newCell = character.toUpperCase();
+      newBlocks[cell] = newCell;
+
       this.setState({
+        blocks: newBlocks,
         selectedCell: nextCell,
       });
+
       if (blocks[cellTwin] === true) blocks[cellTwin] = false;
     } else {
       if (typeof blocks[cell] === "string") {
