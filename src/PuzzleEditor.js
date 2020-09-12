@@ -19,7 +19,7 @@ export default class PuzzleEditor extends React.Component {
     orientationIsHorizontal: true,
   };
 
-  /* BEGIN PUZZLE OPTIONS (sizing, pattern) */
+  /* BEGIN PUZZLE OPTIONS (sizing, pattern, clear) */
   setSize = (value) => {
     if (value === "daily") {
       this.setState({
@@ -64,7 +64,7 @@ export default class PuzzleEditor extends React.Component {
 
   handlePatternBtn = () => {
     // TODO PATTERNONE stores any filled cells. this might be a result of how we fill cells? maybe not. added a clear grid button, but users might be weirded out by this?
-    // console.log("pattern: ", PATTERNONE);
+    console.log("pattern: ", PATTERNONE);
     if (this.state.rows === 15) {
       this.setState({
         blocks: PATTERNONE,
@@ -88,7 +88,7 @@ export default class PuzzleEditor extends React.Component {
     });
   };
 
-  /* END PUZZLE OPTIONS (sizing, pattern) */
+  /* END PUZZLE OPTIONS (sizing, pattern, clear) */
 
   selectCell = (value) => {
     this.setState({
@@ -116,6 +116,7 @@ export default class PuzzleEditor extends React.Component {
     }
   };
 
+  // TODO could simplify name to updateCell if that makes sense. Chris, see if this works as well as the code it replaces. This should solve the directly mutating state issue
   updateCellInBlocks = (cell, newValue) => {
     let blocks = this.state.blocks;
     let newCell = newValue;
@@ -137,12 +138,6 @@ export default class PuzzleEditor extends React.Component {
     if (typeof character === "string") {
       // this works but maybe shouldn't? we're modifying state without calling setState?
       // blocks[cell] = character.toUpperCase();
-      // TODO some extra steps, but seems to work. double check?
-
-      // let newBlocks = blocks;
-      // let newCell = newBlocks[cell];
-      // newCell = character.toUpperCase();
-      // newBlocks[cell] = newCell;
 
       let newBlocks = this.updateCellInBlocks(cell, character.toUpperCase());
 

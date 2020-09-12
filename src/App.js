@@ -18,6 +18,8 @@ PROBLEMS/ISSUES/ROOM FOR IMPROVEMENT
 
 - sometimes, not always: can't select a cell that has a letter in it
 
+- TODO freeze blocks button (I think a freeze option/button for the blocks was mentioned, right? Seems like a good idea: that way you can enter letters without accidentally overwriting blocks)
+
 */
 
 export default class App extends React.Component {
