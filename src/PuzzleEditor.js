@@ -86,16 +86,16 @@ export default class PuzzleEditor extends React.Component {
   handleDoubleClick = (input) => {
     if (input !== undefined) {
       this.setState({
-        orientationIsHorizontal: input
-      })
+        orientationIsHorizontal: input,
+      });
     } else {
-      this.setState(prevState => {
+      this.setState((prevState) => {
         return {
-          orientationIsHorizontal: !prevState.orientationIsHorizontal
-        }
-      })
+          orientationIsHorizontal: !prevState.orientationIsHorizontal,
+        };
+      });
     }
-  }
+  };
 
   fillCell = (cell, character) => {
     const rows = this.state.rows;
@@ -117,9 +117,8 @@ export default class PuzzleEditor extends React.Component {
     } else {
       if (typeof blocks[cell] === "string") {
         blocks[cell] = true;
-        
       } else {
-      blocks[cell] = !blocks[cell];
+        blocks[cell] = !blocks[cell];
       }
       if (cell !== Math.floor(totalSquares / 2)) {
         blocks[cellTwin] = !blocks[cellTwin];
@@ -141,8 +140,6 @@ export default class PuzzleEditor extends React.Component {
     if (e.key.match(/^[a-z]+$/)) {
       this.fillCell(cell, e.key);
     }
-    // TODO space bar scrolls to bottom of page (must be default behavior, how do we turn it off?) 
-    // DONE preventDefault() at the end of his method, line 229
     if (e.key.match(/\s/g)) {
       if (this.state.orientationIsHorizontal) {
         this.setState({
@@ -179,7 +176,6 @@ export default class PuzzleEditor extends React.Component {
         });
       }
     }
-    // TODO up/down arrows scroll the browser window (must be default behavior, how do we turn it off?)
     if (e.key === "ArrowUp") {
       if (cell > this.state.cols - 1) {
         this.setState({
@@ -230,7 +226,7 @@ export default class PuzzleEditor extends React.Component {
         }
       }
     }
-    e.preventDefault()
+    e.preventDefault();
   };
 
   renderGrid = (cellNumber, cells, selectedAnswer) => {
@@ -274,13 +270,9 @@ export default class PuzzleEditor extends React.Component {
     let cellOrientation = [];
     let cellNumber = [];
 
-    /* BEGIN NEW STUFF */
-    let groupAcross = []
-    let groupDown = []
+    let groupAcross = [];
+    let groupDown = [];
     let cells = [];
-        
-
-    /* END NEW STUFF */
 
     blocks.forEach((_, i) => {
       let isBlockFilled = blocks[i] === true;
@@ -294,7 +286,6 @@ export default class PuzzleEditor extends React.Component {
       let isBlockBelowFilled =
         blocks[i + cols] === true || i + cols >= rows * cols;
 
-      /* BEGIN NEW STUFF */
       cells.push({
         id: i,
         block: this.state.blocks[i], // May not be needed
@@ -337,14 +328,10 @@ export default class PuzzleEditor extends React.Component {
         return arr.sort();
       }
 
-      /* END NEW STUFF */
-
       if (isBlockFilled) {
         cellOrientation.push(null);
         cellNumber.push(null);
-        /* BEGIN NEW STUFF */
         cells[i].block = true;
-        /* END NEW STUFF */
         return;
       }
       if (
@@ -356,39 +343,32 @@ export default class PuzzleEditor extends React.Component {
         counter++;
         cellNumber.push(counter);
         cellOrientation.push("acrossdown"); // This should add down and across, not 'acrossdown'
-        /* BEGIN NEW STUFF */
         cells[i].number = counter;
-        groupAcross.push(findSiblings(i, 'across'))
-        groupDown.push(findSiblings(i, 'down'))
-        /* END NEW STUFF */
+        groupAcross.push(findSiblings(i, "across"));
+        groupDown.push(findSiblings(i, "down"));
       } else if (isBlockBeforeFilled && !isBlockAfterFilled) {
         counter++;
         cellNumber.push(counter);
         cellOrientation.push("across");
-        /* BEGIN NEW STUFF */
         cells[i].number = counter;
-        groupAcross.push(findSiblings(i, 'across'))
-        /* END NEW STUFF */
+        groupAcross.push(findSiblings(i, "across"));
       } else if (isBlockAboveFilled && !isBlockBelowFilled) {
         counter++;
         cellNumber.push(counter);
         cellOrientation.push("down");
-        /* BEGIN NEW STUFF */
         cells[i].number = counter;
-        groupDown.push(findSiblings(i, 'down'))
-        /* END NEW STUFF */
+        groupDown.push(findSiblings(i, "down"));
       } else {
         cellOrientation.push(null);
         cellNumber.push(null);
       }
     });
 
-    
-    /* BEGIN NEW STUFF */
-    let group = (this.state.orientationIsHorizontal ? groupAcross : groupDown) || []
-    
-    let selectedAnswer = group.find(g => g.some(x => x === this.state.selectedCell)) || []
-    /* END NEW STUFF */
+    let group =
+      (this.state.orientationIsHorizontal ? groupAcross : groupDown) || [];
+
+    let selectedAnswer =
+      group.find((g) => g.some((x) => x === this.state.selectedCell)) || [];
 
     return user ? (
       <div>
@@ -469,15 +449,16 @@ export default class PuzzleEditor extends React.Component {
           </div>
 
           <div>
-            {/* not-grid puzzle stuff */}
             <Clues
               cellOrientation={cellOrientation}
               cellNumber={cellNumber}
               selectCell={this.selectCell}
-              handleDoubleClick={(direction) => this.handleDoubleClick(direction)}
+              handleDoubleClick={(direction) =>
+                this.handleDoubleClick(direction)
+              }
               cells={cells}
             />
-            {/* <Fills word={word} /> */} 
+            {/* <Fills word={word} /> */}
           </div>
         </main>
       </div>
