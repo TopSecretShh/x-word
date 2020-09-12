@@ -4,7 +4,7 @@ import Context from "./Context";
 import Cell from "./Cell";
 import Clues from "./Clues";
 import PATTERNONE from "./Patterns.js";
-import Fills from "./Fills";
+// import Fills from "./Fills";
 
 export default class PuzzleEditor extends React.Component {
   static contextType = Context;
@@ -63,7 +63,7 @@ export default class PuzzleEditor extends React.Component {
   };
 
   handlePatternBtn = () => {
-    // TODO PATTERNONE stores any filled cells. this might be a result of how we fill cells? maybe not
+    // TODO PATTERNONE stores any filled cells. this might be a result of how we fill cells? maybe not. added a clear grid button, but users might be weirded out by this?
     // console.log("pattern: ", PATTERNONE);
     if (this.state.rows === 15) {
       this.setState({
@@ -72,7 +72,7 @@ export default class PuzzleEditor extends React.Component {
     }
   };
 
-  handleClearGrid = () => {
+  handleClearLetters = () => {
     let grid = this.state.blocks;
     let emptyGrid = grid.map((cell) =>
       typeof cell === "string" ? (cell = false) : cell
@@ -110,6 +110,14 @@ export default class PuzzleEditor extends React.Component {
     }
   };
 
+  updateCellInBlocks = (cell, newValue) => {
+    let blocks = this.state.blocks;
+    let newCell = newValue;
+    blocks[cell] = newCell;
+
+    return blocks;
+  };
+
   fillCell = (cell, character) => {
     const rows = this.state.rows;
     const cols = this.state.cols;
@@ -122,32 +130,54 @@ export default class PuzzleEditor extends React.Component {
 
     if (typeof character === "string") {
       // this works but maybe shouldn't? we're modifying state without calling setState?
-
       // blocks[cell] = character.toUpperCase();
+      // TODO some extra steps, but seems to work. double check?
 
-      // TODO some extra steps, but seems to work
-      let newBlocks = blocks;
-      let newCell = newBlocks[cell];
-      newCell = character.toUpperCase();
-      newBlocks[cell] = newCell;
+      // let newBlocks = blocks;
+      // let newCell = newBlocks[cell];
+      // newCell = character.toUpperCase();
+      // newBlocks[cell] = newCell;
+
+      let newBlocks = this.updateCellInBlocks(cell, character.toUpperCase());
 
       this.setState({
         blocks: newBlocks,
         selectedCell: nextCell,
       });
 
-      if (blocks[cellTwin] === true) blocks[cellTwin] = false;
+      if (blocks[cellTwin] === true) {
+        // blocks[cellTwin] = false;
+
+        let newBlocks = this.updateCellInBlocks(cellTwin, false);
+        this.setState({
+          blocks: newBlocks,
+        });
+      }
     } else {
       if (typeof blocks[cell] === "string") {
-        blocks[cell] = true;
+        // blocks[cell] = true;
+        let newBlocks = this.updateCellInBlocks(cell, true);
+        this.setState({
+          blocks: newBlocks,
+        });
       } else {
-        blocks[cell] = !blocks[cell];
+        // blocks[cell] = !blocks[cell];
+        let newBlocks = this.updateCellInBlocks(cell, !blocks[cell]);
+        this.setState({
+          blocks: newBlocks,
+        });
       }
       if (cell !== Math.floor(totalSquares / 2)) {
-        blocks[cellTwin] = !blocks[cellTwin];
+        // blocks[cellTwin] = !blocks[cellTwin];
+
+        let newBlocks = this.updateCellInBlocks(cellTwin, !blocks[cellTwin]);
+        this.setState({
+          blocks: newBlocks,
+        });
       }
     }
 
+    // this updates the grid in real time for the user. without it the user has to select a new cell before it re-renders and shows result of filling cell with a block
     this.setState({
       blocks: blocks,
     });
@@ -155,7 +185,7 @@ export default class PuzzleEditor extends React.Component {
 
   handleKeydown = (e) => {
     const cell = this.state.selectedCell;
-    const blocks = this.state.blocks;
+    // const blocks = this.state.blocks;
 
     if (e.key === "." && (cell || cell === 0)) {
       this.fillCell(cell);
@@ -216,8 +246,14 @@ export default class PuzzleEditor extends React.Component {
     if (e.key === "Backspace") {
       if (this.state.orientationIsHorizontal) {
         if (typeof this.state.blocks[cell] === "string") {
-          // this works but maybe shouldn't? we're modifying state without calling setState?
-          blocks[cell] = false;
+          // TODO this works but maybe shouldn't? we're modifying state without calling setState?
+          // blocks[cell] = false;
+
+          let newBlocks = this.updateCellInBlocks(cell, false);
+
+          this.setState({
+            blocks: newBlocks,
+          });
         }
         if (
           cell === 0 ||
@@ -234,8 +270,14 @@ export default class PuzzleEditor extends React.Component {
         }
       } else {
         if (typeof this.state.blocks[cell] === "string") {
-          // this works but maybe shouldn't? we're modifying state without calling setState?
-          blocks[cell] = false;
+          // TODO this works but maybe shouldn't? we're modifying state without calling setState?
+          // blocks[cell] = false;
+
+          let newBlocks = this.updateCellInBlocks(cell, false);
+
+          this.setState({
+            blocks: newBlocks,
+          });
         }
         if (cell > this.state.cols - 1) {
           console.log("not top edge");
@@ -458,7 +500,7 @@ export default class PuzzleEditor extends React.Component {
             </div>
             <div className="clear-grid-btn">
               <h3>Clear Grid</h3>
-              <button type="button" onClick={() => this.handleClearGrid()}>
+              <button type="button" onClick={() => this.handleClearLetters()}>
                 Clear
               </button>
             </div>
