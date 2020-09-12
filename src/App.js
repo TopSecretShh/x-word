@@ -16,15 +16,6 @@ PROBLEMS/ISSUES/ROOM FOR IMPROVEMENT
 - also this (probably related): orientation horizontal, (small custom size makes this more obvious). start in the last cell and add letters. it adds more rows, I think, or at least more numbers appear in the across clues
 - Chris - The two errors above may be in the fillCell method in PuzzleEditor.js, which as you noted, is mutating state directly. I must fix it, even if it isn't the cause of the strange behavior above. The symmetry issue noted below is definitely located in fillCell, but I almost have it fixed
 
-- double click/pressing space bar do change the orientation, but the highlighted cells/selected answer doesn't change until a new click
-- Chris - the above should be fixed but please check
-
-- arrow keys cannot select answer
-- Blocking a lettered square or lettering a block square, does not work symmetrically
-
-- Too many columns extend beyond area
-- Chris - fixed
-
 - sometimes, not always: can't select a cell that has a letter in it
 
 */
