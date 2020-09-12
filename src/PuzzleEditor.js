@@ -82,6 +82,12 @@ export default class PuzzleEditor extends React.Component {
     });
   };
 
+  handleClearGrid = () => {
+    this.setState({
+      blocks: Array(this.state.rows * this.state.cols).fill(false),
+    });
+  };
+
   /* END PUZZLE OPTIONS (sizing, pattern) */
 
   selectCell = (value) => {
@@ -499,9 +505,12 @@ export default class PuzzleEditor extends React.Component {
               </button>
             </div>
             <div className="clear-grid-btn">
-              <h3>Clear Grid</h3>
+              <h3>Clear</h3>
               <button type="button" onClick={() => this.handleClearLetters()}>
-                Clear
+                Clear Letters
+              </button>
+              <button type="button" onClick={() => this.handleClearGrid()}>
+                Clear Grid
               </button>
             </div>
           </div>
