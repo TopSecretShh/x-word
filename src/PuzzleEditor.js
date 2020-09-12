@@ -63,12 +63,26 @@ export default class PuzzleEditor extends React.Component {
   };
 
   handlePatternBtn = () => {
+    // TODO PATTERNONE stores any filled cells. this might be a result of how we fill cells? maybe not
+    // console.log("pattern: ", PATTERNONE);
     if (this.state.rows === 15) {
       this.setState({
         blocks: PATTERNONE,
       });
     }
   };
+
+  handleClearGrid = () => {
+    console.log(this.state.blocks);
+    let grid = this.state.blocks;
+    let emptyGrid = grid.map((cell) =>
+      typeof cell === "string" ? (cell = false) : cell
+    );
+    this.setState({
+      blocks: emptyGrid,
+    });
+  };
+
   /* END PUZZLE OPTIONS (sizing, pattern) */
 
   selectCell = (value) => {
@@ -431,6 +445,12 @@ export default class PuzzleEditor extends React.Component {
               <h3>Pattern</h3>
               <button type="button" onClick={() => this.handlePatternBtn()}>
                 Pattern
+              </button>
+            </div>
+            <div className="clear-grid-btn">
+              <h3>Clear Grid</h3>
+              <button type="button" onClick={() => this.handleClearGrid()}>
+                Clear
               </button>
             </div>
           </div>
