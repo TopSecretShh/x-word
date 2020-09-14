@@ -20,6 +20,9 @@ PROBLEMS/ISSUES/ROOM FOR IMPROVEMENT
 
 - TODO freeze blocks button (I think a freeze option/button for the blocks was mentioned, right? Seems like a good idea: that way you can enter letters without accidentally overwriting blocks)
 
+- Chris - All symmetry issues fixed
+!!!!!!CAREFUL!!!!!!
+I completely changed all blank, unblocked cells to be true. Everything dependent on this has also been changed. I did this so when truthy strings are changed to the opposite value, they'll become blocks
 */
 
 export default class App extends React.Component {
