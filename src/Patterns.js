@@ -1,4 +1,4 @@
-const arr = Array(225).fill(false);
+const arr = Array(225).fill(true);
 
 let pattern_1 = [
   4,

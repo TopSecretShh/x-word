@@ -29,7 +29,7 @@ function Cell({
     <g
       className={`crossword__cell 
             ${selectedCell ? "crossword__cell--selected" : ""} 
-            ${blocked ? "crossword__cell--filled" : ""}
+            ${!blocked ? "crossword__cell--filled" : ""}
             ${highlight ? "crossword__cell--highlighted" : ""}
             `}
     >

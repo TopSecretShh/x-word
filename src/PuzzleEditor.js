@@ -10,13 +10,13 @@ export default class PuzzleEditor extends React.Component {
   static contextType = Context;
 
   state = {
-    rows: 4,
-    cols: 4,
+    rows: 3,
+    cols: 3,
     title: "Untitled",
     custom: false,
-    blocks: Array(16).fill(false),
+    blocks: Array(9).fill(true),
     selectedCell: null,
-    orientationIsHorizontal: true,
+    orientationIsHorizontal: true
   };
 
   /* BEGIN PUZZLE OPTIONS (sizing, pattern, clear) */
@@ -25,14 +25,14 @@ export default class PuzzleEditor extends React.Component {
       this.setState({
         rows: 15,
         cols: 15,
-        blocks: Array(225).fill(false),
+        blocks: Array(225).fill(true),
         selectedCell: null,
       });
     } else if (value === "sunday") {
       this.setState({
         rows: 21,
         cols: 21,
-        blocks: Array(441).fill(false),
+        blocks: Array(441).fill(true),
         selectedCell: null,
       });
     } else if (value === "custom") {
@@ -57,7 +57,7 @@ export default class PuzzleEditor extends React.Component {
     this.setState({
       rows: parseInt(e.target.rows.value),
       cols: parseInt(e.target.cols.value),
-      blocks: Array(e.target.rows.value * e.target.cols.value).fill(false),
+      blocks: Array(e.target.rows.value * e.target.cols.value).fill(true),
       selectedCell: null,
     });
   };
@@ -75,7 +75,7 @@ export default class PuzzleEditor extends React.Component {
   handleClearLetters = () => {
     let grid = this.state.blocks;
     let emptyGrid = grid.map((cell) =>
-      typeof cell === "string" ? (cell = false) : cell
+      typeof cell === "string" ? (cell = true) : cell
     );
     this.setState({
       blocks: emptyGrid,
@@ -84,7 +84,7 @@ export default class PuzzleEditor extends React.Component {
 
   handleClearGrid = () => {
     this.setState({
-      blocks: Array(this.state.rows * this.state.cols).fill(false),
+      blocks: Array(this.state.rows * this.state.cols).fill(true),
     });
   };
 
@@ -115,78 +115,53 @@ export default class PuzzleEditor extends React.Component {
       });
     }
   };
+ // moving cells, middle and odd symmetry!!!!!!!!
+  updateCell = (cell, character, cellTwinNumber) => {
+    let blocksCopy = [...this.state.blocks]; // Creates deep copy
+    blocksCopy[cell] = character || !blocksCopy[cell]
 
-  // TODO could simplify name to updateCell if that makes sense. Chris, see if this works as well as the code it replaces. This should solve the directly mutating state issue
-  updateCellInBlocks = (cell, newValue) => {
-    let blocks = this.state.blocks;
-    let newCell = newValue;
-    blocks[cell] = newCell;
+    if (character) {
+      if (typeof blocksCopy[cellTwinNumber] !== 'string') {
+        blocksCopy[cellTwinNumber] = true
+      }
+    } else if (cellTwinNumber !== cell) {
+      blocksCopy[cellTwinNumber] = !blocksCopy[cellTwinNumber]
+    }
 
-    return blocks;
+    this.setState({
+      blocks: blocksCopy,
+    })
+
+    return blocksCopy;
   };
 
   fillCell = (cell, character) => {
-    const rows = this.state.rows;
-    const cols = this.state.cols;
+    const {
+      rows,
+      cols,
+      orientationIsHorizontal
+    } = this.state;
     const totalSquares = rows * cols - 1;
-    const cellTwin = totalSquares - cell; // At 15 rows 10 cols for example, middle symmetry doesn't work
-    const blocks = this.state.blocks;
-    const nextCell = this.state.orientationIsHorizontal
+    const cellTwinNumber = totalSquares - cell;
+    const nextCell = orientationIsHorizontal
       ? cell + 1
       : cell + cols;
 
-    if (typeof character === "string") {
-      // this works but maybe shouldn't? we're modifying state without calling setState?
-      // blocks[cell] = character.toUpperCase();
-
-      let newBlocks = this.updateCellInBlocks(cell, character.toUpperCase());
-
+    if (character) {
+      character = character.toUpperCase()
       this.setState({
-        blocks: newBlocks,
-        selectedCell: nextCell,
-      });
-
-      if (blocks[cellTwin] === true) {
-        // blocks[cellTwin] = false;
-
-        let newBlocks = this.updateCellInBlocks(cellTwin, false);
-        this.setState({
-          blocks: newBlocks,
-        });
-      }
-    } else {
-      if (typeof blocks[cell] === "string") {
-        // blocks[cell] = true;
-        let newBlocks = this.updateCellInBlocks(cell, true);
-        this.setState({
-          blocks: newBlocks,
-        });
-      } else {
-        // blocks[cell] = !blocks[cell];
-        let newBlocks = this.updateCellInBlocks(cell, !blocks[cell]);
-        this.setState({
-          blocks: newBlocks,
-        });
-      }
-      if (cell !== Math.floor(totalSquares / 2)) {
-        // blocks[cellTwin] = !blocks[cellTwin];
-
-        let newBlocks = this.updateCellInBlocks(cellTwin, !blocks[cellTwin]);
-        this.setState({
-          blocks: newBlocks,
-        });
-      }
+        selectedCell: nextCell
+      })
     }
 
-    // this updates the grid in real time for the user. without it the user has to select a new cell before it re-renders and shows result of filling cell with a block
-    this.setState({
-      blocks: blocks,
-    });
+      this.updateCell(cell, character, cellTwinNumber);
+
+    
+
   };
 
   handleKeydown = (e) => {
     const cell = this.state.selectedCell;
-    // const blocks = this.state.blocks;
 
     if (e.key === "." && (cell || cell === 0)) {
       this.fillCell(cell);
@@ -250,7 +225,7 @@ export default class PuzzleEditor extends React.Component {
           // TODO this works but maybe shouldn't? we're modifying state without calling setState?
           // blocks[cell] = false;
 
-          let newBlocks = this.updateCellInBlocks(cell, false);
+          let newBlocks = this.updateCell(cell, true);
 
           this.setState({
             blocks: newBlocks,
@@ -274,7 +249,7 @@ export default class PuzzleEditor extends React.Component {
           // TODO this works but maybe shouldn't? we're modifying state without calling setState?
           // blocks[cell] = false;
 
-          let newBlocks = this.updateCellInBlocks(cell, false);
+          let newBlocks = this.updateCell(cell, false);
 
           this.setState({
             blocks: newBlocks,
@@ -308,7 +283,7 @@ export default class PuzzleEditor extends React.Component {
           col={i % cols}
           selectCell={this.selectCell}
           selectedCell={i === this.state.selectedCell}
-          blocked={block === true}
+          blocked={block}
           cellCharacterLabel={block}
           cellNumberLabel={cellNumber[i]}
           handleKeydown={this.handleKeydown}
@@ -341,16 +316,16 @@ export default class PuzzleEditor extends React.Component {
     let cells = [];
 
     blocks.forEach((_, i) => {
-      let isBlockFilled = blocks[i] === true;
+      let isBlockFilled = blocks[i] === false;
 
-      let isBlockBeforeFilled = blocks[i - 1] === true || i % cols === 0;
+      let isBlockBeforeFilled = blocks[i - 1] === false || i % cols === 0;
 
-      let isBlockAfterFilled = blocks[i + 1] === true || (i + 1) % cols === 0;
+      let isBlockAfterFilled = blocks[i + 1] === false || (i + 1) % cols === 0;
 
-      let isBlockAboveFilled = blocks[i - cols] === true || i - cols < 0;
+      let isBlockAboveFilled = blocks[i - cols] === false || i - cols < 0;
 
       let isBlockBelowFilled =
-        blocks[i + cols] === true || i + cols >= rows * cols;
+        blocks[i + cols] === false || i + cols >= rows * cols;
 
       cells.push({
         id: i,
@@ -360,17 +335,17 @@ export default class PuzzleEditor extends React.Component {
       });
 
       function findSiblings(clue, direction) {
-        if (blocks[clue] === true) return [];
+        if (blocks[clue] === false) return [];
         let arr = [clue];
 
         if (direction === "across") {
-          for (let i = clue + 1; blocks[i] !== true && i % cols !== 0; i++) {
+          for (let i = clue + 1; blocks[i] !== false && i % cols !== 0; i++) {
             arr.push(i);
           }
           if (clue % cols !== 0) {
             for (
               let i = clue - 1;
-              i >= 0 && blocks[i] !== true && (i + 1) % cols !== 0;
+              i >= 0 && blocks[i] !== false && (i + 1) % cols !== 0;
               i--
             ) {
               arr.push(i);
@@ -379,12 +354,12 @@ export default class PuzzleEditor extends React.Component {
         }
 
         if (direction === "down") {
-          for (let i = clue - cols; blocks[i] !== true && i >= 0; i -= cols) {
+          for (let i = clue - cols; blocks[i] !== false && i >= 0; i -= cols) {
             arr.push(i);
           }
           for (
             let i = clue + cols;
-            blocks[i] !== true && i < rows * cols;
+            blocks[i] !== false && i < rows * cols;
             i += cols
           ) {
             arr.push(i);
@@ -397,7 +372,7 @@ export default class PuzzleEditor extends React.Component {
       if (isBlockFilled) {
         cellOrientation.push(null);
         cellNumber.push(null);
-        cells[i].block = true;
+        cells[i].block = false;
         return;
       }
       if (
@@ -434,7 +409,7 @@ export default class PuzzleEditor extends React.Component {
       (this.state.orientationIsHorizontal ? groupAcross : groupDown) || [];
 
     let selectedAnswer =
-      group.find((g) => g.some((x) => x === this.state.selectedCell)) || [];
+      group.find(g => g.some((x) => x === this.state.selectedCell)) || [];
 
     return user ? (
       <div>
