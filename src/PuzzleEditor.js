@@ -115,7 +115,7 @@ export default class PuzzleEditor extends React.Component {
       });
     }
   };
- // moving cells, middle and odd symmetry!!!!!!!!
+
   updateCell = (cell, character, cellTwinNumber) => {
     let blocksCopy = [...this.state.blocks]; // Creates deep copy
     blocksCopy[cell] = character || !blocksCopy[cell]
@@ -131,8 +131,6 @@ export default class PuzzleEditor extends React.Component {
     this.setState({
       blocks: blocksCopy,
     })
-
-    return blocksCopy;
   };
 
   fillCell = (cell, character) => {
@@ -155,9 +153,6 @@ export default class PuzzleEditor extends React.Component {
     }
 
       this.updateCell(cell, character, cellTwinNumber);
-
-    
-
   };
 
   handleKeydown = (e) => {
