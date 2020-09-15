@@ -490,9 +490,9 @@ export default class PuzzleEditor extends React.Component {
               </button>
             </div>
             <div className="freeze-btn">
-              <h3>Freeze Blocks</h3>
+              <h3>Toggle Block Freeze</h3>
               <button type="button" onClick={() => this.handleFreezeBlocks()}>
-                Freeze
+                Freeze/Unfreeze
               </button>
             </div>
             <div className="clear-grid-btns">
