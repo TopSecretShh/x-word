@@ -16,7 +16,7 @@ PROBLEMS/ISSUES/ROOM FOR IMPROVEMENT
 - also this (probably related): orientation horizontal, (small custom size makes this more obvious). start in the last cell and add letters. it adds more rows, I think, or at least more numbers appear in the across clues
 - Chris - The two errors above may be in the fillCell method in PuzzleEditor.js, which as you noted, is mutating state directly. I must fix it, even if it isn't the cause of the strange behavior above. The symmetry issue noted below is definitely located in fillCell, but I almost have it fixed
 
-- sometimes, not always: can't select a cell that has a letter in it
+- sometimes, not always: can't select a cell that has a letter in it -> you can't select the cell by clicking on the letter itself, you have to click on the cell behind/next to the letter
 
 - TODO freeze blocks button (I think a freeze option/button for the blocks was mentioned, right? Seems like a good idea: that way you can enter letters without accidentally overwriting blocks)
 

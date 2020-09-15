@@ -16,7 +16,7 @@ export default class PuzzleEditor extends React.Component {
     custom: false,
     blocks: Array(9).fill(true),
     selectedCell: null,
-    orientationIsHorizontal: true
+    orientationIsHorizontal: true,
   };
 
   /* BEGIN PUZZLE OPTIONS (sizing, pattern, clear) */
@@ -118,41 +118,43 @@ export default class PuzzleEditor extends React.Component {
 
   updateCell = (cell, character, cellTwinNumber) => {
     let blocksCopy = [...this.state.blocks]; // Creates deep copy
-    blocksCopy[cell] = character || !blocksCopy[cell]
+    blocksCopy[cell] = character || !blocksCopy[cell];
 
     if (character) {
-      if (typeof blocksCopy[cellTwinNumber] !== 'string') {
-        blocksCopy[cellTwinNumber] = true
+      if (typeof blocksCopy[cellTwinNumber] !== "string") {
+        blocksCopy[cellTwinNumber] = true;
       }
     } else if (cellTwinNumber !== cell) {
-      blocksCopy[cellTwinNumber] = !blocksCopy[cellTwinNumber]
+      blocksCopy[cellTwinNumber] = !blocksCopy[cellTwinNumber];
     }
 
     this.setState({
       blocks: blocksCopy,
-    })
+    });
+  };
+
+  deleteCellContent = (cell, value) => {
+    let blocksCopy = [...this.state.blocks];
+    blocksCopy[cell] = value;
+    this.setState({
+      blocks: blocksCopy,
+    });
   };
 
   fillCell = (cell, character) => {
-    const {
-      rows,
-      cols,
-      orientationIsHorizontal
-    } = this.state;
+    const { rows, cols, orientationIsHorizontal } = this.state;
     const totalSquares = rows * cols - 1;
     const cellTwinNumber = totalSquares - cell;
-    const nextCell = orientationIsHorizontal
-      ? cell + 1
-      : cell + cols;
+    const nextCell = orientationIsHorizontal ? cell + 1 : cell + cols;
 
     if (character) {
-      character = character.toUpperCase()
+      character = character.toUpperCase();
       this.setState({
-        selectedCell: nextCell
-      })
+        selectedCell: nextCell,
+      });
     }
 
-      this.updateCell(cell, character, cellTwinNumber);
+    this.updateCell(cell, character, cellTwinNumber);
   };
 
   handleKeydown = (e) => {
@@ -220,11 +222,7 @@ export default class PuzzleEditor extends React.Component {
           // TODO this works but maybe shouldn't? we're modifying state without calling setState?
           // blocks[cell] = false;
 
-          let newBlocks = this.updateCell(cell, true);
-
-          this.setState({
-            blocks: newBlocks,
-          });
+          this.deleteCellContent(cell, true);
         }
         if (
           cell === 0 ||
@@ -244,11 +242,7 @@ export default class PuzzleEditor extends React.Component {
           // TODO this works but maybe shouldn't? we're modifying state without calling setState?
           // blocks[cell] = false;
 
-          let newBlocks = this.updateCell(cell, false);
-
-          this.setState({
-            blocks: newBlocks,
-          });
+          this.deleteCellContent(cell, true);
         }
         if (cell > this.state.cols - 1) {
           console.log("not top edge");
@@ -404,7 +398,7 @@ export default class PuzzleEditor extends React.Component {
       (this.state.orientationIsHorizontal ? groupAcross : groupDown) || [];
 
     let selectedAnswer =
-      group.find(g => g.some((x) => x === this.state.selectedCell)) || [];
+      group.find((g) => g.some((x) => x === this.state.selectedCell)) || [];
 
     return user ? (
       <div>
