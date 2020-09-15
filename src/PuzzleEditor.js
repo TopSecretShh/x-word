@@ -29,6 +29,7 @@ export default class PuzzleEditor extends React.Component {
         cols: 15,
         blocks: Array(225).fill(true),
         selectedCell: null,
+        freezeBlocks: false,
       });
     } else if (value === "sunday") {
       this.setState({
@@ -36,6 +37,7 @@ export default class PuzzleEditor extends React.Component {
         cols: 21,
         blocks: Array(441).fill(true),
         selectedCell: null,
+        freezeBlocks: false,
       });
     } else if (value === "custom") {
       this.setState({
@@ -61,11 +63,12 @@ export default class PuzzleEditor extends React.Component {
       cols: parseInt(e.target.cols.value),
       blocks: Array(e.target.rows.value * e.target.cols.value).fill(true),
       selectedCell: null,
+      freezeBlocks: false,
     });
   };
 
   handlePatternBtn = () => {
-    if (this.state.rows === 15) {
+    if (this.state.rows === 15 && !this.state.freezeBlocks) {
       this.setState({
         blocks: PATTERNONE,
       });

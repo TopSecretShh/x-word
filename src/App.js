@@ -14,10 +14,6 @@ PROBLEMS/ISSUES/ROOM FOR IMPROVEMENT
 
 - sometimes, not always: can't select a cell that has a letter in it -> you can't select the cell by clicking on the letter itself, you have to click on the cell behind/next to the letter
 
-- TODO freeze blocks button (I think a freeze option/button for the blocks was mentioned, right? Seems like a good idea: that way you can enter letters without accidentally overwriting blocks)
-
-- Chris - All symmetry issues fixed
-
 !!!!!!CAREFUL!!!!!!
 I completely changed all blank, unblocked cells to be true. Everything dependent on this has also been changed. I did this so when truthy strings are changed to the opposite value, they'll become blocks
 -> Ha! I noticed before I saw this note and was very confused for a minute!
