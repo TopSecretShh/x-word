@@ -17,9 +17,11 @@ export default class PuzzleEditor extends React.Component {
     blocks: Array(9).fill(true),
     selectedCell: null,
     orientationIsHorizontal: true,
+    freezeBlocks: false,
   };
 
-  /* BEGIN PUZZLE OPTIONS (sizing, pattern, clear) */
+  /* BEGIN PUZZLE OPTIONS (sizing, pattern, freeze, clear) */
+  // TODO maybe these options/buttons could be their own component? or I guess these fns would still be here, but the puzzle options div could be a separate component
   setSize = (value) => {
     if (value === "daily") {
       this.setState({
@@ -63,13 +65,18 @@ export default class PuzzleEditor extends React.Component {
   };
 
   handlePatternBtn = () => {
-    // TODO PATTERNONE stores any filled cells. this might be a result of how we fill cells? maybe not. added a clear grid button, but users might be weirded out by this?
-    console.log("pattern: ", PATTERNONE);
     if (this.state.rows === 15) {
       this.setState({
         blocks: PATTERNONE,
       });
     }
+  };
+
+  handleFreezeBlocks = () => {
+    const freeze = this.state.freezeBlocks;
+    freeze
+      ? this.setState({ freezeBlocks: false })
+      : this.setState({ freezeBlocks: true });
   };
 
   handleClearLetters = () => {
@@ -88,7 +95,7 @@ export default class PuzzleEditor extends React.Component {
     });
   };
 
-  /* END PUZZLE OPTIONS (sizing, pattern, clear) */
+  /* END PUZZLE OPTIONS (sizing, pattern, freeze, clear) */
 
   selectCell = (value) => {
     this.setState({
@@ -185,7 +192,7 @@ export default class PuzzleEditor extends React.Component {
   handleKeydown = (e) => {
     const cell = this.state.selectedCell;
 
-    if (e.key === "." && (cell || cell === 0)) {
+    if (e.key === "." && (cell || cell === 0) && !this.state.freezeBlocks) {
       this.fillCell(cell);
     }
     if (e.key.match(/^[a-z]+$/)) {
@@ -429,20 +436,20 @@ export default class PuzzleEditor extends React.Component {
         <main>
           <div className="puzzle-options">
             <div className="size-btns">
-              <h3>Size</h3>
+              <h3>Grid Size</h3>
               <button
                 type="button"
                 value="daily"
                 onClick={(e) => this.setSize(e.target.value)}
               >
-                Daily
+                Daily (15x15)
               </button>
               <button
                 type="button"
                 value="sunday"
                 onClick={(e) => this.setSize(e.target.value)}
               >
-                Sunday
+                Sunday (21x21)
               </button>
               <button
                 type="button"
@@ -477,12 +484,18 @@ export default class PuzzleEditor extends React.Component {
               )}
             </div>
             <div className="pattern-btn">
-              <h3>Pattern</h3>
+              <h3>Random Pattern</h3>
               <button type="button" onClick={() => this.handlePatternBtn()}>
-                Pattern
+                Generate
               </button>
             </div>
-            <div className="clear-grid-btn">
+            <div className="freeze-btn">
+              <h3>Freeze Blocks</h3>
+              <button type="button" onClick={() => this.handleFreezeBlocks()}>
+                Freeze
+              </button>
+            </div>
+            <div className="clear-grid-btns">
               <h3>Clear</h3>
               <button type="button" onClick={() => this.handleClearLetters()}>
                 Clear Letters
