@@ -141,11 +141,36 @@ export default class PuzzleEditor extends React.Component {
     });
   };
 
+  findNextCell = (cell, orientationIsHorizontal) => {
+    let nextCell;
+    // arrow right
+    if (orientationIsHorizontal) {
+      if (
+        ((cell + 1) / this.state.cols) % 2 === 0 ||
+        ((cell + 1) / this.state.cols) % 2 === 1
+      ) {
+        console.log("right edge");
+        return cell;
+      } else {
+        nextCell = cell + 1;
+        return nextCell;
+      }
+    } else {
+      if (cell < this.state.cols * this.state.rows - this.state.cols) {
+        nextCell = cell + this.state.cols;
+        return nextCell;
+      } else {
+        return cell;
+      }
+    }
+  };
+
   fillCell = (cell, character) => {
     const { rows, cols, orientationIsHorizontal } = this.state;
     const totalSquares = rows * cols - 1;
     const cellTwinNumber = totalSquares - cell;
-    const nextCell = orientationIsHorizontal ? cell + 1 : cell + cols;
+    // const nextCell = orientationIsHorizontal ? cell + 1 : cell + cols;
+    const nextCell = this.findNextCell(cell, orientationIsHorizontal);
 
     if (character) {
       character = character.toUpperCase();
@@ -210,18 +235,16 @@ export default class PuzzleEditor extends React.Component {
       }
     }
     if (e.key === "ArrowDown") {
-      if (cell < this.state.cols * this.state.rows - this.state.cols)
+      if (cell < this.state.cols * this.state.rows - this.state.cols) {
         this.setState({
           selectedCell: cell + this.state.cols,
         });
+      }
     }
 
     if (e.key === "Backspace") {
       if (this.state.orientationIsHorizontal) {
         if (typeof this.state.blocks[cell] === "string") {
-          // TODO this works but maybe shouldn't? we're modifying state without calling setState?
-          // blocks[cell] = false;
-
           this.deleteCellContent(cell, true);
         }
         if (
@@ -239,13 +262,9 @@ export default class PuzzleEditor extends React.Component {
         }
       } else {
         if (typeof this.state.blocks[cell] === "string") {
-          // TODO this works but maybe shouldn't? we're modifying state without calling setState?
-          // blocks[cell] = false;
-
           this.deleteCellContent(cell, true);
         }
         if (cell > this.state.cols - 1) {
-          console.log("not top edge");
           this.setState({
             selectedCell: cell - this.state.cols,
           });
