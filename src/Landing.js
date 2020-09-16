@@ -24,8 +24,12 @@ export default class Landing extends React.Component {
         <Link className="btn-signup" to="/signup">
           Sign Up
         </Link>{" "}
-        <Link className="btn-alt" to="/home" onClick={this.handleGuestLogin}>
-          Skip to Home
+        <Link
+          className="btn-alt"
+          to="/puzzle-editor"
+          onClick={this.handleGuestLogin}
+        >
+          Skip to Puzzle Editor
         </Link>
       </div>
     );

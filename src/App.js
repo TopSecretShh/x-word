@@ -5,6 +5,7 @@ import Landing from "./Landing";
 import Login from "./Login";
 import SignUp from "./SignUp";
 import Home from "./Home";
+import PuzzleEditor from "./PuzzleEditor";
 import Context from "./Context";
 import "./App.css";
 
@@ -69,6 +70,7 @@ export default class App extends React.Component {
             <Route path="/login" component={Login} />
             <Route path="/signup" component={SignUp} />
             <Route path="/home" component={Home} />
+            <Route path="/puzzle-editor" component={PuzzleEditor} />
           </Switch>
         </div>
       </Context.Provider>
