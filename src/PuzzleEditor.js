@@ -3,7 +3,8 @@ import { Redirect } from "react-router-dom";
 import Context from "./Context";
 import Cell from "./Cell";
 import Clues from "./Clues";
-import PATTERNONE from "./Patterns.js";
+import PATTERN from "./Patterns.js";
+import generatePattern from "./Patterns";
 // import Fills from "./Fills";
 
 export default class PuzzleEditor extends React.Component {
@@ -68,9 +69,10 @@ export default class PuzzleEditor extends React.Component {
   };
 
   handlePatternBtn = () => {
+    const pattern = generatePattern();
     if (this.state.rows === 15 && !this.state.freezeBlocks) {
       this.setState({
-        blocks: PATTERNONE,
+        blocks: pattern,
       });
     }
   };
