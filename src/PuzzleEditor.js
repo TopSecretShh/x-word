@@ -322,6 +322,8 @@ export default class PuzzleEditor extends React.Component {
   render() {
     const user = this.context.currentUser;
 
+    const freeze = this.state.freezeBlocks;
+
     const rows = this.state.rows;
     const cols = this.state.cols;
     const width = cols * 33;
@@ -498,9 +500,16 @@ export default class PuzzleEditor extends React.Component {
             </div>
             <div className="freeze-btn">
               <h3>Toggle Block Freeze</h3>
-              <button type="button" onClick={() => this.handleFreezeBlocks()}>
-                Freeze/Unfreeze
-              </button>
+              {/* TODO this could be a sweet animated lock icon that transitions between un/locked */}
+              {freeze ? (
+                <button type="button" onClick={() => this.handleFreezeBlocks()}>
+                  Unfreeze
+                </button>
+              ) : (
+                <button type="button" onClick={() => this.handleFreezeBlocks()}>
+                  Freeze
+                </button>
+              )}
             </div>
             <div className="clear-grid-btns">
               <h3>Clear</h3>
@@ -526,7 +535,7 @@ export default class PuzzleEditor extends React.Component {
             </svg>
           </div>
 
-          <div>
+          <div className="clue__container">
             <Clues
               cellOrientation={cellOrientation}
               cellNumber={cellNumber}
