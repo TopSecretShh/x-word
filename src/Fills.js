@@ -8,7 +8,8 @@ export default class Fills extends React.Component {
   capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 
   search = () => {
-    let word = this.props.word.map((w) => (w ? w : "?")).join("");
+    let word = this.props.word;
+    console.log("fills word: ", word);
     fetch(`https://api.datamuse.com/words?sp=${word}`)
       .then((response) => response.json())
       .then((data) => {
@@ -19,6 +20,8 @@ export default class Fills extends React.Component {
       });
   };
 
+  // TODO what if you could click on a fill and it actually filled in the cells with the letters!
+  // TODO fills could be a scrollable div instead of a huge long list?
   render() {
     let fills = this.state.fills.map((fill, i) => (
       <li key={i}>{this.capitalize(fill)}</li>
@@ -27,8 +30,8 @@ export default class Fills extends React.Component {
     return (
       <div className="fills">
         <h3>Fills</h3>
-        <ul className="fills">{fills}</ul>
         <button onClick={() => this.search()}>Find Fills</button>
+        <ul className="fills">{fills}</ul>
       </div>
     );
   }
