@@ -1,4 +1,5 @@
 import React from "react";
+import "./Fills.css";
 
 export default class Fills extends React.Component {
   state = {
@@ -21,17 +22,22 @@ export default class Fills extends React.Component {
   };
 
   // TODO what if you could click on a fill and it actually filled in the cells with the letters!
-  // TODO fills could be a scrollable div instead of a huge long list?
   render() {
     let fills = this.state.fills.map((fill, i) => (
-      <li key={i}>{this.capitalize(fill)}</li>
+      <li
+        key={i}
+        className="fills__list--item"
+        onClick={() => this.props.fillInWord(fill, this.props.selectedAnswer)}
+      >
+        {this.capitalize(fill)}
+      </li>
     ));
 
     return (
       <div className="fills">
         <h3>Fills</h3>
         <button onClick={() => this.search()}>Find Fills</button>
-        <ul className="fills">{fills}</ul>
+        <ul className="fills__list">{fills}</ul>
       </div>
     );
   }

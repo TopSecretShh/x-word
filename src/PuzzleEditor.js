@@ -4,7 +4,7 @@ import Context from "./Context";
 import Cell from "./Cell";
 import Clues from "./Clues";
 import generatePattern from "./Patterns";
-import Fills from "./Fills";
+import Fills from "./Fills/Fills";
 
 export default class PuzzleEditor extends React.Component {
   static contextType = Context;
@@ -317,6 +317,21 @@ export default class PuzzleEditor extends React.Component {
     return grid;
   };
 
+  /* FILLS IN WORD ON GRID FROM FILLS */
+  fillInWord = (fill, selectedAnswer) => {
+    let blocksCopy = [...this.state.blocks];
+    let fillWord = Array.from(fill);
+    for (let i = 0; i < selectedAnswer.length; i++) {
+      blocksCopy[selectedAnswer[i]] = fillWord[i].toUpperCase();
+    }
+
+    this.setState({
+      blocks: blocksCopy,
+    });
+  };
+
+  /* FILLS IN WORD ON GRID FROM FILLS */
+
   render() {
     const user = this.context.currentUser;
 
@@ -551,7 +566,11 @@ export default class PuzzleEditor extends React.Component {
               }
               cells={cells}
             />
-            <Fills word={word} />
+            <Fills
+              word={word}
+              fillInWord={this.fillInWord}
+              selectedAnswer={selectedAnswer}
+            />
           </div>
         </main>
       </div>
