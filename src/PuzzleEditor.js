@@ -329,7 +329,6 @@ export default class PuzzleEditor extends React.Component {
       blocks: blocksCopy,
     });
   };
-
   /* FILLS IN WORD ON GRID FROM FILLS */
 
   render() {

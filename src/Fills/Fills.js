@@ -21,7 +21,6 @@ export default class Fills extends React.Component {
       });
   };
 
-  // TODO what if you could click on a fill and it actually filled in the cells with the letters!
   render() {
     let fills = this.state.fills.map((fill, i) => (
       <li
