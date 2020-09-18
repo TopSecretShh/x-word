@@ -4,7 +4,7 @@ import Context from "./Context";
 import Cell from "./Cell";
 import Clues from "./Clues";
 import generatePattern from "./Patterns";
-// import Fills from "./Fills";
+import Fills from "./Fills";
 
 export default class PuzzleEditor extends React.Component {
   static contextType = Context;
@@ -435,6 +435,15 @@ export default class PuzzleEditor extends React.Component {
     let selectedAnswer =
       group.find((g) => g.some((x) => x === this.state.selectedCell)) || [];
 
+    let word = [];
+    console.log("selected answer: ", selectedAnswer);
+    selectedAnswer
+      .sort((a, b) => a - b)
+      .forEach((i) =>
+        typeof blocks[i] === "string" ? word.push(blocks[i]) : word.push("?")
+      );
+    console.log("word: ", word);
+
     return user ? (
       <div>
         <header>
@@ -545,7 +554,7 @@ export default class PuzzleEditor extends React.Component {
               }
               cells={cells}
             />
-            {/* <Fills word={word} /> */}
+            <Fills word={word} />
           </div>
         </main>
       </div>

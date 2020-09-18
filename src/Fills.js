@@ -20,8 +20,8 @@ export default class Fills extends React.Component {
   };
 
   render() {
-    let fills = this.state.fills.map((fill) => (
-      <li key={fill}>{this.capitalize(fill)}</li>
+    let fills = this.state.fills.map((fill, i) => (
+      <li key={i}>{this.capitalize(fill)}</li>
     ));
 
     return (
