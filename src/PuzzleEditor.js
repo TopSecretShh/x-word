@@ -440,7 +440,6 @@ export default class PuzzleEditor extends React.Component {
         typeof blocks[i] === "string" ? word.push(blocks[i]) : word.push("?")
       );
     word = word.join("");
-    console.log("word: ", word);
 
     return user ? (
       <div>
