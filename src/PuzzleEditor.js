@@ -157,7 +157,6 @@ export default class PuzzleEditor extends React.Component {
 
   findNextCell = (cell, orientationIsHorizontal) => {
     let nextCell;
-    // arrow right
     if (orientationIsHorizontal) {
       if (
         ((cell + 1) / this.state.cols) % 2 === 0 ||
@@ -183,7 +182,6 @@ export default class PuzzleEditor extends React.Component {
     const { rows, cols, orientationIsHorizontal } = this.state;
     const totalSquares = rows * cols - 1;
     const cellTwinNumber = totalSquares - cell;
-    // const nextCell = orientationIsHorizontal ? cell + 1 : cell + cols;
     const nextCell = this.findNextCell(cell, orientationIsHorizontal);
 
     if (character) {
@@ -255,7 +253,6 @@ export default class PuzzleEditor extends React.Component {
         });
       }
     }
-
     if (e.key === "Backspace") {
       if (this.state.orientationIsHorizontal) {
         if (typeof this.state.blocks[cell] === "string") {
