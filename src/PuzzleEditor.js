@@ -97,11 +97,13 @@ export default class PuzzleEditor extends React.Component {
         blocks: Array(this.state.rows * this.state.cols).fill(true),
       });
     }
+    // TODO there should be an else here that shows the user a message to let them know that they cannot clear grid while freeze is enabled
   };
 
   /* END PUZZLE OPTIONS (sizing, pattern, freeze, clear) */
 
   // TODO this lags behind because they aren't synchronous...
+  // TODO need to fix a/synchrony issue!
   selectCell = (value, word) => {
     this.setState({
       selectedCell: value,
@@ -188,7 +190,7 @@ export default class PuzzleEditor extends React.Component {
     }
   };
 
-  fillCell = (cell, character) => {
+  fillCell = (cell, character, word) => {
     const { rows, cols, orientationIsHorizontal } = this.state;
     const totalSquares = rows * cols - 1;
     const cellTwinNumber = totalSquares - cell;
@@ -196,9 +198,10 @@ export default class PuzzleEditor extends React.Component {
 
     if (character) {
       character = character.toUpperCase();
-      this.setState({
-        selectedCell: nextCell,
-      });
+      // this.setState({
+      //   selectedCell: nextCell,
+      // });
+      this.selectCell(nextCell, word);
     }
 
     this.updateCell(cell, character, cellTwinNumber);
@@ -208,10 +211,10 @@ export default class PuzzleEditor extends React.Component {
     const cell = this.state.selectedCell;
 
     if (e.key === "." && (cell || cell === 0) && !this.state.freezeBlocks) {
-      this.fillCell(cell);
+      this.fillCell(cell, word);
     }
     if (e.key.match(/^[a-z]+$/)) {
-      this.fillCell(cell, e.key);
+      this.fillCell(cell, e.key, word);
     }
     // TODO need to find a way for changing the orientation to reselect the cell
     if (e.key.match(/\s/g)) {
