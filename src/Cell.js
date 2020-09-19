@@ -13,16 +13,16 @@ function Cell({
   handleKeydown,
   handleDoubleClick,
   cells,
+  word,
 }) {
-//
+  //
   // let highlighted = highlightedCells || [];
   // let isHighlighted = highlighted.includes(cellNumber);
 
-  let highlight = selectedAnswer.some(a => a === cells.id)
-
+  let highlight = selectedAnswer.some((a) => a === cells.id);
 
   function handleClick(cell) {
-    selectCell(cell.id);
+    selectCell(cell.id, word);
   }
 
   return (

@@ -17,6 +17,7 @@ PROBLEMS/ISSUES/ROOM FOR IMPROVEMENT
 
 - TODO App.css needs to be cleaned up. CSS that applies directly and exclusively to components can be put in a dedicated file (like Fills.css)
 
+- TODO clicking find fills btn takes focus away from grid. You have to click on the grid again to re-focus. Not sure if there's anything we can do about this? Possible solution: auto-find fills based on selectedCell. That's how Phil works
 
 */
 

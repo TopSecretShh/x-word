@@ -18,6 +18,7 @@ export default class PuzzleEditor extends React.Component {
     selectedCell: null,
     orientationIsHorizontal: true,
     freezeBlocks: false,
+    fills: [],
   };
 
   /* BEGIN PUZZLE OPTIONS (sizing, pattern, freeze, clear) */
@@ -98,10 +99,22 @@ export default class PuzzleEditor extends React.Component {
 
   /* END PUZZLE OPTIONS (sizing, pattern, freeze, clear) */
 
-  selectCell = (value) => {
+  selectCell = (value, word) => {
     this.setState({
       selectedCell: value,
     });
+    this.searchWord(word);
+  };
+
+  searchWord = (word) => {
+    fetch(`https://api.datamuse.com/words?sp=${word}`)
+      .then((response) => response.json())
+      .then((data) => {
+        let words = data.map((word) => (word.score > 100 ? word.word : ""));
+        this.setState({
+          fills: words,
+        });
+      });
   };
 
   // selectAnswer = ({ across, down }) => {
@@ -284,7 +297,7 @@ export default class PuzzleEditor extends React.Component {
     e.preventDefault();
   };
 
-  renderGrid = (cellNumber, cells, selectedAnswer) => {
+  renderGrid = (cellNumber, cells, selectedAnswer, word) => {
     let cols = this.state.cols;
     let blocks = this.state.blocks;
 
@@ -305,6 +318,7 @@ export default class PuzzleEditor extends React.Component {
           highlightedCells={this.state.highlightedCells}
           cells={cells[i]}
           selectedAnswer={selectedAnswer}
+          word={word}
         />
       );
     });
@@ -546,10 +560,11 @@ export default class PuzzleEditor extends React.Component {
                 }`}
                 id="grid"
               >
-                {this.renderGrid(cellNumber, cells, selectedAnswer)}
+                {this.renderGrid(cellNumber, cells, selectedAnswer, word)}
               </svg>
             </div>
             <Fills
+              fills={this.state.fills}
               word={word}
               fillInWord={this.fillInWord}
               selectedAnswer={selectedAnswer}
