@@ -92,9 +92,11 @@ export default class PuzzleEditor extends React.Component {
   };
 
   handleClearGrid = () => {
-    this.setState({
-      blocks: Array(this.state.rows * this.state.cols).fill(true),
-    });
+    if (!this.state.freezeBlocks) {
+      this.setState({
+        blocks: Array(this.state.rows * this.state.cols).fill(true),
+      });
+    }
   };
 
   /* END PUZZLE OPTIONS (sizing, pattern, freeze, clear) */
