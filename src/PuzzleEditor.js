@@ -52,12 +52,6 @@ export default class PuzzleEditor extends React.Component {
   };
 
   handleSubmitCustom = (e) => {
-    console.log(
-      "custom dimensions: ",
-      Number(e.target.rows.value),
-      parseInt(e.target.cols.value)
-    );
-
     this.setState({
       rows: parseInt(e.target.rows.value),
       cols: parseInt(e.target.cols.value),
@@ -542,17 +536,24 @@ export default class PuzzleEditor extends React.Component {
             </div>
           </div>
 
-          <div className="crossword__container--grid-wrapper">
-            <svg
-              viewBox={`0 0 ${width} ${height}`}
-              preserveAspectRatio="xMinYMin slice"
-              className={`Grid ${
-                rows >= cols ? "view_box--tall" : "view_box--wide"
-              }`}
-              id="grid"
-            >
-              {this.renderGrid(cellNumber, cells, selectedAnswer)}
-            </svg>
+          <div className="grid-and-fills">
+            <div className="crossword__container--grid-wrapper">
+              <svg
+                viewBox={`0 0 ${width} ${height}`}
+                preserveAspectRatio="xMinYMin slice"
+                className={`Grid ${
+                  rows >= cols ? "view_box--tall" : "view_box--wide"
+                }`}
+                id="grid"
+              >
+                {this.renderGrid(cellNumber, cells, selectedAnswer)}
+              </svg>
+            </div>
+            <Fills
+              word={word}
+              fillInWord={this.fillInWord}
+              selectedAnswer={selectedAnswer}
+            />
           </div>
 
           <div className="clue__container">
@@ -564,11 +565,6 @@ export default class PuzzleEditor extends React.Component {
                 this.handleDoubleClick(direction)
               }
               cells={cells}
-            />
-            <Fills
-              word={word}
-              fillInWord={this.fillInWord}
-              selectedAnswer={selectedAnswer}
             />
           </div>
         </main>

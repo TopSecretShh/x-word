@@ -15,6 +15,9 @@ PROBLEMS/ISSUES/ROOM FOR IMPROVEMENT
 
 - sometimes, not always: can't select a cell that has a letter in it -> you can't select the cell by clicking on the letter itself, you have to click on the cell behind/next to the letter
 
+- TODO App.css needs to be cleaned up. CSS that applies directly and exclusively to components can be put in a dedicated file (like Fills.css)
+
+
 */
 
 export default class App extends React.Component {

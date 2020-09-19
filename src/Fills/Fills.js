@@ -10,7 +10,6 @@ export default class Fills extends React.Component {
 
   search = () => {
     let word = this.props.word;
-    console.log("fills word: ", word);
     fetch(`https://api.datamuse.com/words?sp=${word}`)
       .then((response) => response.json())
       .then((data) => {
