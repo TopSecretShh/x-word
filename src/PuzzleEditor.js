@@ -99,6 +99,7 @@ export default class PuzzleEditor extends React.Component {
 
   /* END PUZZLE OPTIONS (sizing, pattern, freeze, clear) */
 
+  // TODO this lags behind because they aren't synchronous...
   selectCell = (value, word) => {
     this.setState({
       selectedCell: value,
@@ -201,7 +202,7 @@ export default class PuzzleEditor extends React.Component {
     this.updateCell(cell, character, cellTwinNumber);
   };
 
-  handleKeydown = (e) => {
+  handleKeydown = (e, word) => {
     const cell = this.state.selectedCell;
 
     if (e.key === "." && (cell || cell === 0) && !this.state.freezeBlocks) {
@@ -210,6 +211,7 @@ export default class PuzzleEditor extends React.Component {
     if (e.key.match(/^[a-z]+$/)) {
       this.fillCell(cell, e.key);
     }
+    // TODO need to find a way for changing the orientation to reselect the cell
     if (e.key.match(/\s/g)) {
       if (this.state.orientationIsHorizontal) {
         this.setState({
@@ -228,9 +230,10 @@ export default class PuzzleEditor extends React.Component {
       ) {
         console.log("right edge");
       } else {
-        this.setState({
-          selectedCell: cell + 1,
-        });
+        // this.setState({
+        //   selectedCell: cell + 1,
+        // });
+        this.selectCell(cell + 1, word);
       }
     }
     if (e.key === "ArrowLeft") {
@@ -241,23 +244,26 @@ export default class PuzzleEditor extends React.Component {
       ) {
         console.log("left edge");
       } else {
-        this.setState({
-          selectedCell: cell - 1,
-        });
+        // this.setState({
+        //   selectedCell: cell - 1,
+        // });
+        this.selectCell(cell - 1, word);
       }
     }
     if (e.key === "ArrowUp") {
       if (cell > this.state.cols - 1) {
-        this.setState({
-          selectedCell: cell - this.state.cols,
-        });
+        // this.setState({
+        //   selectedCell: cell - this.state.cols,
+        // });
+        this.selectCell(cell - this.state.cols, word);
       }
     }
     if (e.key === "ArrowDown") {
       if (cell < this.state.cols * this.state.rows - this.state.cols) {
-        this.setState({
-          selectedCell: cell + this.state.cols,
-        });
+        // this.setState({
+        //   selectedCell: cell + this.state.cols,
+        // });
+        this.selectCell(cell + this.state.cols, word);
       }
     }
 
@@ -271,26 +277,30 @@ export default class PuzzleEditor extends React.Component {
           (cell / this.state.cols) % 2 === 0 ||
           (cell / this.state.cols) % 2 === 1
         ) {
-          this.setState({
-            selectedCell: cell,
-          });
+          // this.setState({
+          //   selectedCell: cell,
+          // });
+          this.selectCell(cell, word);
         } else {
-          this.setState({
-            selectedCell: cell - 1,
-          });
+          // this.setState({
+          //   selectedCell: cell - 1,
+          // });
+          this.selectCell(cell - 1, word);
         }
       } else {
         if (typeof this.state.blocks[cell] === "string") {
           this.deleteCellContent(cell, true);
         }
         if (cell > this.state.cols - 1) {
-          this.setState({
-            selectedCell: cell - this.state.cols,
-          });
+          // this.setState({
+          //   selectedCell: cell - this.state.cols,
+          // });
+          this.selectCell(cell - this.state.cols, word);
         } else {
-          this.setState({
-            selectedCell: cell,
-          });
+          // this.setState({
+          //   selectedCell: cell,
+          // });
+          this.selectCell(cell, word);
         }
       }
     }

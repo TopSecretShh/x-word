@@ -42,7 +42,7 @@ function Cell({
           handleClick(cells);
         }}
         onDoubleClick={() => handleDoubleClick()}
-        onKeyDown={(e) => handleKeydown(e)}
+        onKeyDown={(e) => handleKeydown(e, word)}
         tabIndex="0"
         vectorEffect="non-scaling-stroke"
       ></rect>
