@@ -210,6 +210,7 @@ export default class PuzzleEditor extends React.Component {
   handleKeydown = (e, word) => {
     const cell = this.state.selectedCell;
 
+    // TODO cannot add a block!
     if (e.key === "." && (cell || cell === 0) && !this.state.freezeBlocks) {
       this.fillCell(cell, word);
     }
