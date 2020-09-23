@@ -1,17 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import Context from "../Context/Context";
 import {withRouter} from 'react-router-dom';
 
- class Login extends React.Component {
-  static contextType = Context;
+const Login = (props) => {
+  const { users, setCurrentUser, setError, error} = useContext(Context);
 
-  state = {
-    error: null,
-  };
-
-  handleSubmit = (e) => {
-    const users = this.context.users;
-    console.log(this.context, users, 'in login', e.target.username.value, e.target.password.value)
+  const handleSubmit = (e) => {
     const username = e.target.username.value;
     const password = e.target.password.value;
     const match = users
@@ -20,30 +14,29 @@ import {withRouter} from 'react-router-dom';
 
     if (match.length) {
       console.log("we have a match!");
-      this.context.setCurrentUser(username);
-      this.handleLoginSuccess();
+      setCurrentUser(username);
+      handleLoginSuccess();
     } else {
       console.log("no such user");
+      setError("no such user")
     }
   };
 
-  handleLoginSuccess = () => {
-    this.props.history.push("/puzzle");
+  const handleLoginSuccess = () => {
+    props.history.push("/puzzle");
   };
 
-  handleCancelBtn = () => {
-    this.props.history.push("/");
+  const handleCancelBtn = () => {
+    props.history.push("/");
   };
 
-  render() {
-    const { error } = this.state;
     return (
       <div className="Login">
         <form
           className="form-login"
           onSubmit={(e) => {
             e.preventDefault();
-            this.handleSubmit(e);
+            handleSubmit(e);
           }}
         >
           <fieldset>
@@ -83,7 +76,7 @@ import {withRouter} from 'react-router-dom';
             <button
               type="button"
               className="btn-cancel"
-              onClick={this.handleCancelBtn}
+              onClick={handleCancelBtn}
             >
               Cancel
             </button>
@@ -92,5 +85,5 @@ import {withRouter} from 'react-router-dom';
       </div>
     );
   }
-}
+
 export default (withRouter)(Login);

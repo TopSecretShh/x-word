@@ -1,17 +1,25 @@
-import React from "react";
+import React, { useContext } from "react";
+import Context from '../Context/Context';
 
-function Clues({
-  cellOrientation,
-  cellNumber,
-  selectCell,
-  handleDoubleClick
-}) {
+
+
+const Clues = () => {
+
+  const {
+    cellOrientation,
+    cellNumber,
+    pickCell,
+    doubleClick
+  } = useContext(Context);
+
+
   let across = [];
   let down = [];
 
   function handleClick(i, direction) {
-    selectCell(i);
-    handleDoubleClick(direction);
+    console.log(i, 'HERE???????', direction)
+    pickCell(i);
+    doubleClick(direction);
   }
 
   cellOrientation.forEach((b, i) => {
@@ -42,6 +50,7 @@ function Clues({
   });
 
   return (
+    <div className="clue__container">
     <div className="clues">
       <div>
         <h3>Across</h3>
@@ -52,6 +61,7 @@ function Clues({
         <h3>Down</h3>
         <ul className="clues__list">{down}</ul>
       </div>
+    </div>
     </div>
   );
 }

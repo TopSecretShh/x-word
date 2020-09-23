@@ -1,21 +1,22 @@
-import React from "react";
+import React, { useContext } from "react";
+import Context from '../Context/Context';
 
-function Cell({
-  cellSize,
-  row,
-  col,
-  selectedCell,
-  selectedAnswer,
-  pickCell,
-  blocked,
-  cellNumberLabel,
-  cellCharacterLabel,
-  handleKeydown,
-  handleDoubleClick,
-  cells,
-}) {
 
-  console.log(selectedAnswer, selectedCell)
+const Cell = (props) => {
+  const {
+    cellSize,
+    row,
+    col,
+    selectedCell,
+    blocked,
+    cellNumberLabel,
+    cellCharacterLabel,
+    cells,
+    selectedAnswer} = props;
+
+  const { pickCell, keydown, doubleClick, highlightedCells } = useContext(Context);
+  
+    //console.log(selectedAnswer, selectedCell)
   let highlight = selectedAnswer.some(a => a === cells.id)
 
 
@@ -41,8 +42,8 @@ function Cell({
         onClick={(e) => {
           handleClick(cells);
         }}
-        onDoubleClick={() => handleDoubleClick()}
-        onKeyDown={(e) => handleKeydown(e)}
+        onDoubleClick={() => doubleClick()}
+        onKeyDown={(e) => keydown(e)}
         tabIndex="0"
         vectorEffect="non-scaling-stroke"
       ></rect>
