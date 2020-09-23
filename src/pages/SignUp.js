@@ -1,16 +1,9 @@
 import React from "react";
-import Context from "./Context";
+import Context from "../Context/Context";
 import { Link } from "react-router-dom";
 
 export default class SignUp extends React.Component {
   static contextType = Context;
-
-  state = {
-    username: "",
-    password: "",
-    error: null,
-    match: null,
-  };
 
   updateUsername(e) {
     this.setState({
@@ -25,21 +18,17 @@ export default class SignUp extends React.Component {
   }
 
   handleSubmit = (e) => {
+    e.preventDefault();
     const users = this.context.users;
     const username = e.target.username.value;
     const password = e.target.password.value;
 
     const match = users.filter((u) => u.username === username);
-
-    this.setState({
-      match: false,
-    });
+   
 
     if (match.length) {
       console.log("user already exists");
-      this.setState({
-        match: true,
-      });
+      this.props.history.push("/login");
     } else if (!match.length) {
       this.context.addNewUser(username, password);
       this.props.history.push("/login");
@@ -51,15 +40,16 @@ export default class SignUp extends React.Component {
   };
 
   render() {
-    const { error, match } = this.state;
+    let error = null;
+        if (this.context.error) {
+            error = this.context.error.message;
+        }
+        
     return (
       <div className="SignUp">
         <form
           className="form-signup"
-          onSubmit={(e) => {
-            e.preventDefault();
-            this.handleSubmit(e);
-          }}
+          onSubmit={(e) => this.handleSubmit(e)}
         >
           <fieldset>
             <legend>User Information</legend>
@@ -109,7 +99,7 @@ export default class SignUp extends React.Component {
             Cancel
           </button>
         </form>
-        <div className="username-match">
+        {/* <div className="username-match">
           {match && (
             <p>
               {this.state.username} already has an account. If you already have
@@ -117,7 +107,7 @@ export default class SignUp extends React.Component {
               different user name and try again.
             </p>
           )}
-        </div>
+        </div>  this will be determined later once we have api and proper auth*/} 
         <div className="error">{error && <p>{error}</p>}</div>
       </div>
     );

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Context from "./Context";
+import Context from "../Context/Context";
 
 export default class Landing extends React.Component {
   static contextType = Context;
@@ -10,6 +10,7 @@ export default class Landing extends React.Component {
   };
 
   render() {
+    console.log(this.context, '?????')
     return (
       <div className="Landing">
         <h1>X-Word</h1>

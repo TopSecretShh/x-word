@@ -40,6 +40,7 @@ let pattern_1 = [
 ];
 
 pattern_1.forEach((s) => {
+  //console.log('in patterns?')
   arr[s] = !arr[s];
 });
 

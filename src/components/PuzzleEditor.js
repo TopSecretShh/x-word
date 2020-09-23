@@ -1,100 +1,27 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
-import Context from "./Context";
+import Context from '../Context/Context';
 import Cell from "./Cell";
 import Clues from "./Clues";
-import PATTERNONE from "./Patterns.js";
+import PATTERNONE from "../Context/Patterns.js";
+import PuzzleBoard from "./PuzzleBoard";
 // import Fills from "./Fills";
 
 export default class PuzzleEditor extends React.Component {
   static contextType = Context;
+ 
 
-  state = {
-    rows: 3,
-    cols: 3,
-    title: "Untitled",
-    custom: false,
-    blocks: Array(9).fill(true),
-    selectedCell: null,
-    orientationIsHorizontal: true
-  };
-
-  /* BEGIN PUZZLE OPTIONS (sizing, pattern, clear) */
-  setSize = (value) => {
-    if (value === "daily") {
-      this.setState({
-        rows: 15,
-        cols: 15,
-        blocks: Array(225).fill(true),
-        selectedCell: null,
-      });
-    } else if (value === "sunday") {
-      this.setState({
-        rows: 21,
-        cols: 21,
-        blocks: Array(441).fill(true),
-        selectedCell: null,
-      });
-    } else if (value === "custom") {
-      this.setState({
-        custom: true,
-      });
-    }
-    if (this.state.custom) {
-      this.setState({
-        custom: false,
-      });
-    }
-  };
-
-  handleSubmitCustom = (e) => {
-    console.log(
-      "custom dimensions: ",
-      Number(e.target.rows.value),
-      parseInt(e.target.cols.value)
-    );
-
-    this.setState({
-      rows: parseInt(e.target.rows.value),
-      cols: parseInt(e.target.cols.value),
-      blocks: Array(e.target.rows.value * e.target.cols.value).fill(true),
-      selectedCell: null,
-    });
-  };
+  setSize = (value) => this.context.setSize(value);
+  handleSubmitCustom = (e) => this.context.createCustom(e.target);
 
   handlePatternBtn = () => {
     // TODO PATTERNONE stores any filled cells. this might be a result of how we fill cells? maybe not. added a clear grid button, but users might be weirded out by this?
-    console.log("pattern: ", PATTERNONE);
-    if (this.state.rows === 15) {
-      this.setState({
-        blocks: PATTERNONE,
-      });
-    }
+    this.context.patternButton()
   };
 
-  handleClearLetters = () => {
-    let grid = this.state.blocks;
-    let emptyGrid = grid.map((cell) =>
-      typeof cell === "string" ? (cell = true) : cell
-    );
-    this.setState({
-      blocks: emptyGrid,
-    });
-  };
-
-  handleClearGrid = () => {
-    this.setState({
-      blocks: Array(this.state.rows * this.state.cols).fill(true),
-    });
-  };
-
-  /* END PUZZLE OPTIONS (sizing, pattern, clear) */
-
-  selectCell = (value) => {
-    this.setState({
-      selectedCell: value,
-    });
-  };
+  handleClearLetters = () => this.context.handleClearLetters();
+  handleClearGrid = () => this.context.handleClearLetters();
+  selectCell = (value) => this.context.pickCell(value);
 
   // selectAnswer = ({ across, down }) => {
   //   this.setState((prevState) => ({
@@ -265,146 +192,119 @@ export default class PuzzleEditor extends React.Component {
     e.preventDefault();
   };
 
-  renderGrid = (cellNumber, cells, selectedAnswer) => {
-    let cols = this.state.cols;
-    let blocks = this.state.blocks;
 
-    let grid = blocks.map((block, i) => {
-      return (
-        <Cell
-          key={i}
-          cellSize={33}
-          row={Math.floor(i / cols)}
-          col={i % cols}
-          selectCell={this.selectCell}
-          selectedCell={i === this.state.selectedCell}
-          blocked={block}
-          cellCharacterLabel={block}
-          cellNumberLabel={cellNumber[i]}
-          handleKeydown={this.handleKeydown}
-          handleDoubleClick={this.handleDoubleClick}
-          highlightedCells={this.state.highlightedCells}
-          cells={cells[i]}
-          selectedAnswer={selectedAnswer}
-        />
-      );
-    });
-    return grid;
-  };
 
   render() {
+   
     const user = this.context.currentUser;
 
-    const rows = this.state.rows;
-    const cols = this.state.cols;
-    const width = cols * 33;
-    const height = rows * 33;
-    const custom = this.state.custom;
+    const {rows, cols, blocks, custom, orientationIsHorizontal, selectedCell, setSize} = this.context;
+ 
 
-    const blocks = this.state.blocks;
-    let counter = 0;
-    let cellOrientation = [];
-    let cellNumber = [];
+   
+    // let counter = 0;
+    // let cellOrientation = [];
+    // let cellNumber = [];
 
-    let groupAcross = [];
-    let groupDown = [];
-    let cells = [];
+    // let groupAcross = [];
+    // let groupDown = [];
+    // let cells = [];
 
-    blocks.forEach((_, i) => {
-      let isBlockFilled = blocks[i] === false;
+    // blocks.forEach((_, i) => {
+    //   let isBlockFilled = blocks[i] === false;
 
-      let isBlockBeforeFilled = blocks[i - 1] === false || i % cols === 0;
+    //   let isBlockBeforeFilled = blocks[i - 1] === false || i % cols === 0;
 
-      let isBlockAfterFilled = blocks[i + 1] === false || (i + 1) % cols === 0;
+    //   let isBlockAfterFilled = blocks[i + 1] === false || (i + 1) % cols === 0;
 
-      let isBlockAboveFilled = blocks[i - cols] === false || i - cols < 0;
+    //   let isBlockAboveFilled = blocks[i - cols] === false || i - cols < 0;
 
-      let isBlockBelowFilled =
-        blocks[i + cols] === false || i + cols >= rows * cols;
+    //   let isBlockBelowFilled =
+    //     blocks[i + cols] === false || i + cols >= rows * cols;
 
-      cells.push({
-        id: i,
-        block: this.state.blocks[i], // May not be needed
-        number: null,
-        character: this.state.blocks[i] ? this.state.blocks[i] : "", // May not be needed
-      });
+    //   cells.push({
+    //     id: i,
+    //     block: blocks[i], // May not be needed
+    //     number: null,
+    //     character: blocks[i] ? blocks[i] : "", // May not be needed
+    //   });
 
-      function findSiblings(clue, direction) {
-        if (blocks[clue] === false) return [];
-        let arr = [clue];
+    //   function findSiblings(clue, direction) {
+    //     if (blocks[clue] === false) return [];
+    //     let arr = [clue];
 
-        if (direction === "across") {
-          for (let i = clue + 1; blocks[i] !== false && i % cols !== 0; i++) {
-            arr.push(i);
-          }
-          if (clue % cols !== 0) {
-            for (
-              let i = clue - 1;
-              i >= 0 && blocks[i] !== false && (i + 1) % cols !== 0;
-              i--
-            ) {
-              arr.push(i);
-            }
-          }
-        }
+    //     if (direction === "across") {
+    //       for (let i = clue + 1; blocks[i] !== false && i % cols !== 0; i++) {
+    //         arr.push(i);
+    //       }
+    //       if (clue % cols !== 0) {
+    //         for (
+    //           let i = clue - 1;
+    //           i >= 0 && blocks[i] !== false && (i + 1) % cols !== 0;
+    //           i--
+    //         ) {
+    //           arr.push(i);
+    //         }
+    //       }
+    //     }
 
-        if (direction === "down") {
-          for (let i = clue - cols; blocks[i] !== false && i >= 0; i -= cols) {
-            arr.push(i);
-          }
-          for (
-            let i = clue + cols;
-            blocks[i] !== false && i < rows * cols;
-            i += cols
-          ) {
-            arr.push(i);
-          }
-        }
+    //     if (direction === "down") {
+    //       for (let i = clue - cols; blocks[i] !== false && i >= 0; i -= cols) {
+    //         arr.push(i);
+    //       }
+    //       for (
+    //         let i = clue + cols;
+    //         blocks[i] !== false && i < rows * cols;
+    //         i += cols
+    //       ) {
+    //         arr.push(i);
+    //       }
+    //     }
 
-        return arr.sort();
-      }
+    //     return arr.sort();
+    //   }
 
-      if (isBlockFilled) {
-        cellOrientation.push(null);
-        cellNumber.push(null);
-        cells[i].block = false;
-        return;
-      }
-      if (
-        isBlockAboveFilled &&
-        isBlockBeforeFilled &&
-        !isBlockAfterFilled &&
-        !isBlockBelowFilled
-      ) {
-        counter++;
-        cellNumber.push(counter);
-        cellOrientation.push("acrossdown"); // This should add down and across, not 'acrossdown'
-        cells[i].number = counter;
-        groupAcross.push(findSiblings(i, "across"));
-        groupDown.push(findSiblings(i, "down"));
-      } else if (isBlockBeforeFilled && !isBlockAfterFilled) {
-        counter++;
-        cellNumber.push(counter);
-        cellOrientation.push("across");
-        cells[i].number = counter;
-        groupAcross.push(findSiblings(i, "across"));
-      } else if (isBlockAboveFilled && !isBlockBelowFilled) {
-        counter++;
-        cellNumber.push(counter);
-        cellOrientation.push("down");
-        cells[i].number = counter;
-        groupDown.push(findSiblings(i, "down"));
-      } else {
-        cellOrientation.push(null);
-        cellNumber.push(null);
-      }
-    });
+    //   if (isBlockFilled) {
+    //     cellOrientation.push(null);
+    //     cellNumber.push(null);
+    //     cells[i].block = false;
+    //     return;
+    //   }
+    //   if (
+    //     isBlockAboveFilled &&
+    //     isBlockBeforeFilled &&
+    //     !isBlockAfterFilled &&
+    //     !isBlockBelowFilled
+    //   ) {
+    //     counter++;
+    //     cellNumber.push(counter);
+    //     cellOrientation.push("acrossdown"); // This should add down and across, not 'acrossdown'
+    //     cells[i].number = counter;
+    //     groupAcross.push(findSiblings(i, "across"));
+    //     groupDown.push(findSiblings(i, "down"));
+    //   } else if (isBlockBeforeFilled && !isBlockAfterFilled) {
+    //     counter++;
+    //     cellNumber.push(counter);
+    //     cellOrientation.push("across");
+    //     cells[i].number = counter;
+    //     groupAcross.push(findSiblings(i, "across"));
+    //   } else if (isBlockAboveFilled && !isBlockBelowFilled) {
+    //     counter++;
+    //     cellNumber.push(counter);
+    //     cellOrientation.push("down");
+    //     cells[i].number = counter;
+    //     groupDown.push(findSiblings(i, "down"));
+    //   } else {
+    //     cellOrientation.push(null);
+    //     cellNumber.push(null);
+    //   }
+    // });
 
-    let group =
-      (this.state.orientationIsHorizontal ? groupAcross : groupDown) || [];
+    // let group =
+    //   (orientationIsHorizontal ? groupAcross : groupDown) || [];
 
-    let selectedAnswer =
-      group.find(g => g.some((x) => x === this.state.selectedCell)) || [];
+    // let selectedAnswer =
+    //   group.find(g => g.some((x) => x === selectedCell)) || [];
 
     return user ? (
       <div>
@@ -480,7 +380,7 @@ export default class PuzzleEditor extends React.Component {
             </div>
           </div>
 
-          <div className="crossword__container--grid-wrapper">
+          {/* <div className="crossword__container--grid-wrapper">
             <svg
               viewBox={`0 0 ${width} ${height}`}
               preserveAspectRatio="xMinYMin slice"
@@ -491,10 +391,11 @@ export default class PuzzleEditor extends React.Component {
             >
               {this.renderGrid(cellNumber, cells, selectedAnswer)}
             </svg>
-          </div>
+          </div> */}
+          <PuzzleBoard />
 
           <div>
-            <Clues
+            {/* <Clues
               cellOrientation={cellOrientation}
               cellNumber={cellNumber}
               selectCell={this.selectCell}
@@ -502,7 +403,7 @@ export default class PuzzleEditor extends React.Component {
                 this.handleDoubleClick(direction)
               }
               cells={cells}
-            />
+            /> */}
             {/* <Fills word={word} /> */}
           </div>
         </main>

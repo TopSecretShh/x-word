@@ -1,5 +1,5 @@
 import React from "react";
-import Context from "./Context";
+import Context from "../Context/Context";
 
 export default class Login extends React.Component {
   static contextType = Context;
@@ -10,6 +10,7 @@ export default class Login extends React.Component {
 
   handleSubmit = (e) => {
     const users = this.context.users;
+    console.log(this.context, users, 'in login', e.target.username.value, e.target.password.value)
     const username = e.target.username.value;
     const password = e.target.password.value;
     const match = users

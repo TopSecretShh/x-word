@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import PuzzleEditor from "./PuzzleEditor";
+import PuzzleEditor from "../components/PuzzleEditor";
 
 export default class Home extends React.Component {
   render() {

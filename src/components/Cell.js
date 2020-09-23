@@ -4,9 +4,9 @@ function Cell({
   cellSize,
   row,
   col,
-  selectCell,
   selectedCell,
   selectedAnswer,
+  pickCell,
   blocked,
   cellNumberLabel,
   cellCharacterLabel,
@@ -14,15 +14,14 @@ function Cell({
   handleDoubleClick,
   cells,
 }) {
-//
-  // let highlighted = highlightedCells || [];
-  // let isHighlighted = highlighted.includes(cellNumber);
 
+  console.log(selectedAnswer, selectedCell)
   let highlight = selectedAnswer.some(a => a === cells.id)
 
 
   function handleClick(cell) {
-    selectCell(cell.id);
+    console.log('clicked',cell)
+    pickCell(cell.id);
   }
 
   return (
@@ -34,11 +33,12 @@ function Cell({
             `}
     >
       <rect
+        value={cellNumberLabel}
         x={col * cellSize}
         y={row * cellSize}
         width={cellSize}
         height={cellSize}
-        onClick={() => {
+        onClick={(e) => {
           handleClick(cells);
         }}
         onDoubleClick={() => handleDoubleClick()}
