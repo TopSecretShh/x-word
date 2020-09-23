@@ -20,7 +20,7 @@ function Cell({
 
 
   function handleClick(cell) {
-    console.log('clicked',cell)
+    // console.log('clicked',cell)
     pickCell(cell.id);
   }
 

@@ -1,10 +1,9 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
+import HomePage from './pages/HomePage'
+import LoginRegister from "./pages/LoginRegister";
+import Login from './components/Login'; 
 
-import Landing from "./pages/Landing";
-import Login from "./pages/Login";
-import SignUp from "./pages/SignUp";
-import Home from "./pages/Home";
 import "./App.css";
 
 /*
@@ -27,12 +26,12 @@ I completely changed all blank, unblocked cells to be true. Everything dependent
 const App = () => {
   return (
     <div className="App">
-      <Switch>
-        <Route exact path="/" component={Landing} />
-        <Route path="/login" component={Login} />
-        <Route path="/signup" component={SignUp} />
-        <Route path="/home" component={Home} />
-      </Switch>
+      {/* <Switch> */}
+      
+      <Route path='/' component={HomePage} />
+      <Route exact path="/signin" component={LoginRegister} />
+      <Route exact path='/login' component={Login} />
+      {/* </Switch> */}
     </div>
   );
 }

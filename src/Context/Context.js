@@ -21,6 +21,7 @@ import PATTERNONE from './Patterns';
   createCustom: () => {},
   patternButton: () => {},
   clearLetters: () => {},
+  clearGrid: () => {},
   pickCell: () => {},
   doubleClick: () => {},
 });
@@ -183,6 +184,7 @@ export class ContextProvider extends React.Component {
       createCustom: this.createCustom,
       patternButton: this.patternButton,
       clearLetters: this.clearLetters,
+      clearGrid: this.clearGrid,
       pickCell: this.pickCell,
       doubleClick: this.doubleClick,
       error: this.state.error,

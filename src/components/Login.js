@@ -1,7 +1,8 @@
 import React from "react";
 import Context from "../Context/Context";
+import {withRouter} from 'react-router-dom';
 
-export default class Login extends React.Component {
+ class Login extends React.Component {
   static contextType = Context;
 
   state = {
@@ -27,7 +28,7 @@ export default class Login extends React.Component {
   };
 
   handleLoginSuccess = () => {
-    this.props.history.push("/home");
+    this.props.history.push("/puzzle");
   };
 
   handleCancelBtn = () => {
@@ -92,3 +93,4 @@ export default class Login extends React.Component {
     );
   }
 }
+export default (withRouter)(Login);

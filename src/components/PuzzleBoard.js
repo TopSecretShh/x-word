@@ -124,7 +124,7 @@ export default class PuzzleBoard extends React.Component {
                     id="grid"
                 >
                     {blocks.map((block, i) => {
-                        console.log(block, '?????')
+                        //console.log(block, '?????')
                         return (
                             <Cell
                                 key={i}

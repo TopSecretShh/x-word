@@ -1,15 +1,17 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
 import Context from '../Context/Context';
-import Cell from "./Cell";
-import Clues from "./Clues";
+import Cell from "../components/Cell";
+import Clues from "../components/Clues";
 import PATTERNONE from "../Context/Patterns.js";
-import PuzzleBoard from "./PuzzleBoard";
+import PuzzleBoard from "../components/PuzzleBoard";
+import PuzzleHeader from '../components/PuzzleHeader';
+import PuzzleOptionsBar from "../components/PuzzleOptionsBar";
 // import Fills from "./Fills";
 
 export default class PuzzleEditor extends React.Component {
   static contextType = Context;
- 
+
 
   setSize = (value) => this.context.setSize(value);
   handleSubmitCustom = (e) => this.context.createCustom(e.target);
@@ -79,7 +81,7 @@ export default class PuzzleEditor extends React.Component {
       })
     }
 
-      this.updateCell(cell, character, cellTwinNumber);
+    this.updateCell(cell, character, cellTwinNumber);
   };
 
   handleKeydown = (e) => {
@@ -195,13 +197,13 @@ export default class PuzzleEditor extends React.Component {
 
 
   render() {
-   
+
     const user = this.context.currentUser;
 
-    const {rows, cols, blocks, custom, orientationIsHorizontal, selectedCell, setSize} = this.context;
- 
+    const { rows, cols, blocks, custom, orientationIsHorizontal, selectedCell, setSize } = this.context;
 
-   
+
+
     // let counter = 0;
     // let cellOrientation = [];
     // let cellNumber = [];
@@ -308,108 +310,17 @@ export default class PuzzleEditor extends React.Component {
 
     return user ? (
       <div>
-        <header>
-          <h1>{this.context.title}</h1>
-          <p>by {this.context.currentUser}</p>
-        </header>
-
+        <PuzzleHeader />
+        <PuzzleOptionsBar />
         <main>
-          <div className="puzzle-options">
-            <div className="size-btns">
-              <h3>Size</h3>
-              <button
-                type="button"
-                value="daily"
-                onClick={(e) => this.setSize(e.target.value)}
-              >
-                Daily
-              </button>
-              <button
-                type="button"
-                value="sunday"
-                onClick={(e) => this.setSize(e.target.value)}
-              >
-                Sunday
-              </button>
-              <button
-                type="button"
-                value="custom"
-                onClick={(e) => this.setSize(e.target.value)}
-              >
-                Custom
-              </button>
-              {custom ? (
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    this.handleSubmitCustom(e);
-                  }}
-                >
-                  <fieldset className="custom-size">
-                    <label>
-                      # of rows:{"  "}
-                      <input type="number" name="rows" min={3} max={25} />
-                    </label>
-                    <br />
-                    <label>
-                      # of columns:{" "}
-                      <input type="number" name="cols" min={3} max={25} />
-                    </label>
-                    <br />
-                    <button type="submit">Enter</button>
-                  </fieldset>
-                </form>
-              ) : (
-                ""
-              )}
-            </div>
-            <div className="pattern-btn">
-              <h3>Pattern</h3>
-              <button type="button" onClick={() => this.handlePatternBtn()}>
-                Pattern
-              </button>
-            </div>
-            <div className="clear-grid-btn">
-              <h3>Clear</h3>
-              <button type="button" onClick={() => this.handleClearLetters()}>
-                Clear Letters
-              </button>
-              <button type="button" onClick={() => this.handleClearGrid()}>
-                Clear Grid
-              </button>
-            </div>
-          </div>
-
-          {/* <div className="crossword__container--grid-wrapper">
-            <svg
-              viewBox={`0 0 ${width} ${height}`}
-              preserveAspectRatio="xMinYMin slice"
-              className={`Grid ${
-                rows >= cols ? "view_box--tall" : "view_box--wide"
-              }`}
-              id="grid"
-            >
-              {this.renderGrid(cellNumber, cells, selectedAnswer)}
-            </svg>
-          </div> */}
           <PuzzleBoard />
 
           <div>
-            {/* <Clues
-              cellOrientation={cellOrientation}
-              cellNumber={cellNumber}
-              selectCell={this.selectCell}
-              handleDoubleClick={(direction) =>
-                this.handleDoubleClick(direction)
-              }
-              cells={cells}
-            /> */}
-            {/* <Fills word={word} /> */}
           </div>
         </main>
       </div>
     ) : (
-      <Redirect to={{ pathname: "/" }} />
-    );
+        <Redirect to={{ pathname: "/" }} />
+      );
   }
 }

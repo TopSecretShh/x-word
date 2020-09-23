@@ -1,8 +1,8 @@
 import React from "react";
 import Context from "../Context/Context";
-import { Link } from "react-router-dom";
+import { Link , withRouter} from "react-router-dom";
 
-export default class SignUp extends React.Component {
+class SignUp extends React.Component {
   static contextType = Context;
 
   updateUsername(e) {
@@ -27,7 +27,7 @@ export default class SignUp extends React.Component {
    
 
     if (match.length) {
-      console.log("user already exists");
+      console.log("user already exists", this.props);
       this.props.history.push("/login");
     } else if (!match.length) {
       this.context.addNewUser(username, password);
@@ -113,3 +113,4 @@ export default class SignUp extends React.Component {
     );
   }
 }
+export default (withRouter)(SignUp);
