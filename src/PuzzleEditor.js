@@ -387,10 +387,8 @@ export default class PuzzleEditor extends React.Component {
 
       cellsBlockOrNumber.push({
         id: i,
-        block: this.state.cells[i], // May not be needed
+        block: this.state.cells[i],
         number: null,
-        character: this.state.cells[i] ? this.state.cells[i] : "",
-        // character may not be needed
       });
 
       function findSiblings(clue, direction) {
