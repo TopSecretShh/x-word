@@ -97,7 +97,7 @@ export default class PuzzleEditor extends React.Component {
         cells: Array(this.state.rows * this.state.cols).fill(true),
       });
     }
-    // TODO there should be an else here that shows the user a message to let them know that they cannot clear grid while freeze is enabled
+    // TODO there should be an else statement here that shows the user a message to let them know that they cannot clear grid while freeze is enabled
   };
 
   /* END PUZZLE OPTIONS (sizing, pattern, freeze, clear) */
@@ -137,7 +137,7 @@ export default class PuzzleEditor extends React.Component {
   };
 
   updateCell = (cell, character, cellTwinNumber) => {
-    let cellsCopy = [...this.state.cells]; // Creates deep copy
+    let cellsCopy = [...this.state.cells];
     cellsCopy[cell] = character || !cellsCopy[cell];
 
     if (character) {
@@ -214,10 +214,14 @@ export default class PuzzleEditor extends React.Component {
         this.setState({
           orientationIsHorizontal: false,
         });
+        // TODO not sure if this addresses the problem, still non-synchronous
+        this.selectCell(cell, word);
       } else if (!this.state.orientationIsHorizontal) {
         this.setState({
           orientationIsHorizontal: true,
         });
+        // TODO not sure if this addresses the problem, still non-synchronous
+        this.selectCell(cell, word);
       }
     }
     if (e.key === "ArrowRight") {
