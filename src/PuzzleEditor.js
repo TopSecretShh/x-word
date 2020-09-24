@@ -212,7 +212,7 @@ export default class PuzzleEditor extends React.Component {
 
     // TODO cannot add a block!
     if (e.key === "." && (cell || cell === 0) && !this.state.freezeBlocks) {
-      this.fillCell(cell, word);
+      this.fillCell(cell);
     }
     if (e.key.match(/^[a-z]+$/)) {
       this.fillCell(cell, e.key, word);
