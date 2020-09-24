@@ -14,7 +14,7 @@ export default class PuzzleEditor extends React.Component {
     cols: 3,
     title: "Untitled",
     custom: false,
-    blocks: Array(9).fill(true),
+    cells: Array(9).fill(true),
     selectedCell: null,
     orientationIsHorizontal: true,
     freezeBlocks: false,
@@ -28,7 +28,7 @@ export default class PuzzleEditor extends React.Component {
       this.setState({
         rows: 15,
         cols: 15,
-        blocks: Array(225).fill(true),
+        cells: Array(225).fill(true),
         selectedCell: null,
         freezeBlocks: false,
       });
@@ -36,7 +36,7 @@ export default class PuzzleEditor extends React.Component {
       this.setState({
         rows: 21,
         cols: 21,
-        blocks: Array(441).fill(true),
+        cells: Array(441).fill(true),
         selectedCell: null,
         freezeBlocks: false,
       });
@@ -56,7 +56,7 @@ export default class PuzzleEditor extends React.Component {
     this.setState({
       rows: parseInt(e.target.rows.value),
       cols: parseInt(e.target.cols.value),
-      blocks: Array(e.target.rows.value * e.target.cols.value).fill(true),
+      cells: Array(e.target.rows.value * e.target.cols.value).fill(true),
       selectedCell: null,
       freezeBlocks: false,
     });
@@ -69,7 +69,7 @@ export default class PuzzleEditor extends React.Component {
     const pattern = generatePattern(rows, cols);
     if (!freeze) {
       this.setState({
-        blocks: pattern,
+        cells: pattern,
       });
     }
   };
@@ -82,19 +82,19 @@ export default class PuzzleEditor extends React.Component {
   };
 
   handleClearLetters = () => {
-    let grid = this.state.blocks;
+    let grid = this.state.cells;
     let emptyGrid = grid.map((cell) =>
       typeof cell === "string" ? (cell = true) : cell
     );
     this.setState({
-      blocks: emptyGrid,
+      cells: emptyGrid,
     });
   };
 
   handleClearGrid = () => {
     if (!this.state.freezeBlocks) {
       this.setState({
-        blocks: Array(this.state.rows * this.state.cols).fill(true),
+        cells: Array(this.state.rows * this.state.cols).fill(true),
       });
     }
     // TODO there should be an else here that shows the user a message to let them know that they cannot clear grid while freeze is enabled
@@ -143,27 +143,27 @@ export default class PuzzleEditor extends React.Component {
   };
 
   updateCell = (cell, character, cellTwinNumber) => {
-    let blocksCopy = [...this.state.blocks]; // Creates deep copy
-    blocksCopy[cell] = character || !blocksCopy[cell];
+    let cellsCopy = [...this.state.cells]; // Creates deep copy
+    cellsCopy[cell] = character || !cellsCopy[cell];
 
     if (character) {
-      if (typeof blocksCopy[cellTwinNumber] !== "string") {
-        blocksCopy[cellTwinNumber] = true;
+      if (typeof cellsCopy[cellTwinNumber] !== "string") {
+        cellsCopy[cellTwinNumber] = true;
       }
     } else if (cellTwinNumber !== cell) {
-      blocksCopy[cellTwinNumber] = !blocksCopy[cellTwinNumber];
+      cellsCopy[cellTwinNumber] = !cellsCopy[cellTwinNumber];
     }
 
     this.setState({
-      blocks: blocksCopy,
+      cells: cellsCopy,
     });
   };
 
   deleteCellContent = (cell, value) => {
-    let blocksCopy = [...this.state.blocks];
-    blocksCopy[cell] = value;
+    let cellsCopy = [...this.state.cells];
+    cellsCopy[cell] = value;
     this.setState({
-      blocks: blocksCopy,
+      cells: cellsCopy,
     });
   };
 
@@ -274,7 +274,7 @@ export default class PuzzleEditor extends React.Component {
     }
     if (e.key === "Backspace") {
       if (this.state.orientationIsHorizontal) {
-        if (typeof this.state.blocks[cell] === "string") {
+        if (typeof this.state.cells[cell] === "string") {
           this.deleteCellContent(cell, true);
         }
         if (
@@ -293,7 +293,7 @@ export default class PuzzleEditor extends React.Component {
           this.selectCell(cell - 1, word);
         }
       } else {
-        if (typeof this.state.blocks[cell] === "string") {
+        if (typeof this.state.cells[cell] === "string") {
           this.deleteCellContent(cell, true);
         }
         if (cell > this.state.cols - 1) {
@@ -312,11 +312,11 @@ export default class PuzzleEditor extends React.Component {
     e.preventDefault();
   };
 
-  renderGrid = (cellNumber, cells, selectedAnswer, word) => {
+  renderGrid = (cellNumber, cellsBlockOrNumber, selectedAnswer, word) => {
     let cols = this.state.cols;
-    let blocks = this.state.blocks;
+    let cells = this.state.cells;
 
-    let grid = blocks.map((block, i) => {
+    let grid = cells.map((block, i) => {
       return (
         <Cell
           key={i}
@@ -330,8 +330,7 @@ export default class PuzzleEditor extends React.Component {
           cellNumberLabel={cellNumber[i]}
           handleKeydown={this.handleKeydown}
           handleDoubleClick={this.handleDoubleClick}
-          // highlightedCells={this.state.highlightedCells}
-          cells={cells[i]}
+          cellsBlockOrNumber={cellsBlockOrNumber[i]}
           selectedAnswer={selectedAnswer}
           word={word}
         />
@@ -342,14 +341,14 @@ export default class PuzzleEditor extends React.Component {
 
   /* FILLS IN WORD ON GRID FROM FILLS */
   fillInWord = (fill, selectedAnswer) => {
-    let blocksCopy = [...this.state.blocks];
+    let cellsCopy = [...this.state.cells];
     let fillWord = Array.from(fill);
     for (let i = 0; i < selectedAnswer.length; i++) {
-      blocksCopy[selectedAnswer[i]] = fillWord[i].toUpperCase();
+      cellsCopy[selectedAnswer[i]] = fillWord[i].toUpperCase();
     }
 
     this.setState({
-      blocks: blocksCopy,
+      cells: cellsCopy,
     });
   };
   /* FILLS IN WORD ON GRID FROM FILLS */
@@ -365,46 +364,47 @@ export default class PuzzleEditor extends React.Component {
     const height = rows * 33;
     const custom = this.state.custom;
 
-    const blocks = this.state.blocks;
+    const cells = this.state.cells;
     let counter = 0;
     let cellOrientation = [];
     let cellNumber = [];
 
     let groupAcross = [];
     let groupDown = [];
-    let cells = [];
+    let cellsBlockOrNumber = [];
 
-    blocks.forEach((_, i) => {
-      let isBlockFilled = blocks[i] === false;
+    cells.forEach((_, i) => {
+      let isBlockFilled = cells[i] === false;
 
-      let isBlockBeforeFilled = blocks[i - 1] === false || i % cols === 0;
+      let isBlockBeforeFilled = cells[i - 1] === false || i % cols === 0;
 
-      let isBlockAfterFilled = blocks[i + 1] === false || (i + 1) % cols === 0;
+      let isBlockAfterFilled = cells[i + 1] === false || (i + 1) % cols === 0;
 
-      let isBlockAboveFilled = blocks[i - cols] === false || i - cols < 0;
+      let isBlockAboveFilled = cells[i - cols] === false || i - cols < 0;
 
       let isBlockBelowFilled =
-        blocks[i + cols] === false || i + cols >= rows * cols;
+        cells[i + cols] === false || i + cols >= rows * cols;
 
-      cells.push({
+      cellsBlockOrNumber.push({
         id: i,
-        block: this.state.blocks[i], // May not be needed
+        block: this.state.cells[i], // May not be needed
         number: null,
-        character: this.state.blocks[i] ? this.state.blocks[i] : "", // May not be needed
+        character: this.state.cells[i] ? this.state.cells[i] : "",
+        // character may not be needed
       });
 
       function findSiblings(clue, direction) {
-        if (blocks[clue] === false) return [];
+        if (cells[clue] === false) return [];
         let arr = [clue];
 
         if (direction === "across") {
-          for (let i = clue + 1; blocks[i] !== false && i % cols !== 0; i++) {
+          for (let i = clue + 1; cells[i] !== false && i % cols !== 0; i++) {
             arr.push(i);
           }
           if (clue % cols !== 0) {
             for (
               let i = clue - 1;
-              i >= 0 && blocks[i] !== false && (i + 1) % cols !== 0;
+              i >= 0 && cells[i] !== false && (i + 1) % cols !== 0;
               i--
             ) {
               arr.push(i);
@@ -413,12 +413,12 @@ export default class PuzzleEditor extends React.Component {
         }
 
         if (direction === "down") {
-          for (let i = clue - cols; blocks[i] !== false && i >= 0; i -= cols) {
+          for (let i = clue - cols; cells[i] !== false && i >= 0; i -= cols) {
             arr.push(i);
           }
           for (
             let i = clue + cols;
-            blocks[i] !== false && i < rows * cols;
+            cells[i] !== false && i < rows * cols;
             i += cols
           ) {
             arr.push(i);
@@ -431,7 +431,7 @@ export default class PuzzleEditor extends React.Component {
       if (isBlockFilled) {
         cellOrientation.push(null);
         cellNumber.push(null);
-        cells[i].block = false;
+        cellsBlockOrNumber[i].block = false;
         return;
       }
       if (
@@ -443,20 +443,20 @@ export default class PuzzleEditor extends React.Component {
         counter++;
         cellNumber.push(counter);
         cellOrientation.push("acrossdown"); // This should add down and across, not 'acrossdown'
-        cells[i].number = counter;
+        cellsBlockOrNumber[i].number = counter;
         groupAcross.push(findSiblings(i, "across"));
         groupDown.push(findSiblings(i, "down"));
       } else if (isBlockBeforeFilled && !isBlockAfterFilled) {
         counter++;
         cellNumber.push(counter);
         cellOrientation.push("across");
-        cells[i].number = counter;
+        cellsBlockOrNumber[i].number = counter;
         groupAcross.push(findSiblings(i, "across"));
       } else if (isBlockAboveFilled && !isBlockBelowFilled) {
         counter++;
         cellNumber.push(counter);
         cellOrientation.push("down");
-        cells[i].number = counter;
+        cellsBlockOrNumber[i].number = counter;
         groupDown.push(findSiblings(i, "down"));
       } else {
         cellOrientation.push(null);
@@ -474,7 +474,7 @@ export default class PuzzleEditor extends React.Component {
     selectedAnswer
       .sort((a, b) => a - b)
       .forEach((i) =>
-        typeof blocks[i] === "string" ? word.push(blocks[i]) : word.push("?")
+        typeof cells[i] === "string" ? word.push(cells[i]) : word.push("?")
       );
     word = word.join("");
 
@@ -575,7 +575,12 @@ export default class PuzzleEditor extends React.Component {
                 }`}
                 id="grid"
               >
-                {this.renderGrid(cellNumber, cells, selectedAnswer, word)}
+                {this.renderGrid(
+                  cellNumber,
+                  cellsBlockOrNumber,
+                  selectedAnswer,
+                  word
+                )}
               </svg>
             </div>
             <Fills
@@ -594,7 +599,7 @@ export default class PuzzleEditor extends React.Component {
               handleDoubleClick={(direction) =>
                 this.handleDoubleClick(direction)
               }
-              cells={cells}
+              cellsBlockOrNumber={cellsBlockOrNumber}
             />
           </div>
         </main>

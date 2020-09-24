@@ -12,14 +12,14 @@ function Cell({
   cellCharacterLabel,
   handleKeydown,
   handleDoubleClick,
-  cells,
+  cellsBlockOrNumber,
   word,
 }) {
   //
   // let highlighted = highlightedCells || [];
   // let isHighlighted = highlighted.includes(cellNumber);
 
-  let highlight = selectedAnswer.some((a) => a === cells.id);
+  let highlight = selectedAnswer.some((a) => a === cellsBlockOrNumber.id);
 
   function handleClick(cell) {
     selectCell(cell.id, word);
@@ -33,7 +33,7 @@ function Cell({
             ${highlight ? "crossword__cell--highlighted" : ""}
             `}
       onClick={() => {
-        handleClick(cells);
+        handleClick(cellsBlockOrNumber);
       }}
       onDoubleClick={() => handleDoubleClick()}
       onKeyDown={(e) => handleKeydown(e, word)}
