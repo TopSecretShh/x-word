@@ -1,0 +1,9 @@
+.fills__list {
+  height: 200px;
+  width: 200px;
+  overflow-y: auto;
+}
+
+.fills__list--item {
+  cursor: pointer;
+}

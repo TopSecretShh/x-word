@@ -13,16 +13,16 @@ function Cell({
   handleKeydown,
   handleDoubleClick,
   cells,
+  word,
 }) {
-//
+  //
   // let highlighted = highlightedCells || [];
   // let isHighlighted = highlighted.includes(cellNumber);
 
-  let highlight = selectedAnswer.some(a => a === cells.id)
-
+  let highlight = selectedAnswer.some((a) => a === cells.id);
 
   function handleClick(cell) {
-    selectCell(cell.id);
+    selectCell(cell.id, word);
   }
 
   return (
@@ -32,17 +32,17 @@ function Cell({
             ${!blocked ? "crossword__cell--filled" : ""}
             ${highlight ? "crossword__cell--highlighted" : ""}
             `}
+      onClick={() => {
+        handleClick(cells);
+      }}
+      onDoubleClick={() => handleDoubleClick()}
+      onKeyDown={(e) => handleKeydown(e, word)}
     >
       <rect
         x={col * cellSize}
         y={row * cellSize}
         width={cellSize}
         height={cellSize}
-        onClick={() => {
-          handleClick(cells);
-        }}
-        onDoubleClick={() => handleDoubleClick()}
-        onKeyDown={(e) => handleKeydown(e)}
         tabIndex="0"
         vectorEffect="non-scaling-stroke"
       ></rect>

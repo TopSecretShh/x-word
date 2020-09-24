@@ -217,6 +217,8 @@ function generatePattern(rows, cols) {
     );
 
     return arr;
+  } else {
+    return Array(rows * cols).fill(true);
   }
 }
 

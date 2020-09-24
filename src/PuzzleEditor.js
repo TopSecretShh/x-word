@@ -4,7 +4,7 @@ import Context from "./Context";
 import Cell from "./Cell";
 import Clues from "./Clues";
 import generatePattern from "./Patterns";
-// import Fills from "./Fills";
+import Fills from "./Fills/Fills";
 
 export default class PuzzleEditor extends React.Component {
   static contextType = Context;
@@ -18,6 +18,7 @@ export default class PuzzleEditor extends React.Component {
     selectedCell: null,
     orientationIsHorizontal: true,
     freezeBlocks: false,
+    fills: [],
   };
 
   /* BEGIN PUZZLE OPTIONS (sizing, pattern, freeze, clear) */
@@ -52,12 +53,6 @@ export default class PuzzleEditor extends React.Component {
   };
 
   handleSubmitCustom = (e) => {
-    console.log(
-      "custom dimensions: ",
-      Number(e.target.rows.value),
-      parseInt(e.target.cols.value)
-    );
-
     this.setState({
       rows: parseInt(e.target.rows.value),
       cols: parseInt(e.target.cols.value),
@@ -97,17 +92,34 @@ export default class PuzzleEditor extends React.Component {
   };
 
   handleClearGrid = () => {
-    this.setState({
-      blocks: Array(this.state.rows * this.state.cols).fill(true),
-    });
+    if (!this.state.freezeBlocks) {
+      this.setState({
+        blocks: Array(this.state.rows * this.state.cols).fill(true),
+      });
+    }
+    // TODO there should be an else here that shows the user a message to let them know that they cannot clear grid while freeze is enabled
   };
 
   /* END PUZZLE OPTIONS (sizing, pattern, freeze, clear) */
 
-  selectCell = (value) => {
+  // TODO this lags behind because they aren't synchronous...
+  // TODO need to fix a/synchrony issue!
+  selectCell = (value, word) => {
     this.setState({
       selectedCell: value,
     });
+    this.searchWord(word);
+  };
+
+  searchWord = (word) => {
+    fetch(`https://api.datamuse.com/words?sp=${word}`)
+      .then((response) => response.json())
+      .then((data) => {
+        let words = data.map((word) => (word.score > 100 ? word.word : ""));
+        this.setState({
+          fills: words,
+        });
+      });
   };
 
   // selectAnswer = ({ across, down }) => {
@@ -178,7 +190,7 @@ export default class PuzzleEditor extends React.Component {
     }
   };
 
-  fillCell = (cell, character) => {
+  fillCell = (cell, character, word) => {
     const { rows, cols, orientationIsHorizontal } = this.state;
     const totalSquares = rows * cols - 1;
     const cellTwinNumber = totalSquares - cell;
@@ -186,23 +198,26 @@ export default class PuzzleEditor extends React.Component {
 
     if (character) {
       character = character.toUpperCase();
-      this.setState({
-        selectedCell: nextCell,
-      });
+      // this.setState({
+      //   selectedCell: nextCell,
+      // });
+      this.selectCell(nextCell, word);
     }
 
     this.updateCell(cell, character, cellTwinNumber);
   };
 
-  handleKeydown = (e) => {
+  handleKeydown = (e, word) => {
     const cell = this.state.selectedCell;
 
     if (e.key === "." && (cell || cell === 0) && !this.state.freezeBlocks) {
       this.fillCell(cell);
     }
     if (e.key.match(/^[a-z]+$/)) {
-      this.fillCell(cell, e.key);
+      this.fillCell(cell, e.key, word);
     }
+    // TODO need to find a way for changing the orientation to reselect the cell (and therefore highlight the correct word, across/down)
+    // should use selectCell fn?
     if (e.key.match(/\s/g)) {
       if (this.state.orientationIsHorizontal) {
         this.setState({
@@ -221,9 +236,10 @@ export default class PuzzleEditor extends React.Component {
       ) {
         console.log("right edge");
       } else {
-        this.setState({
-          selectedCell: cell + 1,
-        });
+        // this.setState({
+        //   selectedCell: cell + 1,
+        // });
+        this.selectCell(cell + 1, word);
       }
     }
     if (e.key === "ArrowLeft") {
@@ -234,23 +250,26 @@ export default class PuzzleEditor extends React.Component {
       ) {
         console.log("left edge");
       } else {
-        this.setState({
-          selectedCell: cell - 1,
-        });
+        // this.setState({
+        //   selectedCell: cell - 1,
+        // });
+        this.selectCell(cell - 1, word);
       }
     }
     if (e.key === "ArrowUp") {
       if (cell > this.state.cols - 1) {
-        this.setState({
-          selectedCell: cell - this.state.cols,
-        });
+        // this.setState({
+        //   selectedCell: cell - this.state.cols,
+        // });
+        this.selectCell(cell - this.state.cols, word);
       }
     }
     if (e.key === "ArrowDown") {
       if (cell < this.state.cols * this.state.rows - this.state.cols) {
-        this.setState({
-          selectedCell: cell + this.state.cols,
-        });
+        // this.setState({
+        //   selectedCell: cell + this.state.cols,
+        // });
+        this.selectCell(cell + this.state.cols, word);
       }
     }
     if (e.key === "Backspace") {
@@ -263,33 +282,37 @@ export default class PuzzleEditor extends React.Component {
           (cell / this.state.cols) % 2 === 0 ||
           (cell / this.state.cols) % 2 === 1
         ) {
-          this.setState({
-            selectedCell: cell,
-          });
+          // this.setState({
+          //   selectedCell: cell,
+          // });
+          this.selectCell(cell, word);
         } else {
-          this.setState({
-            selectedCell: cell - 1,
-          });
+          // this.setState({
+          //   selectedCell: cell - 1,
+          // });
+          this.selectCell(cell - 1, word);
         }
       } else {
         if (typeof this.state.blocks[cell] === "string") {
           this.deleteCellContent(cell, true);
         }
         if (cell > this.state.cols - 1) {
-          this.setState({
-            selectedCell: cell - this.state.cols,
-          });
+          // this.setState({
+          //   selectedCell: cell - this.state.cols,
+          // });
+          this.selectCell(cell - this.state.cols, word);
         } else {
-          this.setState({
-            selectedCell: cell,
-          });
+          // this.setState({
+          //   selectedCell: cell,
+          // });
+          this.selectCell(cell, word);
         }
       }
     }
     e.preventDefault();
   };
 
-  renderGrid = (cellNumber, cells, selectedAnswer) => {
+  renderGrid = (cellNumber, cells, selectedAnswer, word) => {
     let cols = this.state.cols;
     let blocks = this.state.blocks;
 
@@ -310,11 +333,26 @@ export default class PuzzleEditor extends React.Component {
           // highlightedCells={this.state.highlightedCells}
           cells={cells[i]}
           selectedAnswer={selectedAnswer}
+          word={word}
         />
       );
     });
     return grid;
   };
+
+  /* FILLS IN WORD ON GRID FROM FILLS */
+  fillInWord = (fill, selectedAnswer) => {
+    let blocksCopy = [...this.state.blocks];
+    let fillWord = Array.from(fill);
+    for (let i = 0; i < selectedAnswer.length; i++) {
+      blocksCopy[selectedAnswer[i]] = fillWord[i].toUpperCase();
+    }
+
+    this.setState({
+      blocks: blocksCopy,
+    });
+  };
+  /* FILLS IN WORD ON GRID FROM FILLS */
 
   render() {
     const user = this.context.currentUser;
@@ -432,6 +470,14 @@ export default class PuzzleEditor extends React.Component {
     let selectedAnswer =
       group.find((g) => g.some((x) => x === this.state.selectedCell)) || [];
 
+    let word = [];
+    selectedAnswer
+      .sort((a, b) => a - b)
+      .forEach((i) =>
+        typeof blocks[i] === "string" ? word.push(blocks[i]) : word.push("?")
+      );
+    word = word.join("");
+
     return user ? (
       <div>
         <header>
@@ -519,17 +565,25 @@ export default class PuzzleEditor extends React.Component {
             </div>
           </div>
 
-          <div className="crossword__container--grid-wrapper">
-            <svg
-              viewBox={`0 0 ${width} ${height}`}
-              preserveAspectRatio="xMinYMin slice"
-              className={`Grid ${
-                rows >= cols ? "view_box--tall" : "view_box--wide"
-              }`}
-              id="grid"
-            >
-              {this.renderGrid(cellNumber, cells, selectedAnswer)}
-            </svg>
+          <div className="grid-and-fills">
+            <div className="crossword__container--grid-wrapper">
+              <svg
+                viewBox={`0 0 ${width} ${height}`}
+                preserveAspectRatio="xMinYMin slice"
+                className={`Grid ${
+                  rows >= cols ? "view_box--tall" : "view_box--wide"
+                }`}
+                id="grid"
+              >
+                {this.renderGrid(cellNumber, cells, selectedAnswer, word)}
+              </svg>
+            </div>
+            <Fills
+              fills={this.state.fills}
+              word={word}
+              fillInWord={this.fillInWord}
+              selectedAnswer={selectedAnswer}
+            />
           </div>
 
           <div className="clue__container">
@@ -542,7 +596,6 @@ export default class PuzzleEditor extends React.Component {
               }
               cells={cells}
             />
-            {/* <Fills word={word} /> */}
           </div>
         </main>
       </div>

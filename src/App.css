@@ -55,6 +55,10 @@ rect {
   cursor: pointer;
 }
 
+.grid-and-fills {
+  display: flex;
+}
+
 .crossword__container--grid-wrapper {
   width: 500px;
   height: 400px;

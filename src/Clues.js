@@ -9,8 +9,8 @@ function Clues({ cellOrientation, cellNumber, selectCell, handleDoubleClick }) {
     handleDoubleClick(direction);
   }
 
-  // TODO experimenting with how to display clues
   /* 
+  experimenting with how to display clues
   Phil only display the across and down clue for the currently selected cell, with fill suggestions for both.
 
   Personally, I like being able to see all clues at the same time, but being able to see clues and the grid at the same time is crucial. Maybe a scrollable list of clues?
