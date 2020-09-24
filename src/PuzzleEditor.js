@@ -210,14 +210,14 @@ export default class PuzzleEditor extends React.Component {
   handleKeydown = (e, word) => {
     const cell = this.state.selectedCell;
 
-    // TODO cannot add a block!
     if (e.key === "." && (cell || cell === 0) && !this.state.freezeBlocks) {
       this.fillCell(cell);
     }
     if (e.key.match(/^[a-z]+$/)) {
       this.fillCell(cell, e.key, word);
     }
-    // TODO need to find a way for changing the orientation to reselect the cell
+    // TODO need to find a way for changing the orientation to reselect the cell (and therefore highlight the correct word, across/down)
+    // should use selectCell fn?
     if (e.key.match(/\s/g)) {
       if (this.state.orientationIsHorizontal) {
         this.setState({
