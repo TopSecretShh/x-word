@@ -307,7 +307,7 @@ export default class PuzzleEditor extends React.Component {
           cellNumberLabel={cellNumber[i]}
           handleKeydown={this.handleKeydown}
           handleDoubleClick={this.handleDoubleClick}
-          highlightedCells={this.state.highlightedCells}
+          // highlightedCells={this.state.highlightedCells}
           cells={cells[i]}
           selectedAnswer={selectedAnswer}
         />

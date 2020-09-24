@@ -2,6 +2,8 @@ function generatePattern(rows, cols) {
   if (rows === 15 && cols === 15) {
     const arr = Array(225).fill(true);
 
+    // TODO have patterns use symmetry
+
     let dailyPatterns = [
       [
         4,
