@@ -374,15 +374,15 @@ export default class PuzzleEditor extends React.Component {
     let cellsBlockOrNumber = [];
 
     cells.forEach((_, i) => {
-      let isBlockFilled = cells[i] === false;
+      let isCellBlocked = cells[i] === false;
 
-      let isBlockBeforeFilled = cells[i - 1] === false || i % cols === 0;
+      let isCellBeforeBlocked = cells[i - 1] === false || i % cols === 0;
 
-      let isBlockAfterFilled = cells[i + 1] === false || (i + 1) % cols === 0;
+      let isCellAfterBlocked = cells[i + 1] === false || (i + 1) % cols === 0;
 
-      let isBlockAboveFilled = cells[i - cols] === false || i - cols < 0;
+      let isCellAboveBlocked = cells[i - cols] === false || i - cols < 0;
 
-      let isBlockBelowFilled =
+      let isCellBelowBlocked =
         cells[i + cols] === false || i + cols >= rows * cols;
 
       cellsBlockOrNumber.push({
@@ -428,17 +428,17 @@ export default class PuzzleEditor extends React.Component {
         return arr.sort();
       }
 
-      if (isBlockFilled) {
+      if (isCellBlocked) {
         cellOrientation.push(null);
         cellNumber.push(null);
         cellsBlockOrNumber[i].block = false;
         return;
       }
       if (
-        isBlockAboveFilled &&
-        isBlockBeforeFilled &&
-        !isBlockAfterFilled &&
-        !isBlockBelowFilled
+        isCellAboveBlocked &&
+        isCellBeforeBlocked &&
+        !isCellAfterBlocked &&
+        !isCellBelowBlocked
       ) {
         counter++;
         cellNumber.push(counter);
@@ -446,13 +446,13 @@ export default class PuzzleEditor extends React.Component {
         cellsBlockOrNumber[i].number = counter;
         groupAcross.push(findSiblings(i, "across"));
         groupDown.push(findSiblings(i, "down"));
-      } else if (isBlockBeforeFilled && !isBlockAfterFilled) {
+      } else if (isCellBeforeBlocked && !isCellAfterBlocked) {
         counter++;
         cellNumber.push(counter);
         cellOrientation.push("across");
         cellsBlockOrNumber[i].number = counter;
         groupAcross.push(findSiblings(i, "across"));
-      } else if (isBlockAboveFilled && !isBlockBelowFilled) {
+      } else if (isCellAboveBlocked && !isCellBelowBlocked) {
         counter++;
         cellNumber.push(counter);
         cellOrientation.push("down");
