@@ -104,6 +104,10 @@ export default class PuzzleEditor extends React.Component {
 
   // TODO this lags behind because they aren't synchronous...
   // TODO need to fix a/synchrony issue!
+  // the issue might arise from the fact that 'word' is created/updated in the render of the component?
+  // passing in word, which comes from previously selected cell, not the newly selected one...
+  // word needs to be selected in a different way
+  // word comes from selectedAnswer in createCells. selectedAnswer comes from this.state.selectedCell
   selectCell = (value, word) => {
     this.setState({
       selectedCell: value,
@@ -323,23 +327,20 @@ export default class PuzzleEditor extends React.Component {
   };
   /* FILLS IN WORD ON GRID FROM FILLS */
 
-  render() {
-    const user = this.context.currentUser;
-
-    const freeze = this.state.freezeBlocks;
-
+  createCells = () => {
+    // setting the stage
     const rows = this.state.rows;
     const cols = this.state.cols;
-    const width = cols * 33;
-    const height = rows * 33;
-    const custom = this.state.custom;
     const cells = this.state.cells;
 
+    // internal variables
     let counter = 0;
-    let cellOrientation = [];
-    let cellNumber = [];
     let groupAcross = [];
     let groupDown = [];
+
+    // variables to be exported
+    let cellOrientation = [];
+    let cellNumber = [];
     let cellId = [];
 
     cells.forEach((_, i) => {
@@ -424,6 +425,29 @@ export default class PuzzleEditor extends React.Component {
     });
 
     // this finds the selected word and creates a word fragment to send to API via Fills.js
+    // let group =
+    //   (this.state.orientationIsHorizontal ? groupAcross : groupDown) || [];
+    // let selectedAnswer =
+    //   group.find((g) => g.some((x) => x === this.state.selectedCell)) || [];
+    // let word = [];
+    // selectedAnswer
+    //   .sort((a, b) => a - b)
+    //   .forEach((i) =>
+    //     typeof cells[i] === "string" ? word.push(cells[i]) : word.push("?")
+    //   );
+    // word = word.join("");
+
+    return {
+      cellOrientation,
+      cellNumber,
+      cellId,
+      groupAcross,
+      groupDown,
+      cells,
+    };
+  };
+
+  createWord = (groupAcross, groupDown, cells) => {
     let group =
       (this.state.orientationIsHorizontal ? groupAcross : groupDown) || [];
     let selectedAnswer =
@@ -435,6 +459,30 @@ export default class PuzzleEditor extends React.Component {
         typeof cells[i] === "string" ? word.push(cells[i]) : word.push("?")
       );
     word = word.join("");
+    return { selectedAnswer, word };
+  };
+
+  render() {
+    const rows = this.state.rows;
+    const cols = this.state.cols;
+    const user = this.context.currentUser;
+    const freeze = this.state.freezeBlocks;
+    const width = cols * 33;
+    const height = rows * 33;
+    const custom = this.state.custom;
+    const {
+      cellOrientation,
+      cellNumber,
+      cellId,
+      groupAcross,
+      groupDown,
+      cells,
+    } = this.createCells();
+    const { selectedAnswer, word } = this.createWord(
+      groupAcross,
+      groupDown,
+      cells
+    );
 
     return user ? (
       <div>

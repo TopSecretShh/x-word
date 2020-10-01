@@ -1,6 +1,8 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 
+import { users } from "./tempUsersData";
+
 import Landing from "./Landing";
 import Login from "./Login";
 import SignUp from "./SignUp";
@@ -23,14 +25,7 @@ export default class App extends React.Component {
   static contextType = Context;
 
   state = {
-    users: [
-      { id: 0, username: "Bob", password: "bob" },
-      {
-        id: 1,
-        username: "Jon",
-        password: "jon",
-      },
-    ],
+    users: users,
     currentUser: "",
   };
 
@@ -52,12 +47,19 @@ export default class App extends React.Component {
     });
   };
 
+  signOut = () => {
+    this.setState({
+      currentUser: "",
+    });
+  };
+
   render() {
     const value = {
       users: this.state.users,
       currentUser: this.state.currentUser,
       addNewUser: this.addNewUser,
       setCurrentUser: this.setCurrentUser,
+      signOut: this.signOut,
     };
 
     return (
