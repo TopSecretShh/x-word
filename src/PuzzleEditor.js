@@ -326,22 +326,17 @@ export default class PuzzleEditor extends React.Component {
   };
   /* FILLS IN WORD ON GRID FROM FILLS */
 
-  render() {
-    const user = this.context.currentUser;
-    const freeze = this.state.freezeBlocks;
-
+  createCells = () => {
     const rows = this.state.rows;
     const cols = this.state.cols;
-    const width = cols * 33;
-    const height = rows * 33;
-    const custom = this.state.custom;
     const cells = this.state.cells;
 
     let counter = 0;
-    let cellOrientation = [];
-    let cellNumber = [];
     let groupAcross = [];
     let groupDown = [];
+
+    let cellOrientation = [];
+    let cellNumber = [];
     let cellId = [];
 
     cells.forEach((_, i) => {
@@ -437,6 +432,25 @@ export default class PuzzleEditor extends React.Component {
         typeof cells[i] === "string" ? word.push(cells[i]) : word.push("?")
       );
     word = word.join("");
+
+    return { cellOrientation, cellNumber, cellId, selectedAnswer, word };
+  };
+
+  render() {
+    const rows = this.state.rows;
+    const cols = this.state.cols;
+    const user = this.context.currentUser;
+    const freeze = this.state.freezeBlocks;
+    const width = cols * 33;
+    const height = rows * 33;
+    const custom = this.state.custom;
+    const {
+      cellOrientation,
+      cellNumber,
+      cellId,
+      selectedAnswer,
+      word,
+    } = this.createCells();
 
     return user ? (
       <div>
