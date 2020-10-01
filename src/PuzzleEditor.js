@@ -106,6 +106,7 @@ export default class PuzzleEditor extends React.Component {
   // TODO need to fix a/synchrony issue!
   // the issue might arise from the fact that 'word' is created/updated in the render of the component?
   // passing in word, which comes from previously selected cell, not the newly selected one...
+  // word needs to be selected in a different way
   selectCell = (value, word) => {
     this.setState({
       selectedCell: value,
