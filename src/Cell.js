@@ -7,33 +7,28 @@ function Cell({
   selectCell,
   selectedCell,
   selectedAnswer,
-  blocked,
+  isNotBlocked,
   cellNumberLabel,
-  cellCharacterLabel,
   handleKeydown,
   handleDoubleClick,
-  cells,
+  cellId,
   word,
 }) {
-  //
-  // let highlighted = highlightedCells || [];
-  // let isHighlighted = highlighted.includes(cellNumber);
-
-  let highlight = selectedAnswer.some((a) => a === cells.id);
+  let highlight = selectedAnswer.some((a) => a === cellId);
 
   function handleClick(cell) {
-    selectCell(cell.id, word);
+    selectCell(cell, word);
   }
 
   return (
     <g
       className={`crossword__cell 
             ${selectedCell ? "crossword__cell--selected" : ""} 
-            ${!blocked ? "crossword__cell--filled" : ""}
+            ${!isNotBlocked ? "crossword__cell--filled" : ""}
             ${highlight ? "crossword__cell--highlighted" : ""}
             `}
       onClick={() => {
-        handleClick(cells);
+        handleClick(cellId);
       }}
       onDoubleClick={() => handleDoubleClick()}
       onKeyDown={(e) => handleKeydown(e, word)}
@@ -51,7 +46,7 @@ function Cell({
         x={col * cellSize + 16}
         y={row * cellSize + 24}
       >
-        {cellCharacterLabel}
+        {isNotBlocked}
       </text>
       <text
         className="crossword__cell--number"
