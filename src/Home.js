@@ -14,6 +14,15 @@ export default class Home extends React.Component {
           <Link className="btn-alt" to="/">
             Back to Landing
           </Link>
+          <button
+            type="button"
+            onClick={() => {
+              this.context.signOut();
+              this.props.history.push("/");
+            }}
+          >
+            Sign Out
+          </button>
         </nav>
 
         <main>

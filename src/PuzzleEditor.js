@@ -328,7 +328,6 @@ export default class PuzzleEditor extends React.Component {
 
   render() {
     const user = this.context.currentUser;
-
     const freeze = this.state.freezeBlocks;
 
     const rows = this.state.rows;

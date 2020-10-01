@@ -5,4 +5,5 @@ export default React.createContext({
   currentUser: "",
   addNewUser: () => {},
   setCurrentUser: () => {},
+  signOut: () => {},
 });
