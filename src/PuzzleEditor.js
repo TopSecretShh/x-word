@@ -3,8 +3,8 @@ import { Redirect } from "react-router-dom";
 import Context from "./Context";
 import Cell from "./Cell";
 import Clues from "./Clues";
-import generatePattern from "./Patterns";
 import Fills from "./Fills/Fills";
+import Controls from "./Controls/Controls"
 
 export default class PuzzleEditor extends React.Component {
   static contextType = Context;
@@ -21,86 +21,15 @@ export default class PuzzleEditor extends React.Component {
     fills: [],
   };
 
-  /* BEGIN PUZZLE OPTIONS (sizing, pattern, freeze, clear) */
-  // TODO maybe these options/buttons could be their own component? or I guess these fns would still be here, but the puzzle options div could be a separate component
-  setSize = (value) => {
-    if (value === "daily") {
-      this.setState({
-        rows: 15,
-        cols: 15,
-        cells: Array(225).fill(true),
-        selectedCell: null,
-        freezeBlocks: false,
-      });
-    } else if (value === "sunday") {
-      this.setState({
-        rows: 21,
-        cols: 21,
-        cells: Array(441).fill(true),
-        selectedCell: null,
-        freezeBlocks: false,
-      });
-    } else if (value === "custom") {
-      this.setState({
-        custom: true,
-      });
-    }
-    if (this.state.custom) {
-      this.setState({
-        custom: false,
-      });
-    }
-  };
-
-  handleSubmitCustom = (e) => {
+  handleControlsInput = (field, value) => {
+    if (typeof field === 'object') {
+      this.setState(field)
+    } else {
     this.setState({
-      rows: parseInt(e.target.rows.value),
-      cols: parseInt(e.target.cols.value),
-      cells: Array(e.target.rows.value * e.target.cols.value).fill(true),
-      selectedCell: null,
-      freezeBlocks: false,
-    });
-  };
-
-  handlePatternBtn = () => {
-    const rows = this.state.rows;
-    const cols = this.state.cols;
-    const freeze = this.state.freezeBlocks;
-    const pattern = generatePattern(rows, cols);
-    if (!freeze) {
-      this.setState({
-        cells: pattern,
-      });
+      [field]: value
+    })
     }
-  };
-
-  handleFreezeBlocks = () => {
-    const freeze = this.state.freezeBlocks;
-    freeze
-      ? this.setState({ freezeBlocks: false })
-      : this.setState({ freezeBlocks: true });
-  };
-
-  handleClearLetters = () => {
-    let grid = this.state.cells;
-    let emptyGrid = grid.map((cell) =>
-      typeof cell === "string" ? (cell = true) : cell
-    );
-    this.setState({
-      cells: emptyGrid,
-    });
-  };
-
-  handleClearGrid = () => {
-    if (!this.state.freezeBlocks) {
-      this.setState({
-        cells: Array(this.state.rows * this.state.cols).fill(true),
-      });
-    }
-    // TODO there should be an else statement here that shows the user a message to let them know that they cannot clear grid while freeze is enabled
-  };
-
-  /* END PUZZLE OPTIONS (sizing, pattern, freeze, clear) */
+  }
 
   // TODO this lags behind because they aren't synchronous...
   // TODO need to fix a/synchrony issue!
@@ -466,10 +395,9 @@ export default class PuzzleEditor extends React.Component {
     const rows = this.state.rows;
     const cols = this.state.cols;
     const user = this.context.currentUser;
-    const freeze = this.state.freezeBlocks;
     const width = cols * 33;
     const height = rows * 33;
-    const custom = this.state.custom;
+    // const custom = this.state.custom;
     const {
       cellOrientation,
       cellNumber,
@@ -490,86 +418,15 @@ export default class PuzzleEditor extends React.Component {
           <h1>{this.context.title}</h1>
           <p>by {this.context.currentUser}</p>
         </header>
-
         <main>
-          <div className="puzzle-options">
-            <div className="size-btns">
-              <h3>Grid Size</h3>
-              <button
-                type="button"
-                value="daily"
-                onClick={(e) => this.setSize(e.target.value)}
-              >
-                Daily (15x15)
-              </button>
-              <button
-                type="button"
-                value="sunday"
-                onClick={(e) => this.setSize(e.target.value)}
-              >
-                Sunday (21x21)
-              </button>
-              <button
-                type="button"
-                value="custom"
-                onClick={(e) => this.setSize(e.target.value)}
-              >
-                Custom
-              </button>
-              {custom ? (
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    this.handleSubmitCustom(e);
-                  }}
-                >
-                  <fieldset className="custom-size">
-                    <label>
-                      # of rows:{"  "}
-                      <input type="number" name="rows" min={3} max={25} />
-                    </label>
-                    <br />
-                    <label>
-                      # of columns:{" "}
-                      <input type="number" name="cols" min={3} max={25} />
-                    </label>
-                    <br />
-                    <button type="submit">Enter</button>
-                  </fieldset>
-                </form>
-              ) : (
-                ""
-              )}
-            </div>
-            <div className="pattern-btn">
-              <h3>Random Pattern</h3>
-              <button type="button" onClick={() => this.handlePatternBtn()}>
-                Generate
-              </button>
-            </div>
-            <div className="freeze-btn">
-              <h3>Toggle Block Freeze</h3>
-              {/* TODO this could be a sweet animated lock icon that transitions between un/locked */}
-              {freeze ? (
-                <button type="button" onClick={() => this.handleFreezeBlocks()}>
-                  Unfreeze
-                </button>
-              ) : (
-                <button type="button" onClick={() => this.handleFreezeBlocks()}>
-                  Freeze
-                </button>
-              )}
-            </div>
-            <div className="clear-grid-btns">
-              <h3>Clear</h3>
-              <button type="button" onClick={() => this.handleClearLetters()}>
-                Clear Letters
-              </button>
-              <button type="button" onClick={() => this.handleClearGrid()}>
-                Clear Grid
-              </button>
-            </div>
-          </div>
+          <Controls 
+            handleControlsInput={this.handleControlsInput}
+            freezeBlocks={this.state.freezeBlocks}
+            rows={this.state.rows}
+            cols={this.state.cols}
+            cells={this.state.cells}
+            custom={this.state.custom}
+          />
 
           <div className="grid-and-fills">
             <div className="crossword__container--grid-wrapper">
