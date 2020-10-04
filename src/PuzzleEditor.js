@@ -217,21 +217,6 @@ export default class PuzzleEditor extends React.Component {
       cells: cellsCopy,
     });
   };
- 
-  // createWord = (groupAcross, groupDown, cells) => {
-  //   let group =
-  //     (this.state.orientationIsHorizontal ? groupAcross : groupDown) || [];
-  //   let selectedAnswer =
-  //     group.find((g) => g.some((x) => x === this.state.selectedCell)) || [];
-  //   let word = [];
-  //   selectedAnswer
-  //     .sort((a, b) => a - b)
-  //     .forEach((i) =>
-  //       typeof cells[i] === "string" ? word.push(cells[i]) : word.push("?")
-  //     );
-  //   word = word.join("");
-  //   return { selectedAnswer, word };
-  // };
 
   render() {
     const {rows, cols, cells, custom, freezeBlocks} = this.state
@@ -262,6 +247,7 @@ export default class PuzzleEditor extends React.Component {
             selectCell={this.selectCell}
             handleKeydown={this.handleKeydown}
             handleDoubleClick={this.handleDoubleClick}
+            fillInWord={this.fillInWord}
           />
         </main>
       </div>

@@ -1,0 +1,32 @@
+rect {
+  outline: 0;
+  stroke: black;
+  stroke-width: 0.5px;
+}
+
+svg[viewBox] {
+  user-select: none;
+}
+
+#grid {
+  margin-top: 16px;
+  border: 2px solid black;
+}
+
+.crossword__container--grid-wrapper {
+  width: 500px;
+  height: 400px;
+}
+
+.grid-and-fills {
+  display: flex;
+}
+
+
+.view_box--tall {
+  height: 100%;
+}
+
+.view_box--wide {
+  width: 100%;
+}

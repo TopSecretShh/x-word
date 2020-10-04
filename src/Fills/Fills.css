@@ -7,3 +7,11 @@
 .fills__list--item {
   cursor: pointer;
 }
+
+.fills {
+  padding: 16px;
+}
+
+ul {
+  list-style-type: none;
+}

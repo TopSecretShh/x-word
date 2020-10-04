@@ -1,4 +1,5 @@
 import React from "react";
+import "./Clues.css"
 
 function Clues({ cellOrientation, cellNumber, selectCell, handleDoubleClick }) {
   let across = [];

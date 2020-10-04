@@ -2,17 +2,18 @@ import React from "react";
 import Clues from "../Clues/Clues";
 import Fills from "../Fills/Fills";
 import Cell from "../Cell/Cell"
-import NewFills from "../Fills/NewFills";
+
+import "./Grid.css"
 
 export default class Grid extends React.Component {
+    state = {
+        fills: [],
+    };
+    
 
     selectCell = (value, word) => {
-        // this.setState({
-        //   selectedCell: value,
-        // });
         this.props.selectCell(value)
         this.searchWord(word);
-        console.log(word)
     };
       
     handleDoubleClick = (input) => {
@@ -78,10 +79,7 @@ export default class Grid extends React.Component {
     createCells = () => {
           // setting the stage
           const {rows, cols, cells} = this.props
-        //   const rows = this.state.rows;
-        //   const cols = this.state.cols;
-        //   const cells = this.state.cells;
-      
+
           // internal variables
           let counter = 0;
           let groupAcross = [];
@@ -173,19 +171,6 @@ export default class Grid extends React.Component {
             }
           });
       
-          // this finds the selected word and creates a word fragment to send to API via Fills.js
-          // let group =
-          //   (this.state.orientationIsHorizontal ? groupAcross : groupDown) || [];
-          // let selectedAnswer =
-          //   group.find((g) => g.some((x) => x === this.state.selectedCell)) || [];
-          // let word = [];
-          // selectedAnswer
-          //   .sort((a, b) => a - b)
-          //   .forEach((i) =>
-          //     typeof cells[i] === "string" ? word.push(cells[i]) : word.push("?")
-          //   );
-          // word = word.join("");
-      
           return {
             cellOrientation,
             cellNumber,
@@ -234,12 +219,10 @@ export default class Grid extends React.Component {
                     </div>
 
                     <Fills
-                    fills={this.props.fills}
+                    fills={this.state.fills}
                     word={word}
-                    fillInWord={this.fillInWord}
+                    fillInWord={this.props.fillInWord}
                     selectedAnswer={selectedAnswer}
-                    />
-                    <NewFills
                     />
                 </div>
                 <div className="clue__container">

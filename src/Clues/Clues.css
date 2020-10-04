@@ -1,0 +1,12 @@
+.clues {
+    display: flex;
+    padding: 16px;
+  }
+  
+  .clues > div {
+    padding: 8px;
+  }
+  
+  .clues__list li {
+    cursor: pointer;
+  }

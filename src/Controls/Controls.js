@@ -1,6 +1,8 @@
 import React from "react";
 import generatePattern from "../Patterns"
 
+import "./Controls.css"
+
 
 class Controls extends React.Component {
   
