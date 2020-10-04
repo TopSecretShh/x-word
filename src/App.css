@@ -39,6 +39,10 @@ rect {
   cursor: pointer;
 }
 
+.block-options {
+  display: flex;
+}
+
 .puzzle-options {
   display: flex;
   border: 1px black solid;

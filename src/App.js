@@ -30,6 +30,7 @@ export default class App extends React.Component {
 
     rows: 3,
     cols: 3,
+    puzzleTitle: "Untitled",
   };
 
   /* user and sign in/out */
@@ -86,6 +87,12 @@ export default class App extends React.Component {
   };
   /* puzzle dismensions */
 
+  updatePuzzleTitle = (puzzleTitle) => {
+    this.setState({
+      puzzleTitle,
+    });
+  };
+
   render() {
     const value = {
       users: this.state.users,
@@ -112,10 +119,12 @@ export default class App extends React.Component {
                   {...props}
                   rows={this.state.rows}
                   cols={this.state.cols}
+                  puzzleTitle={this.state.puzzleTitle}
                   updateRows={this.updateRows}
                   updateCols={this.updateCols}
                   setDailySize={this.setDailySize}
                   setSundaySize={this.setSundaySize}
+                  updatePuzzleTitle={this.updatePuzzleTitle}
                 />
               )}
             />
@@ -126,6 +135,7 @@ export default class App extends React.Component {
                   {...props}
                   rows={this.state.rows}
                   cols={this.state.cols}
+                  puzzleTitle={this.state.puzzleTitle}
                 />
               )}
             />

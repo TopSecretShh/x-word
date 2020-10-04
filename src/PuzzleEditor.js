@@ -74,6 +74,15 @@ export default class PuzzleEditor extends React.Component {
     }
   };
 
+  handleClearGrid = () => {
+    if (!this.state.freezeBlocks) {
+      this.setState({
+        cells: Array(this.props.rows * this.props.cols).fill(true),
+      });
+    }
+    // TODO there should be an else statement here that shows the user a message to let them know that they cannot clear grid while freeze is enabled
+  };
+
   handleFreezeBlocks = () => {
     const freeze = this.state.freezeBlocks;
     freeze
@@ -89,15 +98,6 @@ export default class PuzzleEditor extends React.Component {
     this.setState({
       cells: emptyGrid,
     });
-  };
-
-  handleClearGrid = () => {
-    if (!this.state.freezeBlocks) {
-      this.setState({
-        cells: Array(this.state.rows * this.state.cols).fill(true),
-      });
-    }
-    // TODO there should be an else statement here that shows the user a message to let them know that they cannot clear grid while freeze is enabled
   };
 
   /* END PUZZLE OPTIONS (sizing, pattern, freeze, clear) */
@@ -189,7 +189,8 @@ export default class PuzzleEditor extends React.Component {
   };
 
   fillCell = (cell, character, word) => {
-    const { rows, cols, orientationIsHorizontal } = this.state;
+    const { rows, cols } = this.props;
+    const { orientationIsHorizontal } = this.state;
     const totalSquares = rows * cols - 1;
     const cellTwinNumber = totalSquares - cell;
     const nextCell = this.findNextCell(cell, orientationIsHorizontal);
@@ -288,7 +289,7 @@ export default class PuzzleEditor extends React.Component {
   };
 
   renderGrid = (cellNumber, cellId, selectedAnswer, word) => {
-    let cols = this.state.cols;
+    let cols = this.props.cols;
     let cells = this.state.cells;
 
     let grid = cells.map((cell, i) => {
@@ -329,8 +330,8 @@ export default class PuzzleEditor extends React.Component {
 
   createCells = () => {
     // setting the stage
-    const rows = this.state.rows;
-    const cols = this.state.cols;
+    const rows = this.props.rows;
+    const cols = this.props.cols;
     const cells = this.state.cells;
 
     // internal variables
@@ -463,13 +464,12 @@ export default class PuzzleEditor extends React.Component {
   };
 
   render() {
-    const rows = this.state.rows;
-    const cols = this.state.cols;
+    const rows = this.props.rows;
+    const cols = this.props.cols;
     const user = this.context.currentUser;
     const freeze = this.state.freezeBlocks;
     const width = cols * 33;
     const height = rows * 33;
-    const custom = this.state.custom;
     const {
       cellOrientation,
       cellNumber,
@@ -487,88 +487,48 @@ export default class PuzzleEditor extends React.Component {
     return user ? (
       <div>
         <header>
-          <h1>{this.context.title}</h1>
+          <h1>{this.props.puzzleTitle}</h1>
           <p>by {this.context.currentUser}</p>
         </header>
 
         <main>
           <div className="puzzle-options">
-            <div className="size-btns">
-              <h3>Grid Size</h3>
-              <button
-                type="button"
-                value="daily"
-                onClick={(e) => this.setSize(e.target.value)}
-              >
-                Daily (15x15)
-              </button>
-              <button
-                type="button"
-                value="sunday"
-                onClick={(e) => this.setSize(e.target.value)}
-              >
-                Sunday (21x21)
-              </button>
-              <button
-                type="button"
-                value="custom"
-                onClick={(e) => this.setSize(e.target.value)}
-              >
-                Custom
-              </button>
-              {custom ? (
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    this.handleSubmitCustom(e);
-                  }}
-                >
-                  <fieldset className="custom-size">
-                    <label>
-                      # of rows:{"  "}
-                      <input type="number" name="rows" min={3} max={25} />
-                    </label>
-                    <br />
-                    <label>
-                      # of columns:{" "}
-                      <input type="number" name="cols" min={3} max={25} />
-                    </label>
-                    <br />
-                    <button type="submit">Enter</button>
-                  </fieldset>
-                </form>
+            <div className="block-options">
+              {!freeze ? (
+                <div className="pattern-btn">
+                  <button type="button" onClick={() => this.handlePatternBtn()}>
+                    Pattern
+                  </button>
+                </div>
               ) : (
                 ""
               )}
-            </div>
-            <div className="pattern-btn">
-              <h3>Random Pattern</h3>
-              <button type="button" onClick={() => this.handlePatternBtn()}>
-                Generate
-              </button>
-            </div>
-            <div className="freeze-btn">
-              <h3>Toggle Block Freeze</h3>
-              {/* TODO this could be a sweet animated lock icon that transitions between un/locked */}
-              {freeze ? (
-                <button type="button" onClick={() => this.handleFreezeBlocks()}>
-                  Unfreeze
-                </button>
+              {!freeze ? (
+                <div className="clear-grid-btn">
+                  <button type="button" onClick={() => this.handleClearGrid()}>
+                    Clear Grid
+                  </button>
+                </div>
               ) : (
-                <button type="button" onClick={() => this.handleFreezeBlocks()}>
-                  Freeze
-                </button>
+                ""
               )}
+
+              <div className="freeze-btn">
+                <button type="button" onClick={() => this.handleFreezeBlocks()}>
+                  Freeze Blocks
+                </button>
+              </div>
             </div>
-            <div className="clear-grid-btns">
-              <h3>Clear</h3>
-              <button type="button" onClick={() => this.handleClearLetters()}>
-                Clear Letters
-              </button>
-              <button type="button" onClick={() => this.handleClearGrid()}>
-                Clear Grid
-              </button>
-            </div>
+
+            {freeze ? (
+              <div>
+                <button type="button" onClick={() => this.handleClearLetters()}>
+                  Clear Letters
+                </button>
+              </div>
+            ) : (
+              ""
+            )}
           </div>
 
           <div className="grid-and-fills">
@@ -584,24 +544,32 @@ export default class PuzzleEditor extends React.Component {
                 {this.renderGrid(cellNumber, cellId, selectedAnswer, word)}
               </svg>
             </div>
-            <Fills
-              fills={this.state.fills}
-              word={word}
-              fillInWord={this.fillInWord}
-              selectedAnswer={selectedAnswer}
-            />
+            {freeze ? (
+              <Fills
+                fills={this.state.fills}
+                word={word}
+                fillInWord={this.fillInWord}
+                selectedAnswer={selectedAnswer}
+              />
+            ) : (
+              ""
+            )}
           </div>
 
           <div className="clue__container">
-            <Clues
-              cellOrientation={cellOrientation}
-              cellNumber={cellNumber}
-              selectCell={this.selectCell}
-              handleDoubleClick={(direction) =>
-                this.handleDoubleClick(direction)
-              }
-              cellId={cellId}
-            />
+            {freeze ? (
+              <Clues
+                cellOrientation={cellOrientation}
+                cellNumber={cellNumber}
+                selectCell={this.selectCell}
+                handleDoubleClick={(direction) =>
+                  this.handleDoubleClick(direction)
+                }
+                cellId={cellId}
+              />
+            ) : (
+              ""
+            )}
           </div>
         </main>
       </div>

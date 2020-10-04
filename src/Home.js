@@ -97,8 +97,20 @@ export default class Home extends React.Component {
                     />
                   </label>
                   <br />
-                  <Link to="/puzzle-editor">Begin</Link>
                 </fieldset>
+                <label>
+                  Puzzle Title
+                  <input
+                    type="text"
+                    name="puzzle-title"
+                    value={this.props.puzzleTitle}
+                    onChange={(e) =>
+                      this.props.updatePuzzleTitle(e.target.value)
+                    }
+                  />
+                </label>
+
+                <Link to="/puzzle-editor">Begin</Link>
               </form>
             ) : (
               ""
