@@ -10,11 +10,11 @@ export default class PuzzleEditor extends React.Component {
   static contextType = Context;
 
   state = {
-    rows: 3,
-    cols: 3,
+    // rows: 3,
+    // cols: 3,
     title: "Untitled",
     custom: false,
-    cells: Array(9).fill(true),
+    cells: Array(this.props.rows * this.props.cols).fill(true),
     selectedCell: null,
     orientationIsHorizontal: true,
     freezeBlocks: false,
@@ -23,48 +23,48 @@ export default class PuzzleEditor extends React.Component {
 
   /* BEGIN PUZZLE OPTIONS (sizing, pattern, freeze, clear) */
   // TODO maybe these options/buttons could be their own component? or I guess these fns would still be here, but the puzzle options div could be a separate component
-  setSize = (value) => {
-    if (value === "daily") {
-      this.setState({
-        rows: 15,
-        cols: 15,
-        cells: Array(225).fill(true),
-        selectedCell: null,
-        freezeBlocks: false,
-      });
-    } else if (value === "sunday") {
-      this.setState({
-        rows: 21,
-        cols: 21,
-        cells: Array(441).fill(true),
-        selectedCell: null,
-        freezeBlocks: false,
-      });
-    } else if (value === "custom") {
-      this.setState({
-        custom: true,
-      });
-    }
-    if (this.state.custom) {
-      this.setState({
-        custom: false,
-      });
-    }
-  };
+  // setSize = (value) => {
+  //   if (value === "daily") {
+  //     this.setState({
+  //       rows: 15,
+  //       cols: 15,
+  //       cells: Array(225).fill(true),
+  //       selectedCell: null,
+  //       freezeBlocks: false,
+  //     });
+  //   } else if (value === "sunday") {
+  //     this.setState({
+  //       rows: 21,
+  //       cols: 21,
+  //       cells: Array(441).fill(true),
+  //       selectedCell: null,
+  //       freezeBlocks: false,
+  //     });
+  //   } else if (value === "custom") {
+  //     this.setState({
+  //       custom: true,
+  //     });
+  //   }
+  //   if (this.state.custom) {
+  //     this.setState({
+  //       custom: false,
+  //     });
+  //   }
+  // };
 
-  handleSubmitCustom = (e) => {
-    this.setState({
-      rows: parseInt(e.target.rows.value),
-      cols: parseInt(e.target.cols.value),
-      cells: Array(e.target.rows.value * e.target.cols.value).fill(true),
-      selectedCell: null,
-      freezeBlocks: false,
-    });
-  };
+  // handleSubmitCustom = (e) => {
+  //   this.setState({
+  //     rows: parseInt(e.target.rows.value),
+  //     cols: parseInt(e.target.cols.value),
+  //     cells: Array(e.target.rows.value * e.target.cols.value).fill(true),
+  //     selectedCell: null,
+  //     freezeBlocks: false,
+  //   });
+  // };
 
   handlePatternBtn = () => {
-    const rows = this.state.rows;
-    const cols = this.state.cols;
+    const rows = this.props.rows;
+    const cols = this.props.cols;
     const freeze = this.state.freezeBlocks;
     const pattern = generatePattern(rows, cols);
     if (!freeze) {

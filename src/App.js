@@ -27,8 +27,12 @@ export default class App extends React.Component {
   state = {
     users: users,
     currentUser: "",
+
+    rows: 3,
+    cols: 3,
   };
 
+  /* user and sign in/out */
   addNewUser = (username, password) => {
     const newUser = {
       id: this.state.users.length + 1,
@@ -52,6 +56,35 @@ export default class App extends React.Component {
       currentUser: "",
     });
   };
+  /* user and sign in/out */
+
+  /* puzzle dismensions */
+  updateRows = (value) => {
+    this.setState({
+      rows: Number(value),
+    });
+  };
+
+  updateCols = (value) => {
+    this.setState({
+      cols: Number(value),
+    });
+  };
+
+  setDailySize = () => {
+    this.setState({
+      rows: 15,
+      cols: 15,
+    });
+  };
+
+  setSundaySize = () => {
+    this.setState({
+      rows: 21,
+      cols: 21,
+    });
+  };
+  /* puzzle dismensions */
 
   render() {
     const value = {
@@ -60,6 +93,9 @@ export default class App extends React.Component {
       addNewUser: this.addNewUser,
       setCurrentUser: this.setCurrentUser,
       signOut: this.signOut,
+
+      rows: this.state.rows,
+      cols: this.state.cols,
     };
 
     return (
@@ -69,8 +105,32 @@ export default class App extends React.Component {
             <Route exact path="/" component={Landing} />
             <Route path="/login" component={Login} />
             <Route path="/signup" component={SignUp} />
-            <Route path="/home" component={Home} />
-            <Route path="/puzzle-editor" component={PuzzleEditor} />
+            <Route
+              path="/home"
+              render={(props) => (
+                <Home
+                  {...props}
+                  rows={this.state.rows}
+                  cols={this.state.cols}
+                  updateRows={this.updateRows}
+                  updateCols={this.updateCols}
+                  setDailySize={this.setDailySize}
+                  setSundaySize={this.setSundaySize}
+                />
+              )}
+            />
+            <Route
+              path="/puzzle-editor"
+              render={(props) => (
+                <PuzzleEditor
+                  {...props}
+                  rows={this.state.rows}
+                  cols={this.state.cols}
+                />
+              )}
+            />
+            {/* <Route path="/home" component={Home} /> */}
+            {/* <Route path="/puzzle-editor" component={PuzzleEditor} /> */}
           </Switch>
         </div>
       </Context.Provider>
