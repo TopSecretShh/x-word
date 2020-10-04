@@ -1,6 +1,9 @@
 import React from "react";
 import "./Fills.css";
 
+// TODO
+// Fix synchronization issue
+
 export default class Fills extends React.Component {
   state = {
     fills: [],

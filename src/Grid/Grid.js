@@ -5,12 +5,14 @@ import Cell from "../Cell/Cell"
 
 import "./Grid.css"
 
+// ToDO
+// Restore responsiveness of grid (fix div nesting)
+
 export default class Grid extends React.Component {
     state = {
         fills: [],
     };
     
-
     selectCell = (value, word) => {
         this.props.selectCell(value)
         this.searchWord(word);
