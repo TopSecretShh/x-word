@@ -514,9 +514,16 @@ export default class PuzzleEditor extends React.Component {
               )}
 
               <div className="freeze-btn">
-                <button type="button" onClick={() => this.handleFreezeBlocks()}>
-                  Freeze Blocks
-                </button>
+                {!freeze ? (
+                  <button
+                    type="button"
+                    onClick={() => this.handleFreezeBlocks()}
+                  >
+                    Freeze Blocks
+                  </button>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
 
