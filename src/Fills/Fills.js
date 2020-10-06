@@ -24,12 +24,11 @@ export default class Fills extends React.Component {
       fetch(`https://api.datamuse.com/words?sp=${word}`)
           .then(response => response.json())
           .then(data => data.map(word => (word.score > 100 ? word.word : "") ))
-          .then(stuff => {
+          .then(fills => {
             this.setState({
-              fills: stuff
+              fills,
             })
           })
-          .then(stuff => stuff)
   };
 
   render() {
