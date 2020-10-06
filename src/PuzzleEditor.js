@@ -26,6 +26,8 @@ export default class PuzzleEditor extends React.Component {
 
     groupAcross: [],
     groupDown: [],
+
+    selectedAnswer: [],
   };
 
   /* BEGIN PUZZLE OPTIONS (pattern, freeze, clear) */
@@ -52,10 +54,6 @@ export default class PuzzleEditor extends React.Component {
   };
 
   handleFreezeBlocks = () => {
-    // const freeze = this.state.freezeBlocks;
-    // freeze
-    //   ? this.setState({ freezeBlocks: false })
-    //   : this.setState({ freezeBlocks: true });
     this.setState({
       freezeBlocks: true,
     });
@@ -74,16 +72,38 @@ export default class PuzzleEditor extends React.Component {
 
   /* END PUZZLE OPTIONS (sizing, pattern, freeze, clear) */
 
-  // TODO this lags behind because they aren't synchronous...
   // TODO need to fix a/synchrony issue!
-  // the issue might arise from the fact that 'word' is created/updated in the render of the component?
-  // passing in word, which comes from previously selected cell, not the newly selected one...
-  // word needs to be selected in a different way
-  // word comes from selectedAnswer in createCells. selectedAnswer comes from this.state.selectedCell
-  selectCell = (value, word) => {
+  selectCell = (value) => {
+    this.setState(
+      {
+        selectedCell: value,
+      },
+      this.createWord()
+    );
+  };
+
+  createWord = () => {
+    let group =
+      (this.state.orientationIsHorizontal
+        ? this.state.groupAcross
+        : this.state.groupDown) || [];
+    let selectedAnswer =
+      group.find((g) => g.some((x) => x === this.state.selectedCell)) || [];
+    let word = [];
+    selectedAnswer
+      .sort((a, b) => a - b)
+      .forEach((i) =>
+        typeof this.state.cells[i] === "string"
+          ? word.push(this.state.cells[i])
+          : word.push("?")
+      );
+    word = word.join("");
+
+    // TODO this also has a synchrony issue now :(
     this.setState({
-      selectedCell: value,
+      selectedAnswer,
     });
+
     this.searchWord(word);
   };
 
@@ -160,7 +180,7 @@ export default class PuzzleEditor extends React.Component {
     }
   };
 
-  fillCell = (cell, character, word) => {
+  fillCell = (cell, character) => {
     const { rows, cols } = this.props;
     const { orientationIsHorizontal } = this.state;
     const totalSquares = rows * cols - 1;
@@ -169,13 +189,13 @@ export default class PuzzleEditor extends React.Component {
 
     if (character) {
       character = character.toUpperCase();
-      this.selectCell(nextCell, word);
+      this.selectCell(nextCell);
     }
 
     this.updateCell(cell, character, cellTwinNumber);
   };
 
-  handleKeyDown = (e, word) => {
+  handleKeyDown = (e) => {
     const cell = this.state.selectedCell;
     const freeze = this.state.freezeBlocks;
 
@@ -184,7 +204,7 @@ export default class PuzzleEditor extends React.Component {
     }
     if (e.key.match(/^[a-z]+$/)) {
       if (freeze) {
-        this.fillCell(cell, e.key, word);
+        this.fillCell(cell, e.key);
       }
     }
     // TODO need to find a way for changing the orientation to reselect the cell (and therefore highlight the correct word, across/down)
@@ -195,13 +215,13 @@ export default class PuzzleEditor extends React.Component {
           orientationIsHorizontal: false,
         });
         // TODO not sure if this addresses the problem, still non-synchronous
-        this.selectCell(cell, word);
+        this.selectCell(cell);
       } else if (!this.state.orientationIsHorizontal) {
         this.setState({
           orientationIsHorizontal: true,
         });
         // TODO not sure if this addresses the problem, still non-synchronous
-        this.selectCell(cell, word);
+        this.selectCell(cell);
       }
     }
     if (e.key === "ArrowRight") {
@@ -211,7 +231,7 @@ export default class PuzzleEditor extends React.Component {
       ) {
         console.log("right edge");
       } else {
-        this.selectCell(cell + 1, word);
+        this.selectCell(cell + 1);
       }
     }
     if (e.key === "ArrowLeft") {
@@ -222,17 +242,17 @@ export default class PuzzleEditor extends React.Component {
       ) {
         console.log("left edge");
       } else {
-        this.selectCell(cell - 1, word);
+        this.selectCell(cell - 1);
       }
     }
     if (e.key === "ArrowUp") {
       if (cell > this.props.cols - 1) {
-        this.selectCell(cell - this.props.cols, word);
+        this.selectCell(cell - this.props.cols);
       }
     }
     if (e.key === "ArrowDown") {
       if (cell < this.props.cols * this.props.rows - this.props.cols) {
-        this.selectCell(cell + this.props.cols, word);
+        this.selectCell(cell + this.props.cols);
       }
     }
     if (e.key === "Backspace") {
@@ -245,18 +265,18 @@ export default class PuzzleEditor extends React.Component {
           (cell / this.props.cols) % 2 === 0 ||
           (cell / this.props.cols) % 2 === 1
         ) {
-          this.selectCell(cell, word);
+          this.selectCell(cell);
         } else {
-          this.selectCell(cell - 1, word);
+          this.selectCell(cell - 1);
         }
       } else {
         if (typeof this.state.cells[cell] === "string") {
           this.deleteCellContent(cell, true);
         }
         if (cell > this.props.cols - 1) {
-          this.selectCell(cell - this.props.cols, word);
+          this.selectCell(cell - this.props.cols);
         } else {
-          this.selectCell(cell, word);
+          this.selectCell(cell);
         }
       }
     }
@@ -266,6 +286,7 @@ export default class PuzzleEditor extends React.Component {
   renderGrid = () => {
     const cellNumber = this.state.cellNumber;
     const cellId = this.state.cellId;
+    const selectedAnswer = this.state.selectedAnswer;
 
     let cols = this.props.cols;
     let cells = this.state.cells;
@@ -284,8 +305,7 @@ export default class PuzzleEditor extends React.Component {
           handleKeyDown={this.handleKeyDown}
           handleDoubleClick={this.handleDoubleClick}
           cellId={cellId[i]}
-          // selectedAnswer={selectedAnswer}
-          // word={word}
+          selectedAnswer={selectedAnswer}
         />
       );
     });
@@ -370,7 +390,6 @@ export default class PuzzleEditor extends React.Component {
         return arr.sort();
       }
 
-      // the following if/elses assigns appropriate cellOrientation for Clues.js and groupAcross/Down for figuring out selectedAnswer for Fills.js (to send word fragment to API) and Cell.js (to highlight)
       if (isCellBlocked) {
         cellOrientation.push(null);
         cellNumber.push(null);
@@ -384,7 +403,7 @@ export default class PuzzleEditor extends React.Component {
       ) {
         counter++;
         cellNumber.push(counter);
-        cellOrientation.push("acrossdown"); // This should add down and across, not 'acrossdown'
+        cellOrientation.push("acrossdown");
         groupAcross.push(findSiblings(i, "across"));
         groupDown.push(findSiblings(i, "down"));
       } else if (isCellBeforeBlocked && !isCellAfterBlocked) {
@@ -410,31 +429,6 @@ export default class PuzzleEditor extends React.Component {
       groupAcross,
       groupDown,
     });
-
-    // return {
-    //   cellOrientation,
-    //   cellNumber,
-    //   cellId,
-    //   groupAcross,
-    //   groupDown,
-    // };
-  };
-
-  createWord = (groupAcross, groupDown) => {
-    let group =
-      (this.state.orientationIsHorizontal ? groupAcross : groupDown) || [];
-    let selectedAnswer =
-      group.find((g) => g.some((x) => x === this.state.selectedCell)) || [];
-    let word = [];
-    selectedAnswer
-      .sort((a, b) => a - b)
-      .forEach((i) =>
-        typeof this.state.cells[i] === "string"
-          ? word.push(this.state.cells[i])
-          : word.push("?")
-      );
-    word = word.join("");
-    return { selectedAnswer, word };
   };
 
   render() {
@@ -444,19 +438,6 @@ export default class PuzzleEditor extends React.Component {
     const freeze = this.state.freezeBlocks;
     const width = cols * 33;
     const height = rows * 33;
-    // const {
-    //   cellOrientation,
-    //   cellNumber,
-    //   cellId,
-    //   groupAcross,
-    //   groupDown,
-    //   cells,
-    // } = this.createCells();
-    // const { selectedAnswer, word } = this.createWord(
-    //   groupAcross,
-    //   groupDown,
-    //   cells
-    // );
 
     return user ? (
       <div>
