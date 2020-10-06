@@ -21,46 +21,7 @@ export default class PuzzleEditor extends React.Component {
     fills: [],
   };
 
-  /* BEGIN PUZZLE OPTIONS (sizing, pattern, freeze, clear) */
-  // TODO maybe these options/buttons could be their own component? or I guess these fns would still be here, but the puzzle options div could be a separate component
-  // setSize = (value) => {
-  //   if (value === "daily") {
-  //     this.setState({
-  //       rows: 15,
-  //       cols: 15,
-  //       cells: Array(225).fill(true),
-  //       selectedCell: null,
-  //       freezeBlocks: false,
-  //     });
-  //   } else if (value === "sunday") {
-  //     this.setState({
-  //       rows: 21,
-  //       cols: 21,
-  //       cells: Array(441).fill(true),
-  //       selectedCell: null,
-  //       freezeBlocks: false,
-  //     });
-  //   } else if (value === "custom") {
-  //     this.setState({
-  //       custom: true,
-  //     });
-  //   }
-  //   if (this.state.custom) {
-  //     this.setState({
-  //       custom: false,
-  //     });
-  //   }
-  // };
-
-  // handleSubmitCustom = (e) => {
-  //   this.setState({
-  //     rows: parseInt(e.target.rows.value),
-  //     cols: parseInt(e.target.cols.value),
-  //     cells: Array(e.target.rows.value * e.target.cols.value).fill(true),
-  //     selectedCell: null,
-  //     freezeBlocks: false,
-  //   });
-  // };
+  /* BEGIN PUZZLE OPTIONS (pattern, freeze, clear) */
 
   handlePatternBtn = () => {
     const rows = this.props.rows;
@@ -84,10 +45,14 @@ export default class PuzzleEditor extends React.Component {
   };
 
   handleFreezeBlocks = () => {
-    const freeze = this.state.freezeBlocks;
-    freeze
-      ? this.setState({ freezeBlocks: false })
-      : this.setState({ freezeBlocks: true });
+    // const freeze = this.state.freezeBlocks;
+    // freeze
+    //   ? this.setState({ freezeBlocks: false })
+    //   : this.setState({ freezeBlocks: true });
+    this.setState({
+      freezeBlocks: true,
+    });
+    this.createCells();
   };
 
   handleClearLetters = () => {
@@ -169,8 +134,8 @@ export default class PuzzleEditor extends React.Component {
     let nextCell;
     if (orientationIsHorizontal) {
       if (
-        ((cell + 1) / this.state.cols) % 2 === 0 ||
-        ((cell + 1) / this.state.cols) % 2 === 1
+        ((cell + 1) / this.props.cols) % 2 === 0 ||
+        ((cell + 1) / this.props.cols) % 2 === 1
       ) {
         console.log("right edge");
         return cell;
@@ -179,8 +144,8 @@ export default class PuzzleEditor extends React.Component {
         return nextCell;
       }
     } else {
-      if (cell < this.state.cols * this.state.rows - this.state.cols) {
-        nextCell = cell + this.state.cols;
+      if (cell < this.props.cols * this.props.rows - this.props.cols) {
+        nextCell = cell + this.props.cols;
         return nextCell;
       } else {
         return cell;
@@ -210,7 +175,9 @@ export default class PuzzleEditor extends React.Component {
       this.fillCell(cell);
     }
     if (e.key.match(/^[a-z]+$/)) {
-      this.fillCell(cell, e.key, word);
+      if (this.state.freezeBlocks) {
+        this.fillCell(cell, e.key, word);
+      }
     }
     // TODO need to find a way for changing the orientation to reselect the cell (and therefore highlight the correct word, across/down)
     // should use selectCell fn?
@@ -231,8 +198,8 @@ export default class PuzzleEditor extends React.Component {
     }
     if (e.key === "ArrowRight") {
       if (
-        ((cell + 1) / this.state.cols) % 2 === 0 ||
-        ((cell + 1) / this.state.cols) % 2 === 1
+        ((cell + 1) / this.props.cols) % 2 === 0 ||
+        ((cell + 1) / this.props.cols) % 2 === 1
       ) {
         console.log("right edge");
       } else {
@@ -242,8 +209,8 @@ export default class PuzzleEditor extends React.Component {
     if (e.key === "ArrowLeft") {
       if (
         cell === 0 ||
-        (cell / this.state.cols) % 2 === 0 ||
-        (cell / this.state.cols) % 2 === 1
+        (cell / this.props.cols) % 2 === 0 ||
+        (cell / this.props.cols) % 2 === 1
       ) {
         console.log("left edge");
       } else {
@@ -251,13 +218,13 @@ export default class PuzzleEditor extends React.Component {
       }
     }
     if (e.key === "ArrowUp") {
-      if (cell > this.state.cols - 1) {
-        this.selectCell(cell - this.state.cols, word);
+      if (cell > this.props.cols - 1) {
+        this.selectCell(cell - this.props.cols, word);
       }
     }
     if (e.key === "ArrowDown") {
-      if (cell < this.state.cols * this.state.rows - this.state.cols) {
-        this.selectCell(cell + this.state.cols, word);
+      if (cell < this.props.cols * this.props.rows - this.props.cols) {
+        this.selectCell(cell + this.props.cols, word);
       }
     }
     if (e.key === "Backspace") {
@@ -267,8 +234,8 @@ export default class PuzzleEditor extends React.Component {
         }
         if (
           cell === 0 ||
-          (cell / this.state.cols) % 2 === 0 ||
-          (cell / this.state.cols) % 2 === 1
+          (cell / this.props.cols) % 2 === 0 ||
+          (cell / this.props.cols) % 2 === 1
         ) {
           this.selectCell(cell, word);
         } else {
@@ -278,8 +245,8 @@ export default class PuzzleEditor extends React.Component {
         if (typeof this.state.cells[cell] === "string") {
           this.deleteCellContent(cell, true);
         }
-        if (cell > this.state.cols - 1) {
-          this.selectCell(cell - this.state.cols, word);
+        if (cell > this.props.cols - 1) {
+          this.selectCell(cell - this.props.cols, word);
         } else {
           this.selectCell(cell, word);
         }
@@ -425,19 +392,6 @@ export default class PuzzleEditor extends React.Component {
       }
     });
 
-    // this finds the selected word and creates a word fragment to send to API via Fills.js
-    // let group =
-    //   (this.state.orientationIsHorizontal ? groupAcross : groupDown) || [];
-    // let selectedAnswer =
-    //   group.find((g) => g.some((x) => x === this.state.selectedCell)) || [];
-    // let word = [];
-    // selectedAnswer
-    //   .sort((a, b) => a - b)
-    //   .forEach((i) =>
-    //     typeof cells[i] === "string" ? word.push(cells[i]) : word.push("?")
-    //   );
-    // word = word.join("");
-
     return {
       cellOrientation,
       cellNumber,
@@ -448,7 +402,7 @@ export default class PuzzleEditor extends React.Component {
     };
   };
 
-  createWord = (groupAcross, groupDown, cells) => {
+  createWord = (groupAcross, groupDown) => {
     let group =
       (this.state.orientationIsHorizontal ? groupAcross : groupDown) || [];
     let selectedAnswer =
@@ -457,7 +411,9 @@ export default class PuzzleEditor extends React.Component {
     selectedAnswer
       .sort((a, b) => a - b)
       .forEach((i) =>
-        typeof cells[i] === "string" ? word.push(cells[i]) : word.push("?")
+        typeof this.state.cells[i] === "string"
+          ? word.push(this.state.cells[i])
+          : word.push("?")
       );
     word = word.join("");
     return { selectedAnswer, word };
