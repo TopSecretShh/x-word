@@ -19,6 +19,13 @@ export default class PuzzleEditor extends React.Component {
     orientationIsHorizontal: true,
     freezeBlocks: false,
     fills: [],
+
+    cellOrientation: [],
+    cellNumber: [],
+    cellId: [],
+
+    groupAcross: [],
+    groupDown: [],
   };
 
   /* BEGIN PUZZLE OPTIONS (pattern, freeze, clear) */
@@ -168,14 +175,15 @@ export default class PuzzleEditor extends React.Component {
     this.updateCell(cell, character, cellTwinNumber);
   };
 
-  handleKeydown = (e, word) => {
+  handleKeyDown = (e, word) => {
     const cell = this.state.selectedCell;
+    const freeze = this.state.freezeBlocks;
 
-    if (e.key === "." && (cell || cell === 0) && !this.state.freezeBlocks) {
+    if (e.key === "." && (cell || cell === 0) && !freeze) {
       this.fillCell(cell);
     }
     if (e.key.match(/^[a-z]+$/)) {
-      if (this.state.freezeBlocks) {
+      if (freeze) {
         this.fillCell(cell, e.key, word);
       }
     }
@@ -255,7 +263,10 @@ export default class PuzzleEditor extends React.Component {
     e.preventDefault();
   };
 
-  renderGrid = (cellNumber, cellId, selectedAnswer, word) => {
+  renderGrid = () => {
+    const cellNumber = this.state.cellNumber;
+    const cellId = this.state.cellId;
+
     let cols = this.props.cols;
     let cells = this.state.cells;
 
@@ -270,11 +281,11 @@ export default class PuzzleEditor extends React.Component {
           selectedCell={i === this.state.selectedCell}
           isNotBlocked={cell}
           cellNumberLabel={cellNumber[i]}
-          handleKeydown={this.handleKeydown}
+          handleKeyDown={this.handleKeyDown}
           handleDoubleClick={this.handleDoubleClick}
           cellId={cellId[i]}
-          selectedAnswer={selectedAnswer}
-          word={word}
+          // selectedAnswer={selectedAnswer}
+          // word={word}
         />
       );
     });
@@ -392,14 +403,21 @@ export default class PuzzleEditor extends React.Component {
       }
     });
 
-    return {
+    this.setState({
       cellOrientation,
       cellNumber,
       cellId,
       groupAcross,
       groupDown,
-      cells,
-    };
+    });
+
+    // return {
+    //   cellOrientation,
+    //   cellNumber,
+    //   cellId,
+    //   groupAcross,
+    //   groupDown,
+    // };
   };
 
   createWord = (groupAcross, groupDown) => {
@@ -426,19 +444,19 @@ export default class PuzzleEditor extends React.Component {
     const freeze = this.state.freezeBlocks;
     const width = cols * 33;
     const height = rows * 33;
-    const {
-      cellOrientation,
-      cellNumber,
-      cellId,
-      groupAcross,
-      groupDown,
-      cells,
-    } = this.createCells();
-    const { selectedAnswer, word } = this.createWord(
-      groupAcross,
-      groupDown,
-      cells
-    );
+    // const {
+    //   cellOrientation,
+    //   cellNumber,
+    //   cellId,
+    //   groupAcross,
+    //   groupDown,
+    //   cells,
+    // } = this.createCells();
+    // const { selectedAnswer, word } = this.createWord(
+    //   groupAcross,
+    //   groupDown,
+    //   cells
+    // );
 
     return user ? (
       <div>
@@ -504,15 +522,15 @@ export default class PuzzleEditor extends React.Component {
                 }`}
                 id="grid"
               >
-                {this.renderGrid(cellNumber, cellId, selectedAnswer, word)}
+                {this.renderGrid()}
               </svg>
             </div>
             {freeze ? (
               <Fills
                 fills={this.state.fills}
-                word={word}
+                // word={word}
                 fillInWord={this.fillInWord}
-                selectedAnswer={selectedAnswer}
+                // selectedAnswer={selectedAnswer}
               />
             ) : (
               ""
@@ -522,13 +540,13 @@ export default class PuzzleEditor extends React.Component {
           <div className="clue__container">
             {freeze ? (
               <Clues
-                cellOrientation={cellOrientation}
-                cellNumber={cellNumber}
+                cellOrientation={this.state.cellOrientation}
+                cellNumber={this.state.cellNumber}
                 selectCell={this.selectCell}
                 handleDoubleClick={(direction) =>
                   this.handleDoubleClick(direction)
                 }
-                cellId={cellId}
+                cellId={this.state.cellId}
               />
             ) : (
               ""
