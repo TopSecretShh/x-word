@@ -5,17 +5,18 @@ import Cell from "../Cell/Cell"
 
 import "./Grid.css"
 
-// ToDO
-// Restore responsiveness of grid (fix div nesting)
+// To DO
+// Restore responsiveness of grid (fix div nesting) // FIXED
+// Switch Clue / Fills position
+// Fix overlap
 
 export default class Grid extends React.Component {
     state = {
         fills: [],
     };
     
-    selectCell = (value, word) => {
+    selectCell = (value) => {
         this.props.selectCell(value)
-        // this.searchWord(word);
     };
       
     handleDoubleClick = (input) => {
@@ -25,17 +26,6 @@ export default class Grid extends React.Component {
     handleKeydown = (e, word) => {
         this.props.handleKeydown(e, word)
     }
-    
-    // searchWord = (word) => {
-    //     fetch(`https://api.datamuse.com/words?sp=${word}`)
-    //         .then((response) => response.json())
-    //         .then((data) => {
-    //         let words = data.map((word) => (word.score > 100 ? word.word : ""));
-    //             this.setState({
-    //                 fills: words,
-    //             });
-    //         });
-    // };
 
     renderGrid = (cellNumber, cellId, selectedAnswer, word) => {
         let cols = this.props.cols;
@@ -206,39 +196,41 @@ export default class Grid extends React.Component {
 
         return (
             <>
-                <div className="grid-and-fills">
-                    <div className="crossword__container--grid-wrapper">
-                        <svg
-                            viewBox={`0 0 ${width} ${height}`}
-                            preserveAspectRatio="xMinYMin slice"
-                            className={`Grid ${
-                            rows >= cols ? "view_box--tall" : "view_box--wide"
-                            }`}
-                            id="grid"
-                        >
-                            {this.renderGrid(cellNumber, cellId, selectedAnswer, word)}
-                        </svg>
-                    </div>
+              <div className='grid-fill__container'>
+                <div className="grid__container--outer">
+                  <div className="grid__container--inner">
+                      <svg
+                      viewBox={`0 0 ${width} ${height}`}
+                      preserveAspectRatio="xMinYMin slice"
+                      className={`Grid ${
+                      rows <= cols ? "view_box--wide" : "view_box--tall"
+                      }`}
+                      id="grid">
+                          {this.renderGrid(cellNumber, cellId, selectedAnswer, word)}
+                      </svg>
+                  </div>
+                </div>
 
-                    <Fills
-                    fills={this.state.fills}
-                    word={word}
-                    fillInWord={this.props.fillInWord}
-                    selectedAnswer={selectedAnswer}
-                    cells={cells}
-                    />
-                </div>
-                <div className="clue__container">
-                    <Clues
-                    cellOrientation={cellOrientation}
-                    cellNumber={cellNumber}
-                    selectCell={this.selectCell}
-                    handleDoubleClick={(direction) =>
-                        this.handleDoubleClick(direction)
-                    }
-                    cellId={cellId}
-                    />
-                </div>
+                <Fills
+                fills={this.state.fills}
+                word={word}
+                fillInWord={this.props.fillInWord}
+                selectedAnswer={selectedAnswer}
+                cells={cells}
+                />
+    
+              </div>
+              <div className="clue__container">
+                  <Clues
+                  cellOrientation={cellOrientation}
+                  cellNumber={cellNumber}
+                  selectCell={this.selectCell}
+                  handleDoubleClick={(direction) =>
+                      this.handleDoubleClick(direction)
+                  }
+                  cellId={cellId}
+                  />
+              </div>
             </>
         )
     }

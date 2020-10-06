@@ -13,9 +13,10 @@ svg[viewBox] {
   border: 2px solid black;
 }
 
-.crossword__container--grid-wrapper {
+.grid__container--inner {
   width: 500px;
   height: 400px;
+  display: inline-block;
 }
 
 .grid-and-fills {
@@ -29,4 +30,14 @@ svg[viewBox] {
 
 .view_box--wide {
   width: 100%;
+}
+
+.grid__container--outer {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.grid-fill__container {
+  display: flex;
 }

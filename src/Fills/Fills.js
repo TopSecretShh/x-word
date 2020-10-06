@@ -4,7 +4,7 @@ import "./Fills.css";
 // TODO
 // Fix synchronization issue // FIXED
 // Move some functionality to this component
-// Does this actually need state, or to be a class?
+// Fix multi-word fills eg. SRI LANKA places a blank block between SRI and LANKA 
 
 export default class Fills extends React.Component {
   state = {

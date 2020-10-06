@@ -223,12 +223,12 @@ export default class PuzzleEditor extends React.Component {
     const user = this.context.currentUser;
 
     return user ? (
-      <div>
+      <>
         <header>
           <h1>{this.context.title}</h1>
           <p>by {this.context.currentUser}</p>
         </header>
-        <main>
+        {/* <main> */}
           <Controls 
             handleControlsInput={this.handleControlsInput}
             freezeBlocks={freezeBlocks}
@@ -249,8 +249,8 @@ export default class PuzzleEditor extends React.Component {
             handleDoubleClick={this.handleDoubleClick}
             fillInWord={this.fillInWord}
           />
-        </main>
-      </div>
+        {/* </main> */}
+      </>
     ) : (
       <Redirect to={{ pathname: "/" }} />
     );
