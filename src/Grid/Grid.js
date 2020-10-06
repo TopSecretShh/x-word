@@ -15,7 +15,7 @@ export default class Grid extends React.Component {
     
     selectCell = (value, word) => {
         this.props.selectCell(value)
-        this.searchWord(word);
+        // this.searchWord(word);
     };
       
     handleDoubleClick = (input) => {
@@ -26,16 +26,16 @@ export default class Grid extends React.Component {
         this.props.handleKeydown(e, word)
     }
     
-    searchWord = (word) => {
-        fetch(`https://api.datamuse.com/words?sp=${word}`)
-            .then((response) => response.json())
-            .then((data) => {
-            let words = data.map((word) => (word.score > 100 ? word.word : ""));
-                this.setState({
-                    fills: words,
-                });
-            });
-    };
+    // searchWord = (word) => {
+    //     fetch(`https://api.datamuse.com/words?sp=${word}`)
+    //         .then((response) => response.json())
+    //         .then((data) => {
+    //         let words = data.map((word) => (word.score > 100 ? word.word : ""));
+    //             this.setState({
+    //                 fills: words,
+    //             });
+    //         });
+    // };
 
     renderGrid = (cellNumber, cellId, selectedAnswer, word) => {
         let cols = this.props.cols;
@@ -136,7 +136,6 @@ export default class Grid extends React.Component {
                   arr.push(i);
                 }
               }
-      
               return arr.sort();
             }
       
@@ -200,6 +199,7 @@ export default class Grid extends React.Component {
             cells
         );
 
+
         const {rows, cols} = this.props;
         const width = cols * 33;
         const height = rows * 33;
@@ -225,6 +225,7 @@ export default class Grid extends React.Component {
                     word={word}
                     fillInWord={this.props.fillInWord}
                     selectedAnswer={selectedAnswer}
+                    cells={cells}
                     />
                 </div>
                 <div className="clue__container">
