@@ -199,7 +199,7 @@ export default class PuzzleEditor extends React.Component {
     const cell = this.state.selectedCell;
     const freeze = this.state.freezeBlocks;
 
-    if (e.key === "." && (cell || cell === 0) && !freeze) {
+    if (e.key === "." && (cell || cell === 0)) {
       this.fillCell(cell);
     }
     if (e.key.match(/^[a-z]+$/)) {
@@ -315,7 +315,9 @@ export default class PuzzleEditor extends React.Component {
   /* FILLS IN WORD ON GRID FROM FILLS */
   fillInWord = (fill) => {
     let cellsCopy = [...this.state.cells];
-    let fillWord = Array.from(fill);
+    // TODO
+    let firstFillWord = Array.from(fill).join("").replace(/\s+/g, "");
+    let fillWord = Array.from(firstFillWord);
     for (let i = 0; i < this.state.selectedAnswer.length; i++) {
       cellsCopy[this.state.selectedAnswer[i]] = fillWord[i].toUpperCase();
     }
