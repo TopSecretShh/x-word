@@ -2,10 +2,6 @@ import React from "react";
 import "./Fills.css";
 
 export default class Fills extends React.Component {
-  state = {
-    fills: [],
-  };
-
   capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 
   render() {
@@ -13,7 +9,7 @@ export default class Fills extends React.Component {
       <li
         key={i}
         className="fills__list--item"
-        onClick={() => this.props.fillInWord(fill, this.props.selectedAnswer)}
+        onClick={() => this.props.fillInWord(fill)}
       >
         {this.capitalize(fill)}
       </li>

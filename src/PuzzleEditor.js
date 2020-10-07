@@ -10,8 +10,6 @@ export default class PuzzleEditor extends React.Component {
   static contextType = Context;
 
   state = {
-    // rows: 3,
-    // cols: 3,
     title: "Untitled",
     custom: false,
     cells: Array(this.props.rows * this.props.cols).fill(true),
@@ -28,6 +26,7 @@ export default class PuzzleEditor extends React.Component {
     groupDown: [],
 
     selectedAnswer: [],
+    word: "",
   };
 
   /* BEGIN PUZZLE OPTIONS (pattern, freeze, clear) */
@@ -50,7 +49,6 @@ export default class PuzzleEditor extends React.Component {
         cells: Array(this.props.rows * this.props.cols).fill(true),
       });
     }
-    // TODO there should be an else statement here that shows the user a message to let them know that they cannot clear grid while freeze is enabled
   };
 
   handleFreezeBlocks = () => {
@@ -78,7 +76,9 @@ export default class PuzzleEditor extends React.Component {
       {
         selectedCell: value,
       },
-      this.createWord()
+      () => {
+        this.createWord();
+      }
     );
   };
 
@@ -100,8 +100,11 @@ export default class PuzzleEditor extends React.Component {
     word = word.join("");
 
     // TODO this also has a synchrony issue now :(
+    // selectedAnswer lags behind selectedCell
+    // I think the callback in selectCell isn't working synchronously as I hoped it would
     this.setState({
       selectedAnswer,
+      word,
     });
 
     this.searchWord(word);
@@ -313,11 +316,11 @@ export default class PuzzleEditor extends React.Component {
   };
 
   /* FILLS IN WORD ON GRID FROM FILLS */
-  fillInWord = (fill, selectedAnswer) => {
+  fillInWord = (fill) => {
     let cellsCopy = [...this.state.cells];
     let fillWord = Array.from(fill);
-    for (let i = 0; i < selectedAnswer.length; i++) {
-      cellsCopy[selectedAnswer[i]] = fillWord[i].toUpperCase();
+    for (let i = 0; i < this.state.selectedAnswer.length; i++) {
+      cellsCopy[this.state.selectedAnswer[i]] = fillWord[i].toUpperCase();
     }
 
     this.setState({
@@ -507,12 +510,7 @@ export default class PuzzleEditor extends React.Component {
               </svg>
             </div>
             {freeze ? (
-              <Fills
-                fills={this.state.fills}
-                // word={word}
-                fillInWord={this.fillInWord}
-                // selectedAnswer={selectedAnswer}
-              />
+              <Fills fillInWord={this.fillInWord} fills={this.state.fills} />
             ) : (
               ""
             )}
