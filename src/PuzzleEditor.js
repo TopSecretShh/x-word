@@ -99,9 +99,6 @@ export default class PuzzleEditor extends React.Component {
       );
     word = word.join("");
 
-    // TODO this also has a synchrony issue now :(
-    // selectedAnswer lags behind selectedCell
-    // I think the callback in selectCell isn't working synchronously as I hoped it would
     this.setState({
       selectedAnswer,
       word,
