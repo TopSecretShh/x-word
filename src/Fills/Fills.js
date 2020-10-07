@@ -9,6 +9,7 @@ import "./Fills.css";
 export default class Fills extends React.Component {
   state = {
     fills: [],
+    isLoading: false,
   };
 
   componentDidUpdate(prevProps) {
@@ -21,12 +22,16 @@ export default class Fills extends React.Component {
   capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 
   searchWord = (word) => {
+      this.setState({
+        isLoading: true
+      })
       fetch(`https://api.datamuse.com/words?sp=${word}`)
           .then(response => response.json())
           .then(data => data.map(word => (word.score > 100 ? word.word : "") ))
           .then(fills => {
             this.setState({
               fills,
+              isLoading: false
             })
           })
   };
@@ -47,7 +52,7 @@ export default class Fills extends React.Component {
         <h3>Fills</h3>
         {/* <button onClick={() => this.search()}>Find Fills</button>
         <ul className="fills__list">{fills}</ul> */}
-        <ul className="fills__list">{preFills}</ul>
+        <ul className="fills__list">{this.state.isLoading ? "Loading" : preFills}</ul>
       </div>
     );
   }
