@@ -5,10 +5,7 @@ import Cell from "../Cell/Cell"
 
 import "./Grid.css"
 
-// To DO
-// Restore responsiveness of grid (fix div nesting) // FIXED
-// Switch Clue / Fills position
-// Fix overlap
+// Fix grid extending out of view when rows > cols
 
 export default class Grid extends React.Component {
     state = {
@@ -196,41 +193,35 @@ export default class Grid extends React.Component {
 
         return (
             <>
-              <div className='grid-fill__container'>
-                <div className="grid__container--outer">
-                  <div className="grid__container--inner">
-                      <svg
-                      viewBox={`0 0 ${width} ${height}`}
-                      preserveAspectRatio="xMinYMin slice"
-                      className={`Grid ${
-                      rows <= cols ? "view_box--wide" : "view_box--tall"
-                      }`}
-                      id="grid">
-                          {this.renderGrid(cellNumber, cellId, selectedAnswer, word)}
-                      </svg>
-                  </div>
+              <div className='grid-and-clues__container'>
+                <div className="grid__container">
+                    <svg
+                    viewBox={`0 0 ${width} ${height}`}
+                    preserveAspectRatio="xMinYMin slice"
+                    className={`Grid ${
+                    rows <= cols ? "view_box--wide" : "view_box--tall"
+                    }`}
+                    id="grid">
+                        {this.renderGrid(cellNumber, cellId, selectedAnswer, word)}
+                    </svg>
                 </div>
-
-                <Fills
+                <Clues
+                cellOrientation={cellOrientation}
+                cellNumber={cellNumber}
+                selectCell={this.selectCell}
+                handleDoubleClick={(direction) =>
+                    this.handleDoubleClick(direction)
+                }
+                cellId={cellId}
+                />
+              </div>
+              <Fills
                 fills={this.state.fills}
                 word={word}
                 fillInWord={this.props.fillInWord}
                 selectedAnswer={selectedAnswer}
                 cells={cells}
                 />
-    
-              </div>
-              <div className="clue__container">
-                  <Clues
-                  cellOrientation={cellOrientation}
-                  cellNumber={cellNumber}
-                  selectCell={this.selectCell}
-                  handleDoubleClick={(direction) =>
-                      this.handleDoubleClick(direction)
-                  }
-                  cellId={cellId}
-                  />
-              </div>
             </>
         )
     }

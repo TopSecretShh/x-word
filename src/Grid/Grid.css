@@ -13,17 +13,6 @@ svg[viewBox] {
   border: 2px solid black;
 }
 
-.grid__container--inner {
-  width: 500px;
-  height: 400px;
-  display: inline-block;
-}
-
-.grid-and-fills {
-  display: flex;
-}
-
-
 .view_box--tall {
   height: 100%;
 }
@@ -32,12 +21,11 @@ svg[viewBox] {
   width: 100%;
 }
 
-.grid__container--outer {
-  display: flex;
-  flex-wrap: wrap;
-  width: 100%;
+.grid__container {
+  width: 500px;
 }
 
-.grid-fill__container {
+.grid-and-clues__container {
   display: flex;
+  flex-wrap: wrap;
 }

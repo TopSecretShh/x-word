@@ -48,7 +48,7 @@ function Clues({ cellOrientation, cellNumber, selectCell, handleDoubleClick }) {
   });
 
   return (
-    <div className="clues">
+    <div className="clues__container">
       <div>
         <h3>Across</h3>
         <ul className="clues__list">{across}</ul>
