@@ -1,0 +1,9 @@
+.puzzle-options {
+  display: flex;
+  border: 1px black solid;
+  padding: 5px;
+}
+
+.puzzle-options > div {
+  margin: 5px;
+}

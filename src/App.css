@@ -30,16 +30,6 @@ rect {
   display: flex;
 }
 
-.puzzle-options {
-  display: flex;
-  border: 1px black solid;
-  padding: 5px;
-}
-
-.puzzle-options > div {
-  margin: 5px;
-}
-
 .crossword__cell {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   fill: white;
