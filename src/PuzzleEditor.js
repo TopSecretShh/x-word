@@ -1,10 +1,10 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
 import Context from "./Context";
-import Cell from "./Cell/Cell";
 import Clues from "./Clues/Clues";
 import generatePattern from "./Patterns";
 import Fills from "./Fills/Fills";
+import Grid from "./Grid/Grid";
 
 export default class PuzzleEditor extends React.Component {
   static contextType = Context;
@@ -277,35 +277,6 @@ export default class PuzzleEditor extends React.Component {
     e.preventDefault();
   };
 
-  renderGrid = () => {
-    const cellNumber = this.state.cellNumber;
-    const cellId = this.props.cellId;
-    const selectedAnswer = this.state.selectedAnswer;
-
-    let cols = this.props.cols;
-    let cells = this.state.cells;
-
-    let grid = cells.map((cell, i) => {
-      return (
-        <Cell
-          key={i}
-          cellSize={33}
-          row={Math.floor(i / cols)}
-          col={i % cols}
-          selectCell={this.selectCell}
-          selectedCell={i === this.state.selectedCell}
-          isNotBlocked={cell}
-          cellNumberLabel={cellNumber[i]}
-          handleKeyDown={this.handleKeyDown}
-          handleDoubleClick={this.handleDoubleClick}
-          cellId={cellId[i]}
-          selectedAnswer={selectedAnswer}
-        />
-      );
-    });
-    return grid;
-  };
-
   /* FILLS IN WORD ON GRID FROM FILLS */
   fillInWord = (fill) => {
     let cellsCopy = [...this.state.cells];
@@ -492,7 +463,18 @@ export default class PuzzleEditor extends React.Component {
                 }`}
                 id="grid"
               >
-                {this.renderGrid()}
+                <Grid
+                  cellNumber={this.state.cellNumber}
+                  cellId={this.props.cellId}
+                  selectedAnswer={this.state.selectedAnswer}
+                  rows={this.props.rows}
+                  cols={this.props.cols}
+                  cells={this.state.cells}
+                  selectedCell={this.state.selectedCell}
+                  selectCell={this.selectCell}
+                  handleKeyDown={this.handleKeyDown}
+                  handleDoubleClick={this.handleDoubleClick}
+                />
               </svg>
             </div>
             {freeze ? (

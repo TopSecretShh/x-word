@@ -1,3 +1,5 @@
+/* TODO hey Chris, for some reason, some of these don't work and I don't know why. I removed the highlighted, selected, and filled methods from the App.css file and the ones here did not take effect. Hopefully I just missed something silly  */
+
 .crossword__cell {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   fill: white;
