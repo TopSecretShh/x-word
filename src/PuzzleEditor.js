@@ -364,8 +364,6 @@ export default class PuzzleEditor extends React.Component {
     const cols = this.props.cols;
     const user = this.context.currentUser;
     const freeze = this.state.freezeBlocks;
-    const width = cols * 33;
-    const height = rows * 33;
 
     return user ? (
       <div>
@@ -385,29 +383,21 @@ export default class PuzzleEditor extends React.Component {
           />
 
           <div className="grid-and-fills">
-            <div className="crossword__container--grid-wrapper">
-              <svg
-                viewBox={`0 0 ${width} ${height}`}
-                preserveAspectRatio="xMinYMin slice"
-                className={`Grid ${
-                  rows >= cols ? "view_box--tall" : "view_box--wide"
-                }`}
-                id="grid"
-              >
-                <Grid
-                  cellNumber={this.state.cellNumber}
-                  cellId={this.props.cellId}
-                  selectedAnswer={this.state.selectedAnswer}
-                  rows={this.props.rows}
-                  cols={this.props.cols}
-                  cells={this.state.cells}
-                  selectedCell={this.state.selectedCell}
-                  selectCell={this.selectCell}
-                  handleKeyDown={this.handleKeyDown}
-                  handleDoubleClick={this.handleDoubleClick}
-                />
-              </svg>
-            </div>
+            <Grid
+              width={cols * 33}
+              height={rows * 33}
+              cellNumber={this.state.cellNumber}
+              cellId={this.props.cellId}
+              selectedAnswer={this.state.selectedAnswer}
+              rows={rows}
+              cols={cols}
+              cells={this.state.cells}
+              selectedCell={this.state.selectedCell}
+              selectCell={this.selectCell}
+              handleKeyDown={this.handleKeyDown}
+              handleDoubleClick={this.handleDoubleClick}
+            />
+
             {freeze ? (
               <Fills fillInWord={this.fillInWord} fills={this.state.fills} />
             ) : (

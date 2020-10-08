@@ -1,7 +1,7 @@
 .fills__list {
   height: 200px;
   width: 200px;
-  overflow-y: auto;
+  overflow-y: scroll;
 }
 
 .fills__list--item {
