@@ -1,11 +1,10 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
-import Context from "./Context";
-import Controls from "./Controls/Controls";
-// import generatePattern from "./Patterns";
-import Grid from "./Grid/Grid";
-import Fills from "./Fills/Fills";
-import Clues from "./Clues/Clues";
+import Context from "../Context/Context";
+import Controls from "../Components/Controls/Controls";
+import Grid from "../Components/Grid/Grid";
+import Fills from "../Components/Fills/Fills";
+import Clues from "../Components/Clues/Clues";
 
 export default class PuzzleEditor extends React.Component {
   static contextType = Context;

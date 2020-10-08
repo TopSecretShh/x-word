@@ -1,14 +1,14 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 
-import { users } from "./tempUsersData";
+import { users } from "./Context/tempUsersData";
 
-import Landing from "./Landing";
-import Login from "./Login";
-import SignUp from "./SignUp";
-import Home from "./Home";
-import PuzzleEditor from "./PuzzleEditor";
-import Context from "./Context";
+import Landing from "./Pages/Landing";
+import Login from "./Pages/Login";
+import SignUp from "./Pages/SignUp";
+import Home from "./Pages/Home";
+import PuzzleEditor from "./Pages/PuzzleEditor";
+import Context from "./Context/Context";
 import "./App.css";
 
 /*

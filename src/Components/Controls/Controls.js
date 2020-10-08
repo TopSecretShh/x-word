@@ -1,5 +1,5 @@
 import React from "react";
-import generatePattern from "../Patterns";
+import generatePattern from "../../Context/Patterns";
 import "./Controls.css";
 
 export default class name extends React.Component {

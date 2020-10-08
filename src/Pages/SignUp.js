@@ -1,5 +1,5 @@
 import React from "react";
-import Context from "./Context";
+import Context from "../Context/Context";
 import { Link } from "react-router-dom";
 
 export default class SignUp extends React.Component {
