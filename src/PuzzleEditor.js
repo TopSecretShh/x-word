@@ -20,7 +20,7 @@ export default class PuzzleEditor extends React.Component {
 
     cellOrientation: [],
     cellNumber: [],
-    cellId: [],
+    cellId: this.props.cellId,
 
     groupAcross: [],
     groupDown: [],
@@ -70,7 +70,11 @@ export default class PuzzleEditor extends React.Component {
 
   /* END PUZZLE OPTIONS (sizing, pattern, freeze, clear) */
 
-  // TODO need to fix a/synchrony issue!
+  // TODO here's the problem: freeze blocks runs createCells, which is when cellIds are created. We need cellIds to select a cell. Therefore we can't select a cell before freezing...
+  // So we need to create cells to the extent that they are selectable prior to freezing. Maybe after selecting the size, a portion of createCells can run, enough to create cellIds.
+  // So: createCells needs to be broken into two smaller fns, one that creates cells ids, the second which creates groupAcross and groupDown
+
+  // TODO can't select before freeze
   selectCell = (value) => {
     this.setState(
       {
@@ -199,7 +203,7 @@ export default class PuzzleEditor extends React.Component {
     const cell = this.state.selectedCell;
     const freeze = this.state.freezeBlocks;
 
-    if (e.key === "." && (cell || cell === 0)) {
+    if (e.key === "." && (cell || cell === 0) && !freeze) {
       this.fillCell(cell);
     }
     if (e.key.match(/^[a-z]+$/)) {
@@ -284,6 +288,8 @@ export default class PuzzleEditor extends React.Component {
   };
 
   renderGrid = () => {
+    console.log(this.state.cellId);
+
     const cellNumber = this.state.cellNumber;
     const cellId = this.state.cellId;
     const selectedAnswer = this.state.selectedAnswer;
@@ -340,11 +346,11 @@ export default class PuzzleEditor extends React.Component {
     // variables to be exported
     let cellOrientation = [];
     let cellNumber = [];
-    let cellId = [];
+    // let cellId = [];
 
     cells.forEach((_, i) => {
       // assigns ID to cell
-      cellId.push(i);
+      // cellId.push(i);
 
       // figures out if cell should have a number based on block position
       let isCellBlocked = cells[i] === false;
@@ -425,7 +431,7 @@ export default class PuzzleEditor extends React.Component {
     this.setState({
       cellOrientation,
       cellNumber,
-      cellId,
+      // cellId,
       groupAcross,
       groupDown,
     });

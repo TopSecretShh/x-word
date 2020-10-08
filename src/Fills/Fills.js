@@ -1,7 +1,7 @@
 import React from "react";
 import "./Fills.css";
 
-// TODO should be functional component
+// TODO should be functional component ?
 
 export default class Fills extends React.Component {
   capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);

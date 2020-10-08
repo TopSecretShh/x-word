@@ -22,7 +22,6 @@ export default class Home extends React.Component {
     return (
       <div className="Home">
         <nav>
-          {/* this is just for dev nav purposes */}
           <Link className="btn-alt" to="/">
             Back to Landing
           </Link>
@@ -110,7 +109,15 @@ export default class Home extends React.Component {
                   />
                 </label>
 
-                <Link to="/puzzle-editor">Begin</Link>
+                <button
+                  type="button"
+                  onClick={() => {
+                    this.props.history.push("/puzzle-editor");
+                    this.props.createCellIds();
+                  }}
+                >
+                  Begin
+                </button>
               </form>
             ) : (
               ""

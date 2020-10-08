@@ -31,6 +31,8 @@ export default class App extends React.Component {
     rows: 3,
     cols: 3,
     puzzleTitle: "Untitled",
+
+    cellId: [],
   };
 
   /* user and sign in/out */
@@ -93,6 +95,19 @@ export default class App extends React.Component {
     });
   };
 
+  createCellIds = () => {
+    const cells = Array(this.state.rows * this.state.cols).fill(true);
+    let cellId = [];
+
+    cells.forEach((_, i) => {
+      cellId.push(i);
+    });
+
+    this.setState({
+      cellId,
+    });
+  };
+
   render() {
     const value = {
       users: this.state.users,
@@ -100,9 +115,6 @@ export default class App extends React.Component {
       addNewUser: this.addNewUser,
       setCurrentUser: this.setCurrentUser,
       signOut: this.signOut,
-
-      rows: this.state.rows,
-      cols: this.state.cols,
     };
 
     return (
@@ -125,6 +137,7 @@ export default class App extends React.Component {
                   setDailySize={this.setDailySize}
                   setSundaySize={this.setSundaySize}
                   updatePuzzleTitle={this.updatePuzzleTitle}
+                  createCellIds={this.createCellIds}
                 />
               )}
             />
@@ -136,11 +149,10 @@ export default class App extends React.Component {
                   rows={this.state.rows}
                   cols={this.state.cols}
                   puzzleTitle={this.state.puzzleTitle}
+                  cellId={this.state.cellId}
                 />
               )}
             />
-            {/* <Route path="/home" component={Home} /> */}
-            {/* <Route path="/puzzle-editor" component={PuzzleEditor} /> */}
           </Switch>
         </div>
       </Context.Provider>
