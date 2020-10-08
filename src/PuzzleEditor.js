@@ -278,8 +278,6 @@ export default class PuzzleEditor extends React.Component {
   };
 
   renderGrid = () => {
-    console.log(this.props.cellId);
-
     const cellNumber = this.state.cellNumber;
     const cellId = this.props.cellId;
     const selectedAnswer = this.state.selectedAnswer;
