@@ -315,9 +315,7 @@ export default class PuzzleEditor extends React.Component {
   /* FILLS IN WORD ON GRID FROM FILLS */
   fillInWord = (fill) => {
     let cellsCopy = [...this.state.cells];
-    // TODO
-    let firstFillWord = Array.from(fill).join("").replace(/\s+/g, "");
-    let fillWord = Array.from(firstFillWord);
+    let fillWord = Array.from(fill.replace(/\s+/g, ""));
     for (let i = 0; i < this.state.selectedAnswer.length; i++) {
       cellsCopy[this.state.selectedAnswer[i]] = fillWord[i].toUpperCase();
     }
