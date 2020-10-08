@@ -26,19 +26,6 @@ rect {
   border: 2px solid black;
 }
 
-.clues {
-  display: flex;
-  padding: 16px;
-}
-
-.clues > div {
-  padding: 8px;
-}
-
-.clues__list li {
-  cursor: pointer;
-}
-
 .block-options {
   display: flex;
 }

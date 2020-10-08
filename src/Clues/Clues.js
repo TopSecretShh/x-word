@@ -1,4 +1,5 @@
 import React from "react";
+import "./Clues.css";
 
 function Clues({ cellOrientation, cellNumber, selectCell, handleDoubleClick }) {
   let across = [];
@@ -9,12 +10,6 @@ function Clues({ cellOrientation, cellNumber, selectCell, handleDoubleClick }) {
     handleDoubleClick(direction);
   }
 
-  /* 
-  experimenting with how to display clues
-  Phil only display the across and down clue for the currently selected cell, with fill suggestions for both.
-
-  Personally, I like being able to see all clues at the same time, but being able to see clues and the grid at the same time is crucial. Maybe a scrollable list of clues?
-  */
   cellOrientation.forEach((b, i) => {
     if (b === "across") {
       across.push(
@@ -47,7 +42,7 @@ function Clues({ cellOrientation, cellNumber, selectCell, handleDoubleClick }) {
   });
 
   return (
-    <div className="clues">
+    <div className="clues__container">
       <div>
         <h3>Across</h3>
         <ul className="clues__list">{across}</ul>

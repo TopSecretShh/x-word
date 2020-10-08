@@ -2,7 +2,7 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 import Context from "./Context";
 import Cell from "./Cell";
-import Clues from "./Clues";
+import Clues from "./Clues/Clues";
 import generatePattern from "./Patterns";
 import Fills from "./Fills/Fills";
 
