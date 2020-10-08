@@ -1,10 +1,11 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
 import Context from "./Context";
-import Clues from "./Clues/Clues";
-import generatePattern from "./Patterns";
-import Fills from "./Fills/Fills";
+import Controls from "./Controls/Controls";
+// import generatePattern from "./Patterns";
 import Grid from "./Grid/Grid";
+import Fills from "./Fills/Fills";
+import Clues from "./Clues/Clues";
 
 export default class PuzzleEditor extends React.Component {
   static contextType = Context;
@@ -28,46 +29,15 @@ export default class PuzzleEditor extends React.Component {
     word: "",
   };
 
-  /* BEGIN PUZZLE OPTIONS (pattern, freeze, clear) */
-
-  handlePatternBtn = () => {
-    const rows = this.props.rows;
-    const cols = this.props.cols;
-    const freeze = this.state.freezeBlocks;
-    const pattern = generatePattern(rows, cols);
-    if (!freeze) {
+  handleControlsInput = (field, value) => {
+    if (typeof field === "object") {
+      this.setState({ field });
+    } else {
       this.setState({
-        cells: pattern,
+        [field]: value,
       });
     }
   };
-
-  handleClearGrid = () => {
-    if (!this.state.freezeBlocks) {
-      this.setState({
-        cells: Array(this.props.rows * this.props.cols).fill(true),
-      });
-    }
-  };
-
-  handleFreezeBlocks = () => {
-    this.setState({
-      freezeBlocks: true,
-    });
-    this.createCells();
-  };
-
-  handleClearLetters = () => {
-    let grid = this.state.cells;
-    let emptyGrid = grid.map((cell) =>
-      typeof cell === "string" ? (cell = true) : cell
-    );
-    this.setState({
-      cells: emptyGrid,
-    });
-  };
-
-  /* END PUZZLE OPTIONS (sizing, pattern, freeze, clear) */
 
   selectCell = (value) => {
     this.setState(
@@ -277,7 +247,6 @@ export default class PuzzleEditor extends React.Component {
     e.preventDefault();
   };
 
-  /* FILLS IN WORD ON GRID FROM FILLS */
   fillInWord = (fill) => {
     let cellsCopy = [...this.state.cells];
     let fillWord = Array.from(fill.replace(/\s+/g, ""));
@@ -289,7 +258,6 @@ export default class PuzzleEditor extends React.Component {
       cells: cellsCopy,
     });
   };
-  /* FILLS IN WORD ON GRID FROM FILLS */
 
   createCells = () => {
     // setting the stage
@@ -407,51 +375,14 @@ export default class PuzzleEditor extends React.Component {
         </header>
 
         <main>
-          <div className="puzzle-options">
-            <div className="block-options">
-              {!freeze ? (
-                <div className="pattern-btn">
-                  <button type="button" onClick={() => this.handlePatternBtn()}>
-                    Pattern
-                  </button>
-                </div>
-              ) : (
-                ""
-              )}
-              {!freeze ? (
-                <div className="clear-grid-btn">
-                  <button type="button" onClick={() => this.handleClearGrid()}>
-                    Clear Grid
-                  </button>
-                </div>
-              ) : (
-                ""
-              )}
-
-              <div className="freeze-btn">
-                {!freeze ? (
-                  <button
-                    type="button"
-                    onClick={() => this.handleFreezeBlocks()}
-                  >
-                    Freeze Blocks
-                  </button>
-                ) : (
-                  ""
-                )}
-              </div>
-            </div>
-
-            {freeze ? (
-              <div>
-                <button type="button" onClick={() => this.handleClearLetters()}>
-                  Clear Letters
-                </button>
-              </div>
-            ) : (
-              ""
-            )}
-          </div>
+          <Controls
+            handleControlsInput={this.handleControlsInput}
+            freeze={freeze}
+            rows={rows}
+            cols={cols}
+            cells={this.state.cells}
+            createCells={this.createCells}
+          />
 
           <div className="grid-and-fills">
             <div className="crossword__container--grid-wrapper">
