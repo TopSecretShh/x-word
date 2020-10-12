@@ -8,9 +8,6 @@ import "./Grid.css"
 // Fix grid extending out of view when rows > cols
 
 export default class Grid extends React.Component {
-    state = {
-        fills: [],
-    };
     
     selectCell = (value) => {
         this.props.selectCell(value)
@@ -51,6 +48,7 @@ export default class Grid extends React.Component {
     };
 
     createWord = (groupAcross, groupDown, cells) => {
+        console.log('creating grid')
         let group =
           (this.props.orientationIsHorizontal ? groupAcross : groupDown) || [];
         let selectedAnswer =
@@ -216,7 +214,6 @@ export default class Grid extends React.Component {
                 />
               </div>
               <Fills
-                fills={this.state.fills}
                 word={word}
                 fillInWord={this.props.fillInWord}
                 selectedAnswer={selectedAnswer}
