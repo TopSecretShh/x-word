@@ -27,7 +27,7 @@ export default class name extends React.Component {
     let emptyGrid = grid.map((cell) =>
       typeof cell === "string" ? (cell = true) : cell
     );
-    this.handleControlsInput("cells", emptyGrid);
+    this.props.handleControlsInput("cells", emptyGrid);
   };
 
   render() {
