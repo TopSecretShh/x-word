@@ -78,15 +78,9 @@ export default class PuzzleEditor extends React.Component {
     fetch(`https://api.datamuse.com/words?sp=${word}`)
       .then((response) => response.json())
       .then((data) => {
-        
-        let words = data.map(word=> word.score > 100 ? word.word.replace(/\s+/g, '') : '')
-        words = words.filter(w=>w.length === word.length)
+        let words = data.map((word) => (word.score > 100 ? word.word : ""));
+        words = words.filter(w=>(w.replace(/\s+/g, '').length) === word.length)
 
-        // console.log(words)
-
-        
-        
-        // let words = data.map((word) => (word.score > 100 ? word.word : ""));
         this.setState({
           fills: words,
         });
