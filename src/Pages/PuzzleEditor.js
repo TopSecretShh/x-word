@@ -5,6 +5,7 @@ import Controls from "../Components/Controls/Controls";
 import Grid from "../Components/Grid/Grid";
 import Fills from "../Components/Fills/Fills";
 import Clues from "../Components/Clues/Clues";
+import BlockStats from '../Components/Stats/BlockStats'
 
 export default class PuzzleEditor extends React.Component {
   static contextType = Context;
@@ -398,6 +399,12 @@ export default class PuzzleEditor extends React.Component {
               handleKeyDown={this.handleKeyDown}
               handleDoubleClick={this.handleDoubleClick}
             />
+
+            <div className='stats'>
+            {!freeze ? (<BlockStats cells={this.state.cells} />) : ''}
+            </div>
+
+            
 
             {freeze ? (
               <Fills fillInWord={this.fillInWord} fills={this.state.fills} />
