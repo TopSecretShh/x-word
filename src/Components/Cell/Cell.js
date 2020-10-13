@@ -1,4 +1,5 @@
 import React from "react";
+import "./Cell.css";
 
 function Cell({
   cellSize,
@@ -9,15 +10,14 @@ function Cell({
   selectedAnswer,
   isNotBlocked,
   cellNumberLabel,
-  handleKeydown,
+  handleKeyDown,
   handleDoubleClick,
   cellId,
-  word,
 }) {
   let highlight = selectedAnswer.some((a) => a === cellId);
 
   function handleClick(cell) {
-    selectCell(cell, word);
+    selectCell(cell);
   }
 
   return (
@@ -31,7 +31,7 @@ function Cell({
         handleClick(cellId);
       }}
       onDoubleClick={() => handleDoubleClick()}
-      onKeyDown={(e) => handleKeydown(e, word)}
+      onKeyDown={(e) => handleKeyDown(e)}
     >
       <rect
         x={col * cellSize}

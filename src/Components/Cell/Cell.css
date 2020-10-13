@@ -1,59 +1,9 @@
-h1,
-h2,
-h3,
-p {
-  margin: 0;
-}
-
-rect {
-  outline: 0;
-  stroke: black;
-  stroke-width: 0.5px;
-}
-
-.App {
-  margin: 16px;
-}
-
-@media (max-width: 400px) {
-  .App {
-    margin: 8px;
-  }
-}
-
-#grid {
-  margin-top: 16px;
-  border: 2px solid black;
-}
-
-.block-options {
-  display: flex;
-}
+/* TODO hey Chris, for some reason, some of these don't work and I don't know why. I removed the highlighted, selected, and filled methods from the App.css file and the ones here did not take effect. Hopefully I just missed something silly  */
 
 .crossword__cell {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   fill: white;
   cursor: pointer;
-}
-
-.grid-and-fills {
-  display: flex;
-}
-
-.crossword__container--grid-wrapper {
-  width: 500px;
-  height: 400px;
-}
-
-svg[viewBox] {
-  /* background: black; */
-  user-select: none;
-}
-.view_box--tall {
-  height: 100%;
-}
-.view_box--wide {
-  width: 100%;
 }
 
 .crossword__cell--highlighted {
@@ -93,17 +43,4 @@ svg[viewBox] {
   font-size: 17px;
   font-weight: 500;
   text-anchor: middle;
-}
-
-ul {
-  list-style-type: none;
-}
-
-.puzzle {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.fills {
-  padding: 16px;
 }

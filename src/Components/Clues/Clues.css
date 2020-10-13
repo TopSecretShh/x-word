@@ -1,0 +1,8 @@
+.clues__container {
+  display: flex;
+  padding: 16px;
+}
+
+.clues__list li {
+  cursor: pointer;
+}

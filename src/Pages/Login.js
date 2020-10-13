@@ -1,5 +1,5 @@
 import React from "react";
-import Context from "./Context";
+import Context from "../Context/Context";
 
 export default class Login extends React.Component {
   static contextType = Context;
