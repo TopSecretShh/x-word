@@ -5,6 +5,8 @@ import Controls from "../Components/Controls/Controls";
 import Grid from "../Components/Grid/Grid";
 import Fills from "../Components/Fills/Fills";
 import Clues from "../Components/Clues/Clues";
+import BlockStats from "../Components/Stats/BlockStats";
+import ClueStats from "../Components/Stats/ClueStats";
 
 export default class PuzzleEditor extends React.Component {
   static contextType = Context;
@@ -79,7 +81,9 @@ export default class PuzzleEditor extends React.Component {
       .then((response) => response.json())
       .then((data) => {
         let words = data.map((word) => (word.score > 100 ? word.word : ""));
-        words = words.filter(w=>(w.replace(/\s+/g, '').length) === word.length)
+        words = words.filter(
+          (w) => w.replace(/\s+/g, "").length === word.length
+        );
 
         this.setState({
           fills: words,
@@ -398,6 +402,14 @@ export default class PuzzleEditor extends React.Component {
               handleKeyDown={this.handleKeyDown}
               handleDoubleClick={this.handleDoubleClick}
             />
+
+            <div className="stats">
+              {!freeze ? (
+                <BlockStats cells={this.state.cells} />
+              ) : (
+                <ClueStats cellOrientation={this.state.cellOrientation} />
+              )}
+            </div>
 
             {freeze ? (
               <Fills fillInWord={this.fillInWord} fills={this.state.fills} />
