@@ -13,11 +13,12 @@ import "./App.css";
 
 /*
 PROBLEMS/ISSUES/ROOM FOR IMPROVEMENT
-- Ben is going to drop little TODO notes on things he's planning to work on soon. Feel free to work on those or not as you like, just remove the TODO if you finish it off.
 
-- TODO incorporate component structure from branch refactor/controls-component
+- TODO clicking fill words to fill grid takes focus away from grid. You have to click on the grid again to re-focus. Not sure if there's anything we can do about this?
 
-- TODO clicking fill words to fill grid takes focus away from grid. You have to click on the grid again to re-focus. Not sure if there's anything we can do about this? Possible solution: auto-find fills based on selectedCell. That's how Phil works
+- TODO Next step: be able to 'save' a puzzle. This is going to require:
+  - this.state.cells (blocks + filled in letters. maybe save a version with and a version without letters)
+  - the clues. currently these are stored nowhere. probably have to chance clues to a class component? or use hooks to use state in the current functional component
 
 */
 
