@@ -1,5 +1,5 @@
-// import React, { useState, useEffect } from "react";
-import React from "react";
+import React, { useState, useEffect } from "react";
+// import React from "react";
 import "./Clues.css";
 
 function Clues({ cellOrientation, cellNumber, selectCell, handleDoubleClick }) {
@@ -22,10 +22,38 @@ function Clues({ cellOrientation, cellNumber, selectCell, handleDoubleClick }) {
   
   */
 
-  // const [clues, setClues] = useState("");
-  // useEffect(()=> {
-  //   setClues()
-  // })
+  const [cluesAcross, setCluesAcross] = useState([]);
+  const [cluesDown, setCluesDown] = useState([]);
+
+  useEffect(() => {
+    cellOrientation.forEach((b, i) => {
+      const clueId = cellNumber[i];
+      if (b === "across") {
+        let newClueAcross = {
+          id: clueId + " across",
+          clue: "",
+        };
+        setCluesAcross((cluesAcross) => [...cluesAcross, newClueAcross]);
+      } else if (b === "down") {
+        let newClueDown = {
+          id: clueId + " down",
+          clue: "",
+        };
+        setCluesDown((cluesDown) => [...cluesDown, newClueDown]);
+      } else if (b === "acrossdown") {
+        let newClueAcross = {
+          id: clueId + " across",
+          clue: "",
+        };
+        let newClueDown = {
+          id: clueId + " down",
+          clue: "",
+        };
+        setCluesAcross((cluesAcross) => [...cluesAcross, newClueAcross]);
+        setCluesDown((cluesDown) => [...cluesDown, newClueDown]);
+      }
+    });
+  }, [cellNumber, cellOrientation]);
 
   let across = [];
   let down = [];
@@ -35,46 +63,97 @@ function Clues({ cellOrientation, cellNumber, selectCell, handleDoubleClick }) {
     handleDoubleClick(direction);
   }
 
+  function updateClueAcross(id, value) {
+    const newClueValue = [{ id: id + " across", clue: value }];
+    const newCluesAcross = cluesAcross.map(
+      (clue) => newClueValue.find((c) => c.id === clue.id) || clue
+    );
+    setCluesAcross(newCluesAcross);
+  }
+
+  function updateCluesDown(id, value) {
+    const newClueValue = [{ id: id + " down", clue: value }];
+    const newCluesDown = cluesDown.map(
+      (clue) => newClueValue.find((c) => c.id === clue.id) || clue
+    );
+    setCluesDown(newCluesDown);
+  }
+
   cellOrientation.forEach((b, i) => {
+    const clueId = cellNumber[i];
     if (b === "across") {
+      const clue = cluesAcross.filter((c) => c.id === clueId + " across");
       across.push(
         <li key={i} onClick={() => handleClick(i, true)}>
-          {cellNumber[i]}{" "}
-          <input type="text" id={i + "across"} name={i + "across"} />
+          <label>
+            {clueId}{" "}
+            <input
+              type="text"
+              id={clueId + " across"}
+              name={clueId + " across"}
+              value={clue.clue}
+              onChange={(e) => updateClueAcross(clueId, e.target.value)}
+            />
+          </label>
         </li>
       );
     } else if (b === "down") {
+      const clue = cluesDown.filter((c) => c.id === clueId + " down");
       down.push(
         <li key={i} onClick={() => handleClick(i, false)}>
-          {cellNumber[i]}{" "}
-          <input type="text" id={i + "down"} name={i + "down"} />
+          <label>
+            {clueId}{" "}
+            <input
+              type="text"
+              id={clueId + " down"}
+              name={clueId + " down"}
+              value={clue.clue}
+              onChange={(e) => updateCluesDown(clueId, e.target.value)}
+            />
+          </label>
         </li>
       );
     } else if (b === "acrossdown") {
+      const clueAcross = cluesAcross.filter((c) => c.id === clueId + " across");
+      const clueDown = cluesDown.filter((c) => c.id === clueId + " down");
       across.push(
         <li key={i} onClick={() => handleClick(i, true)}>
-          {cellNumber[i]}{" "}
-          <input type="text" id={i + "across"} name={i + "across"} />
+          <label>
+            {clueId}{" "}
+            <input
+              type="text"
+              id={clueId + " across"}
+              name={clueId + " across"}
+              value={clueAcross.clue}
+              onChange={(e) => updateClueAcross(clueId, e.target.value)}
+            />
+          </label>
         </li>
       );
       down.push(
         <li key={i} onClick={() => handleClick(i, false)}>
-          {cellNumber[i]}{" "}
-          <input type="text" id={i + "down"} name={i + "down"} />
+          {clueId}{" "}
+          <input
+            type="text"
+            id={clueId + " down"}
+            name={clueId + " down"}
+            value={clueDown.clue}
+            onChange={(e) => updateCluesDown(clueId, e.target.value)}
+          />
         </li>
       );
     }
   });
 
-  function handleSubmit(e) {
-    console.log("submit: ", e.target);
+  function handleSubmit() {
+    console.log(cluesAcross, cluesDown);
   }
 
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        handleSubmit(e);
+        handleSubmit();
       }}
     >
       <div className="clues__container">
