@@ -30,8 +30,8 @@ export default class App extends React.Component {
     currentUser: "",
     userPuzzles: [],
 
-    rows: 3,
-    cols: 3,
+    rows: "",
+    cols: "",
     puzzleTitle: "Untitled",
 
     cellId: [],

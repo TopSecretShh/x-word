@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import Context from "../Context/Context";
 
 export default class Home extends React.Component {
@@ -18,9 +18,11 @@ export default class Home extends React.Component {
   };
 
   render() {
+    const user = this.context.currentUser;
+
     const puzzleDimensions = this.state.puzzleDimensions;
     const userPuzzles = this.context.userPuzzles;
-    return (
+    return user ? (
       <div className="Home">
         <nav>
           <Link className="btn-alt" to="/">
@@ -50,7 +52,12 @@ export default class Home extends React.Component {
                       pathname: "/puzzle-editor",
                       state: {
                         title: p.title,
+                        freeze: true,
+                        rows: p.rows,
+                        cols: p.cols,
                         cells: p.cells,
+                        clues_across: p.clues_across,
+                        clues_down: p.clues_down,
                       },
                     }}
                   >
@@ -139,6 +146,8 @@ export default class Home extends React.Component {
           </div>
         </main>
       </div>
+    ) : (
+      <Redirect to={{ pathname: "/" }} />
     );
   }
 }

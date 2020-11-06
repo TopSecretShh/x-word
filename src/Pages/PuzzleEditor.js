@@ -365,10 +365,13 @@ export default class PuzzleEditor extends React.Component {
   };
 
   render() {
-    const rows = this.props.rows;
-    const cols = this.props.cols;
+    const passedRows = this.props.location.state.rows;
+    const rows = passedRows ? passedRows : this.props.rows;
+    const cols = this.props.location.state.cols
+      ? this.props.location.state.cols
+      : this.props.cols;
     const user = this.context.currentUser;
-    const freeze = this.state.freezeBlocks;
+    const freeze = this.props.location.state.freeze || this.state.freezeBlocks;
 
     const title = this.props.location.state.title || this.props.puzzleTitle;
     const cells = this.props.location.state.cells || this.state.cells;

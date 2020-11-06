@@ -11,11 +11,14 @@ export const users = [
   },
 ];
 
+/* TODO I think rows and cols need to be saved and passed */
 export const userPuzzles = [
   {
     id: 1,
     username: "Bob",
     title: "Big",
+    rows: "",
+    cols: "",
     cells: [],
     clues_across: [],
     clues_down: [],
@@ -24,6 +27,8 @@ export const userPuzzles = [
     id: 2,
     username: "Bob",
     title: "Small",
+    rows: 3,
+    cols: 3,
     cells: [true, true, true, true, false, true, true, true, true],
     clues_across: [
       {
@@ -50,7 +55,26 @@ export const userPuzzles = [
     id: 3,
     username: "Bob",
     title: "Medium",
-    cells: [],
+    rows: 4,
+    cols: 4,
+    cells: [
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+    ],
     clues_across: [],
     clues_down: [],
   },
