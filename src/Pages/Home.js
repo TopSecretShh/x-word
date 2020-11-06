@@ -19,6 +19,7 @@ export default class Home extends React.Component {
 
   render() {
     const puzzleDimensions = this.state.puzzleDimensions;
+    const userPuzzles = this.context.userPuzzles;
     return (
       <div className="Home">
         <nav>
@@ -41,9 +42,22 @@ export default class Home extends React.Component {
             <h2>Welcome back, {this.context.currentUser}!</h2>
             <h3>Saved Puzzles</h3>
             <ul>
-              <li>Puzzle 1</li>
-              <li>Puzzle 2</li>
-              <li>Puzzle 3</li>
+              {/* TODO the user puzzle links need to send all of the data/props to puzzle editor so it is set up ready to go */}
+              {userPuzzles.map((p, i) => (
+                <li key={i}>
+                  <Link
+                    to={{
+                      pathname: "/puzzle-editor",
+                      state: {
+                        title: p.title,
+                        cells: p.cells,
+                      },
+                    }}
+                  >
+                    {p.title}
+                  </Link>
+                </li>
+              ))}
             </ul>
             <h3>Create New Puzzle</h3>
             <button type="button" onClick={() => this.createNewPuzzle()}>

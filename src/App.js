@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 
-import { users } from "./Context/tempUsersData";
+import { users, userPuzzles } from "./Context/tempUsersData";
 
 import Landing from "./Pages/Landing";
 import Login from "./Pages/Login";
@@ -28,6 +28,7 @@ export default class App extends React.Component {
   state = {
     users: users,
     currentUser: "",
+    userPuzzles: [],
 
     rows: 3,
     cols: 3,
@@ -52,6 +53,13 @@ export default class App extends React.Component {
   setCurrentUser = (username) => {
     this.setState({
       currentUser: username,
+    });
+  };
+
+  setUserPuzzles = (username) => {
+    const puzzles = userPuzzles.filter((p) => p.username === username);
+    this.setState({
+      userPuzzles: puzzles,
     });
   };
 
@@ -113,8 +121,10 @@ export default class App extends React.Component {
     const value = {
       users: this.state.users,
       currentUser: this.state.currentUser,
+      userPuzzles: this.state.userPuzzles,
       addNewUser: this.addNewUser,
       setCurrentUser: this.setCurrentUser,
+      setUserPuzzles: this.setUserPuzzles,
       signOut: this.signOut,
     };
 

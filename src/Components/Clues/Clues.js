@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-// import React from "react";
 import "./Clues.css";
 
 function Clues({ cellOrientation, cellNumber, selectCell, handleDoubleClick }) {
@@ -55,9 +54,6 @@ function Clues({ cellOrientation, cellNumber, selectCell, handleDoubleClick }) {
     });
   }, [cellNumber, cellOrientation]);
 
-  let across = [];
-  let down = [];
-
   function handleClick(i, direction) {
     selectCell(i);
     handleDoubleClick(direction);
@@ -78,6 +74,9 @@ function Clues({ cellOrientation, cellNumber, selectCell, handleDoubleClick }) {
     );
     setCluesDown(newCluesDown);
   }
+
+  let across = [];
+  let down = [];
 
   cellOrientation.forEach((b, i) => {
     const clueId = cellNumber[i];

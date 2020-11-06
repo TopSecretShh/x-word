@@ -370,10 +370,13 @@ export default class PuzzleEditor extends React.Component {
     const user = this.context.currentUser;
     const freeze = this.state.freezeBlocks;
 
+    const title = this.props.location.state.title || this.props.puzzleTitle;
+    const cells = this.props.location.state.cells || this.state.cells;
+
     return user ? (
       <div>
         <header>
-          <h1>{this.props.puzzleTitle}</h1>
+          <h1>{title}</h1>
           <p>by {this.context.currentUser}</p>
         </header>
 
@@ -396,7 +399,7 @@ export default class PuzzleEditor extends React.Component {
               selectedAnswer={this.state.selectedAnswer}
               rows={rows}
               cols={cols}
-              cells={this.state.cells}
+              cells={cells}
               selectedCell={this.state.selectedCell}
               selectCell={this.selectCell}
               handleKeyDown={this.handleKeyDown}
@@ -405,7 +408,7 @@ export default class PuzzleEditor extends React.Component {
 
             <div className="stats">
               {!freeze ? (
-                <BlockStats cells={this.state.cells} />
+                <BlockStats cells={cells} />
               ) : (
                 <ClueStats cellOrientation={this.state.cellOrientation} />
               )}
