@@ -12,6 +12,7 @@ export const users = [
 ];
 
 /* TODO I think rows and cols need to be saved and passed */
+// TODO does cellId also need to be passed? it is a prop in App for puzzle-editor
 export const userPuzzles = [
   {
     id: 1,

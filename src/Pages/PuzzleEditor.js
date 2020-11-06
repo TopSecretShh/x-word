@@ -365,16 +365,24 @@ export default class PuzzleEditor extends React.Component {
   };
 
   render() {
-    const passedRows = this.props.location.state.rows;
-    const rows = passedRows ? passedRows : this.props.rows;
-    const cols = this.props.location.state.cols
-      ? this.props.location.state.cols
-      : this.props.cols;
-    const user = this.context.currentUser;
-    const freeze = this.props.location.state.freeze || this.state.freezeBlocks;
+    // TODO this doesn't work
+    /* 
+      maybe two options:
+      - create in state new_puzzle: true/false
+        - this would allow puzzleEditor to know if it needs to use this.state.cells or this.props.location.state.cells, for example
+      - change begin new puzzle btn to Link that also passes props
+        - this seems to break too much functionality
+        - puzzleEditor is using state in Controls for things like cells and freeze
+    
+    */
 
-    const title = this.props.location.state.title || this.props.puzzleTitle;
-    const cells = this.props.location.state.cells || this.state.cells;
+    const user = this.context.currentUser;
+
+    const rows = this.props.location.state.rows;
+    const cols = this.props.location.state.cols;
+    const freeze = this.props.location.state.freeze;
+    const title = this.props.location.state.title;
+    const cells = this.props.location.state.cells;
 
     return user ? (
       <div>
@@ -389,7 +397,7 @@ export default class PuzzleEditor extends React.Component {
             freeze={freeze}
             rows={rows}
             cols={cols}
-            cells={this.state.cells}
+            cells={cells}
             createCells={this.createCells}
           />
 

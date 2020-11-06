@@ -128,6 +128,8 @@ export default class App extends React.Component {
       signOut: this.signOut,
     };
 
+    console.log("app cellid: ", this.state.cellId);
+
     return (
       <Context.Provider value={value}>
         <div className="App">
