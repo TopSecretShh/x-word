@@ -77,6 +77,8 @@ export default class Home extends React.Component {
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
+                  this.props.history.push("/puzzle-editor");
+                  this.props.createCellIds();
                 }}
               >
                 <fieldset className="puzzle-dimensions">
@@ -101,8 +103,10 @@ export default class Home extends React.Component {
                       name="rows"
                       min={3}
                       max={25}
+                      placeholder="3"
                       value={this.props.rows}
                       onChange={(e) => this.props.updateRows(e.target.value)}
+                      required
                     />
                   </label>
                   <br />
@@ -113,8 +117,10 @@ export default class Home extends React.Component {
                       name="cols"
                       min={3}
                       max={25}
+                      placeholder="3"
                       value={this.props.cols}
                       onChange={(e) => this.props.updateCols(e.target.value)}
+                      required
                     />
                   </label>
                   <br />
@@ -131,15 +137,7 @@ export default class Home extends React.Component {
                   />
                 </label>
 
-                <button
-                  type="button"
-                  onClick={() => {
-                    this.props.history.push("/puzzle-editor");
-                    this.props.createCellIds();
-                  }}
-                >
-                  Begin
-                </button>
+                <button type="submit">Begin</button>
 
                 {/* I don't think this will work because the controls update state in puzzle editor, but if puzzle editor isn't using the state values... */}
                 {/*  */}

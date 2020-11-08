@@ -28,6 +28,8 @@ export default class PuzzleEditor extends React.Component {
 
     selectedAnswer: [],
     word: "",
+
+    new_puzzle: true,
   };
 
   handleControlsInput = (field, value) => {
@@ -378,11 +380,20 @@ export default class PuzzleEditor extends React.Component {
 
     const user = this.context.currentUser;
 
-    const rows = this.props.location.state.rows;
-    const cols = this.props.location.state.cols;
-    const freeze = this.props.location.state.freeze;
-    const title = this.props.location.state.title;
-    const cells = this.props.location.state.cells;
+    const newPuzzle = this.state.new_puzzle;
+
+    // this might work for pre-loading, but to actually edit the saved puzzle is going to cause the same issue...
+    const rows = newPuzzle ? this.props.rows : this.props.location.state.rows;
+    const cols = newPuzzle ? this.props.cols : this.props.location.state.cols;
+    const freeze = newPuzzle
+      ? this.state.freezeBlocks
+      : this.props.location.state.freeze;
+    const title = newPuzzle
+      ? this.props.title
+      : this.props.location.state.title;
+    const cells = newPuzzle
+      ? this.state.cells
+      : this.props.location.state.cells;
 
     return user ? (
       <div>
