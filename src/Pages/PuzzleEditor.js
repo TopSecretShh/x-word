@@ -390,6 +390,7 @@ export default class PuzzleEditor extends React.Component {
     const newPuzzle = this.state.new_puzzle;
 
     // this might work for pre-loading, but to actually edit the saved puzzle is going to cause the same issue...
+    // TODO can I successfully edit a saved puzzle?
     const rows = newPuzzle ? this.props.rows : this.props.location.state.rows;
     const cols = newPuzzle ? this.props.cols : this.props.location.state.cols;
     const freeze = newPuzzle
