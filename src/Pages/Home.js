@@ -30,7 +30,6 @@ export default class Home extends React.Component {
             <h2>Welcome back, {this.context.currentUser}!</h2>
             <h3>Saved Puzzles</h3>
             <ul>
-              {/* TODO the user puzzle links need to send all of the data/props to puzzle editor so it is set up ready to go */}
               {userPuzzles.map((p, i) => (
                 <li key={i}>
                   <Link

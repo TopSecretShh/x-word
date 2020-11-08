@@ -1,7 +1,15 @@
 import React, { useState, useEffect } from "react";
 import "./Clues.css";
 
-function Clues({ cellOrientation, cellNumber, selectCell, handleDoubleClick }) {
+function Clues({
+  cellOrientation,
+  cellNumber,
+  selectCell,
+  handleDoubleClick,
+  new_puzzle,
+  savedCluesAcross,
+  savedCluesDown,
+}) {
   /*
   TODO list
   - puzzle in progress save: save this.state.cells for blocks and letters; save clues and clue inputs
@@ -19,65 +27,64 @@ function Clues({ cellOrientation, cellNumber, selectCell, handleDoubleClick }) {
 
   - save btn should be in controls component
   
+
+  -- this component works for creating a new puzzle. it is NOT equipped to deal with a saved puzzle.
+    - it needs to be able to discern if it is a new or saved puzzle
+    - for new puzzles: create across and down clues, empty
+    - for saved puzzles: use saved across and down clues, pre-filled
   */
 
   const [cluesAcross, setCluesAcross] = useState([]);
   const [cluesDown, setCluesDown] = useState([]);
 
+  // this creates across/down clues in state
   useEffect(() => {
-    cellOrientation.forEach((b, i) => {
-      const clueId = cellNumber[i];
-      if (b === "across") {
-        let newClueAcross = {
-          id: clueId + " across",
-          clue: "",
-        };
-        setCluesAcross((cluesAcross) => [...cluesAcross, newClueAcross]);
-      } else if (b === "down") {
-        let newClueDown = {
-          id: clueId + " down",
-          clue: "",
-        };
-        setCluesDown((cluesDown) => [...cluesDown, newClueDown]);
-      } else if (b === "acrossdown") {
-        let newClueAcross = {
-          id: clueId + " across",
-          clue: "",
-        };
-        let newClueDown = {
-          id: clueId + " down",
-          clue: "",
-        };
-        setCluesAcross((cluesAcross) => [...cluesAcross, newClueAcross]);
-        setCluesDown((cluesDown) => [...cluesDown, newClueDown]);
+    if (new_puzzle) {
+      cellOrientation.forEach((b, i) => {
+        const clueId = cellNumber[i];
+        if (b === "across") {
+          let newClueAcross = {
+            id: clueId + " across",
+            clue: "",
+          };
+          setCluesAcross((cluesAcross) => [...cluesAcross, newClueAcross]);
+        } else if (b === "down") {
+          let newClueDown = {
+            id: clueId + " down",
+            clue: "",
+          };
+          setCluesDown((cluesDown) => [...cluesDown, newClueDown]);
+        } else if (b === "acrossdown") {
+          let newClueAcross = {
+            id: clueId + " across",
+            clue: "",
+          };
+          let newClueDown = {
+            id: clueId + " down",
+            clue: "",
+          };
+          setCluesAcross((cluesAcross) => [...cluesAcross, newClueAcross]);
+          setCluesDown((cluesDown) => [...cluesDown, newClueDown]);
+        }
+      });
+    } else if (!new_puzzle) {
+      if (cellOrientation !== []) {
+        setCluesAcross(savedCluesAcross);
+        setCluesDown(savedCluesDown);
       }
-    });
-  }, [cellNumber, cellOrientation]);
+    }
+  }, [
+    new_puzzle,
+    cellNumber,
+    cellOrientation,
+    savedCluesAcross,
+    savedCluesDown,
+  ]);
 
-  function handleClick(i, direction) {
-    selectCell(i);
-    handleDoubleClick(direction);
-  }
-
-  function updateClueAcross(id, value) {
-    const newClueValue = [{ id: id + " across", clue: value }];
-    const newCluesAcross = cluesAcross.map(
-      (clue) => newClueValue.find((c) => c.id === clue.id) || clue
-    );
-    setCluesAcross(newCluesAcross);
-  }
-
-  function updateCluesDown(id, value) {
-    const newClueValue = [{ id: id + " down", clue: value }];
-    const newCluesDown = cluesDown.map(
-      (clue) => newClueValue.find((c) => c.id === clue.id) || clue
-    );
-    setCluesDown(newCluesDown);
-  }
-
+  // TODO need an if/else. if a new puzzle, do this, but if not a new puzzle, create dom based off of state
+  // this creates the html for the dom
   let across = [];
   let down = [];
-
   cellOrientation.forEach((b, i) => {
     const clueId = cellNumber[i];
     if (b === "across") {
@@ -143,6 +150,27 @@ function Clues({ cellOrientation, cellNumber, selectCell, handleDoubleClick }) {
       );
     }
   });
+
+  function handleClick(i, direction) {
+    selectCell(i);
+    handleDoubleClick(direction);
+  }
+
+  function updateClueAcross(id, value) {
+    const newClueValue = [{ id: id + " across", clue: value }];
+    const newCluesAcross = cluesAcross.map(
+      (clue) => newClueValue.find((c) => c.id === clue.id) || clue
+    );
+    setCluesAcross(newCluesAcross);
+  }
+
+  function updateCluesDown(id, value) {
+    const newClueValue = [{ id: id + " down", clue: value }];
+    const newCluesDown = cluesDown.map(
+      (clue) => newClueValue.find((c) => c.id === clue.id) || clue
+    );
+    setCluesDown(newCluesDown);
+  }
 
   function handleSubmit() {
     console.log(cluesAcross, cluesDown);

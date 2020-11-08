@@ -129,9 +129,6 @@ export default class App extends React.Component {
       setUserPuzzles: this.setUserPuzzles,
       signOut: this.signOut,
     };
-
-    console.log("app cellid: ", this.state.cellId);
-
     return (
       <Context.Provider value={value}>
         <div className="App">

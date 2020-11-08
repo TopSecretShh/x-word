@@ -32,12 +32,13 @@ export default class PuzzleEditor extends React.Component {
     word: "",
 
     new_puzzle: true,
+
+    clues_across: [],
+    clues_down: [],
   };
 
   componentDidMount() {
-    console.log(this.props.location.state);
     const savedPuzzle = this.props.location.state;
-
     if (savedPuzzle !== undefined) {
       this.setState(
         {
@@ -48,6 +49,8 @@ export default class PuzzleEditor extends React.Component {
           cols: savedPuzzle.cols,
           cells: savedPuzzle.cells,
           cellId: savedPuzzle.cellId,
+          clues_across: savedPuzzle.clues_across,
+          clues_down: savedPuzzle.clues_down,
         },
         () => {
           this.createCells();
@@ -291,14 +294,10 @@ export default class PuzzleEditor extends React.Component {
   };
 
   createCells = () => {
-    console.log("create cells ran");
-
     // setting the stage
     const rows = this.state.rows;
     const cols = this.state.cols;
     const cells = this.state.cells;
-
-    console.log("create cells rows: ", rows);
 
     // internal variables
     let counter = 0;
@@ -395,27 +394,17 @@ export default class PuzzleEditor extends React.Component {
   };
 
   render() {
-    // TODO this doesn't work
-    /* 
-      maybe two options:
-      - create in state new_puzzle: true/false
-        - this would allow puzzleEditor to know if it needs to use this.state.cells or this.props.location.state.cells, for example
-      - change begin new puzzle btn to Link that also passes props
-        - this seems to break too much functionality
-        - puzzleEditor is using state in Controls for things like cells and freeze
-    
-    */
-
     const user = this.context.currentUser;
-
-    // this might work for pre-loading, but to actually edit the saved puzzle is going to cause the same issue...
-    // TODO can I successfully edit a saved puzzle?
     const rows = this.state.rows;
     const cols = this.state.cols;
-
     const freeze = this.state.freezeBlocks;
     const title = this.state.title;
     const cells = this.state.cells;
+    const new_puzzle = this.state.new_puzzle;
+    const savedCluesAcross = this.state.clues_across;
+    const savedCluesDown = this.state.clues_down;
+
+    console.log("saved across: ", savedCluesAcross);
 
     return user ? (
       <div>
@@ -466,7 +455,7 @@ export default class PuzzleEditor extends React.Component {
           </div>
 
           <div className="clue__container">
-            {freeze ? (
+            {freeze && this.state.cellOrientation.length ? (
               <Clues
                 cellOrientation={this.state.cellOrientation}
                 cellNumber={this.state.cellNumber}
@@ -475,6 +464,9 @@ export default class PuzzleEditor extends React.Component {
                   this.handleDoubleClick(direction)
                 }
                 cellId={this.state.cellId}
+                new_puzzle={new_puzzle}
+                savedCluesAcross={savedCluesAcross}
+                savedCluesDown={savedCluesDown}
               />
             ) : (
               ""
