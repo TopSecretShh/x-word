@@ -45,7 +45,7 @@ export default class Home extends React.Component {
                         clues_across: p.clues_across,
                         clues_down: p.clues_down,
                         new_puzzle: false,
-                        // cellId  ?
+                        cellId: p.cellId,
                       },
                     }}
                   >

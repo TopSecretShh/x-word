@@ -31,6 +31,7 @@ export const userPuzzles = [
     rows: 3,
     cols: 3,
     cells: [true, true, true, true, false, true, true, true, true],
+    cellId: [0, 1, 2, 3, 4, 5, 6, 7, 8],
     clues_across: [
       {
         id: "1 across",
