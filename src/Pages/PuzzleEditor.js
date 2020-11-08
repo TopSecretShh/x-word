@@ -33,7 +33,8 @@ export default class PuzzleEditor extends React.Component {
   };
 
   componentDidMount() {
-    if (!this.props.location.state.new_puzzle) {
+    console.log(this.props.location.state);
+    if (this.props.location.state !== undefined) {
       this.setState({ new_puzzle: false });
     }
   }

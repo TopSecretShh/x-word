@@ -1,7 +1,6 @@
 import React from "react";
 import { Link, Redirect } from "react-router-dom";
 import Context from "../Context/Context";
-import Nav from "../Components/Nav/Nav";
 
 export default class Home extends React.Component {
   static contextType = Context;

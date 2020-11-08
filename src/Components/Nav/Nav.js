@@ -4,10 +4,7 @@ import Context from "../../Context/Context";
 
 function Nav() {
   const context = useContext(Context);
-  const user = context.currentUser.length;
-
   const location = useLocation();
-  console.log("location: ", location.pathname);
 
   function SwitchNav(props) {
     switch (props.location) {
@@ -22,8 +19,6 @@ function Nav() {
             </Link>{" "}
           </>
         );
-      case "/login":
-        return <></>;
       case "/home":
         return (
           <>
@@ -37,6 +32,8 @@ function Nav() {
             </Link>
           </>
         );
+      default:
+        return <></>;
     }
   }
 
