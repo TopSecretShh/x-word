@@ -21,6 +21,7 @@ PROBLEMS/ISSUES/ROOM FOR IMPROVEMENT
   - this.state.cells (blocks + filled in letters. maybe save a version with and a version without letters)
   - the clues. currently these are stored nowhere. probably have to chance clues to a class component? or use hooks to use state in the current functional component
 
+  - TODO does double-click still work?
 */
 
 export default class App extends React.Component {

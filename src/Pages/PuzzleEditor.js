@@ -12,8 +12,9 @@ export default class PuzzleEditor extends React.Component {
   static contextType = Context;
 
   state = {
-    title: "Untitled",
-    custom: false,
+    title: this.props.puzzleTitle,
+    rows: this.props.rows,
+    cols: this.props.cols,
     cells: Array(this.props.rows * this.props.cols).fill(true),
     selectedCell: null,
     orientationIsHorizontal: true,
@@ -34,8 +35,17 @@ export default class PuzzleEditor extends React.Component {
 
   componentDidMount() {
     console.log(this.props.location.state);
-    if (this.props.location.state !== undefined) {
-      this.setState({ new_puzzle: false });
+    const savedPuzzle = this.props.location.state;
+
+    if (savedPuzzle !== undefined) {
+      this.setState({
+        new_puzzle: false,
+        title: savedPuzzle.title,
+        freezeBlocks: true,
+        rows: savedPuzzle.rows,
+        cols: savedPuzzle.cols,
+        cells: savedPuzzle.cells,
+      });
     }
   }
 
@@ -387,21 +397,14 @@ export default class PuzzleEditor extends React.Component {
 
     const user = this.context.currentUser;
 
-    const newPuzzle = this.state.new_puzzle;
-
     // this might work for pre-loading, but to actually edit the saved puzzle is going to cause the same issue...
     // TODO can I successfully edit a saved puzzle?
-    const rows = newPuzzle ? this.props.rows : this.props.location.state.rows;
-    const cols = newPuzzle ? this.props.cols : this.props.location.state.cols;
-    const freeze = newPuzzle
-      ? this.state.freezeBlocks
-      : this.props.location.state.freeze;
-    const title = newPuzzle
-      ? this.props.title
-      : this.props.location.state.title;
-    const cells = newPuzzle
-      ? this.state.cells
-      : this.props.location.state.cells;
+    const rows = this.state.rows;
+    const cols = this.state.cols;
+
+    const freeze = this.state.freezeBlocks;
+    const title = this.state.title;
+    const cells = this.state.cells;
 
     return user ? (
       <div>

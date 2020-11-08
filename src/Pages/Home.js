@@ -45,6 +45,7 @@ export default class Home extends React.Component {
                         clues_across: p.clues_across,
                         clues_down: p.clues_down,
                         new_puzzle: false,
+                        // cellId  ?
                       },
                     }}
                   >
@@ -124,26 +125,6 @@ export default class Home extends React.Component {
                 </label>
 
                 <button type="submit">Begin</button>
-
-                {/* I don't think this will work because the controls update state in puzzle editor, but if puzzle editor isn't using the state values... */}
-                {/*  */}
-                <Link
-                  to={{
-                    pathname: "/puzzle-editor",
-                    state: {
-                      title: this.props.puzzleTitle,
-                      freeze: false,
-                      rows: this.props.rows,
-                      cols: this.props.cols,
-                      cells: Array(this.props.rows * this.props.cols).fill(
-                        true
-                      ),
-                    },
-                  }}
-                  onClick={() => this.props.createCellIds()}
-                >
-                  Begin
-                </Link>
               </form>
             ) : (
               ""
