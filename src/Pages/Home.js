@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, Redirect } from "react-router-dom";
 import Context from "../Context/Context";
+import Nav from "../Components/Nav/Nav";
 
 export default class Home extends React.Component {
   static contextType = Context;
@@ -25,21 +26,6 @@ export default class Home extends React.Component {
 
     return user ? (
       <div className="Home">
-        <nav>
-          <Link className="btn-alt" to="/">
-            Back to Landing
-          </Link>
-          <button
-            type="button"
-            onClick={() => {
-              this.context.signOut();
-              this.props.history.push("/");
-            }}
-          >
-            Sign Out
-          </button>
-        </nav>
-
         <main>
           <div>
             <h2>Welcome back, {this.context.currentUser}!</h2>
@@ -59,6 +45,7 @@ export default class Home extends React.Component {
                         cells: p.cells,
                         clues_across: p.clues_across,
                         clues_down: p.clues_down,
+                        new_puzzle: false,
                       },
                     }}
                   >

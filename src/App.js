@@ -3,6 +3,7 @@ import { Route, Switch } from "react-router-dom";
 
 import { users, userPuzzles } from "./Context/tempUsersData";
 
+import Nav from "./Components/Nav/Nav";
 import Landing from "./Pages/Landing";
 import Login from "./Pages/Login";
 import SignUp from "./Pages/SignUp";
@@ -133,6 +134,9 @@ export default class App extends React.Component {
     return (
       <Context.Provider value={value}>
         <div className="App">
+          <nav>
+            <Nav />
+          </nav>
           <Switch>
             <Route exact path="/" component={Landing} />
             <Route path="/login" component={Login} />

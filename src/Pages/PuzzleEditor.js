@@ -32,6 +32,12 @@ export default class PuzzleEditor extends React.Component {
     new_puzzle: true,
   };
 
+  componentDidMount() {
+    if (!this.props.location.state.new_puzzle) {
+      this.setState({ new_puzzle: false });
+    }
+  }
+
   handleControlsInput = (field, value) => {
     if (typeof field === "object") {
       this.setState({ field });
