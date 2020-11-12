@@ -404,8 +404,6 @@ export default class PuzzleEditor extends React.Component {
     const savedCluesAcross = this.state.clues_across;
     const savedCluesDown = this.state.clues_down;
 
-    console.log("saved across: ", savedCluesAcross);
-
     return user ? (
       <div>
         <header>

@@ -27,11 +27,6 @@ function Clues({
 
   - save btn should be in controls component
   
-
-  -- this component works for creating a new puzzle. it is NOT equipped to deal with a saved puzzle.
-    - it needs to be able to discern if it is a new or saved puzzle
-    - for new puzzles: create across and down clues, empty
-    - for saved puzzles: use saved across and down clues, pre-filled
   */
 
   const [cluesAcross, setCluesAcross] = useState([]);
@@ -68,10 +63,8 @@ function Clues({
         }
       });
     } else if (!new_puzzle) {
-      if (cellOrientation !== []) {
-        setCluesAcross(savedCluesAcross);
-        setCluesDown(savedCluesDown);
-      }
+      setCluesAcross(savedCluesAcross);
+      setCluesDown(savedCluesDown);
     }
   }, [
     new_puzzle,
@@ -81,14 +74,14 @@ function Clues({
     savedCluesDown,
   ]);
 
-  // TODO need an if/else. if a new puzzle, do this, but if not a new puzzle, create dom based off of state
   // this creates the html for the dom
   let across = [];
   let down = [];
+
   cellOrientation.forEach((b, i) => {
     const clueId = cellNumber[i];
     if (b === "across") {
-      const clue = cluesAcross.filter((c) => c.id === clueId + " across");
+      const clue = cluesAcross.filter((c) => c.id === clueId + " across")[0];
       across.push(
         <li key={i} onClick={() => handleClick(i, true)}>
           <label>
@@ -97,14 +90,14 @@ function Clues({
               type="text"
               id={clueId + " across"}
               name={clueId + " across"}
-              value={clue.clue}
+              value={clue ? clue.clue : ""}
               onChange={(e) => updateClueAcross(clueId, e.target.value)}
             />
           </label>
         </li>
       );
     } else if (b === "down") {
-      const clue = cluesDown.filter((c) => c.id === clueId + " down");
+      const clue = cluesDown.filter((c) => c.id === clueId + " down")[0];
       down.push(
         <li key={i} onClick={() => handleClick(i, false)}>
           <label>
@@ -113,15 +106,17 @@ function Clues({
               type="text"
               id={clueId + " down"}
               name={clueId + " down"}
-              value={clue.clue}
+              value={clue ? clue.clue : ""}
               onChange={(e) => updateCluesDown(clueId, e.target.value)}
             />
           </label>
         </li>
       );
     } else if (b === "acrossdown") {
-      const clueAcross = cluesAcross.filter((c) => c.id === clueId + " across");
-      const clueDown = cluesDown.filter((c) => c.id === clueId + " down");
+      const clueAcross = cluesAcross.filter(
+        (c) => c.id === clueId + " across"
+      )[0];
+      const clueDown = cluesDown.filter((c) => c.id === clueId + " down")[0];
       across.push(
         <li key={i} onClick={() => handleClick(i, true)}>
           <label>
@@ -130,7 +125,7 @@ function Clues({
               type="text"
               id={clueId + " across"}
               name={clueId + " across"}
-              value={clueAcross.clue}
+              value={clueAcross ? clueAcross.clue : ""}
               onChange={(e) => updateClueAcross(clueId, e.target.value)}
             />
           </label>
@@ -143,7 +138,7 @@ function Clues({
             type="text"
             id={clueId + " down"}
             name={clueId + " down"}
-            value={clueDown.clue}
+            value={clueDown ? clueDown.clue : ""}
             onChange={(e) => updateCluesDown(clueId, e.target.value)}
           />
         </li>
