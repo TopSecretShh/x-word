@@ -73,11 +73,12 @@ export default class PuzzleEditor extends React.Component {
   };
 
   handleSavePuzzle = (cluesAcross, cluesDown) => {
-    const { title, rows, cols, cells, cellId } = this.state;
+    const { puzzle_id, title, rows, cols, cells, cellId } = this.state;
     const { currentUser, userPuzzles } = this.context;
+    console.log("id: ", puzzle_id);
+    const id = puzzle_id !== "" ? puzzle_id : userPuzzles.length + 1;
     const puzzle = {
-      // this creates a new id, even if puzzle is already saved...
-      // id: userPuzzles.length + 1,
+      id: id,
       username: currentUser,
       title: title,
       rows: rows,

@@ -71,9 +71,18 @@ export default class App extends React.Component {
 
     console.log("app ran: ", newPuzzleSave);
 
-    this.setState({
-      userPuzzles: [...userPuzzles, newPuzzleSave],
-    });
+    if (this.state.userPuzzles.find((p) => p.id === newPuzzleSave.id)) {
+      const newPuzzles = this.state.userPuzzles.map((p) =>
+        p.id === newPuzzleSave.id ? newPuzzleSave : p
+      );
+      this.setState({
+        userPuzzles: newPuzzles,
+      });
+    } else {
+      this.setState({
+        userPuzzles: [...this.state.userPuzzles, newPuzzleSave],
+      });
+    }
   };
 
   signOut = () => {
