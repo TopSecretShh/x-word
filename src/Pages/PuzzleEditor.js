@@ -41,7 +41,6 @@ export default class PuzzleEditor extends React.Component {
   componentDidMount() {
     const savedPuzzle = this.props.location.state;
     if (savedPuzzle !== undefined) {
-      console.log("saved puzzle: ", savedPuzzle);
       this.setState(
         {
           new_puzzle: false,
@@ -75,7 +74,6 @@ export default class PuzzleEditor extends React.Component {
   handleSavePuzzle = (cluesAcross, cluesDown) => {
     const { puzzle_id, title, rows, cols, cells, cellId } = this.state;
     const { currentUser, userPuzzles } = this.context;
-    console.log("id: ", puzzle_id);
     const id = puzzle_id !== "" ? puzzle_id : userPuzzles.length + 1;
     const puzzle = {
       id: id,
@@ -88,7 +86,6 @@ export default class PuzzleEditor extends React.Component {
       clues_across: cluesAcross,
       clues_down: cluesDown,
     };
-    console.log("saved?: ", puzzle);
     this.props.updateUserPuzzles(puzzle);
   };
 

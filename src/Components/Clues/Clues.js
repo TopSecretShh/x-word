@@ -169,7 +169,6 @@ function Clues({
   }
 
   function handleSubmit() {
-    console.log(cluesAcross, cluesDown);
     handleSavePuzzle(cluesAcross, cluesDown);
   }
 

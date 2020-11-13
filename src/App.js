@@ -66,13 +66,8 @@ export default class App extends React.Component {
   };
 
   updateUserPuzzles = (newPuzzleSave) => {
-    // if puzzle was previously saved it already has an id. if that is the case, find the id in userPuzzles and replace. that means when you load up a saved puzzle, it needs to pass the puzzle id into PuzzleEditor
-    // if puzzle was not previously saved, create new id and add it to the array
-
-    console.log("app ran: ", newPuzzleSave);
-
-    if (this.state.userPuzzles.find((p) => p.id === newPuzzleSave.id)) {
-      const newPuzzles = this.state.userPuzzles.map((p) =>
+    if (userPuzzles.find((p) => p.id === newPuzzleSave.id)) {
+      const newPuzzles = userPuzzles.map((p) =>
         p.id === newPuzzleSave.id ? newPuzzleSave : p
       );
       this.setState({
@@ -80,7 +75,7 @@ export default class App extends React.Component {
       });
     } else {
       this.setState({
-        userPuzzles: [...this.state.userPuzzles, newPuzzleSave],
+        userPuzzles: [...userPuzzles, newPuzzleSave],
       });
     }
   };
