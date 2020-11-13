@@ -9,6 +9,7 @@ function Clues({
   new_puzzle,
   savedCluesAcross,
   savedCluesDown,
+  handleSavePuzzle,
 }) {
   /*
   TODO list
@@ -169,6 +170,7 @@ function Clues({
 
   function handleSubmit() {
     console.log(cluesAcross, cluesDown);
+    handleSavePuzzle(cluesAcross, cluesDown);
   }
 
   return (

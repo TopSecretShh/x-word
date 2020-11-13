@@ -33,6 +33,7 @@ export default class PuzzleEditor extends React.Component {
 
     new_puzzle: true,
 
+    puzzle_id: "",
     clues_across: [],
     clues_down: [],
   };
@@ -40,9 +41,11 @@ export default class PuzzleEditor extends React.Component {
   componentDidMount() {
     const savedPuzzle = this.props.location.state;
     if (savedPuzzle !== undefined) {
+      console.log("saved puzzle: ", savedPuzzle);
       this.setState(
         {
           new_puzzle: false,
+          puzzle_id: savedPuzzle.id,
           title: savedPuzzle.title,
           freezeBlocks: true,
           rows: savedPuzzle.rows,
@@ -67,6 +70,25 @@ export default class PuzzleEditor extends React.Component {
         [field]: value,
       });
     }
+  };
+
+  handleSavePuzzle = (cluesAcross, cluesDown) => {
+    const { title, rows, cols, cells, cellId } = this.state;
+    const { currentUser, userPuzzles } = this.context;
+    const puzzle = {
+      // this creates a new id, even if puzzle is already saved...
+      // id: userPuzzles.length + 1,
+      username: currentUser,
+      title: title,
+      rows: rows,
+      cols: cols,
+      cells: cells,
+      cellId: cellId,
+      clues_across: cluesAcross,
+      clues_down: cluesDown,
+    };
+    console.log("saved?: ", puzzle);
+    this.props.updateUserPuzzles(puzzle);
   };
 
   selectCell = (value) => {
@@ -465,6 +487,7 @@ export default class PuzzleEditor extends React.Component {
                 new_puzzle={new_puzzle}
                 savedCluesAcross={savedCluesAcross}
                 savedCluesDown={savedCluesDown}
+                handleSavePuzzle={this.handleSavePuzzle}
               />
             ) : (
               ""

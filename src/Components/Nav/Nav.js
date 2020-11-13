@@ -32,6 +32,12 @@ function Nav() {
             </Link>
           </>
         );
+      case "/puzzle-editor":
+        return (
+          <>
+            <Link to="/home">Home</Link>
+          </>
+        );
       default:
         return <></>;
     }

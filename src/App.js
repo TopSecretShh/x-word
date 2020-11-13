@@ -65,6 +65,17 @@ export default class App extends React.Component {
     });
   };
 
+  updateUserPuzzles = (newPuzzleSave) => {
+    // if puzzle was previously saved it already has an id. if that is the case, find the id in userPuzzles and replace. that means when you load up a saved puzzle, it needs to pass the puzzle id into PuzzleEditor
+    // if puzzle was not previously saved, create new id and add it to the array
+
+    console.log("app ran: ", newPuzzleSave);
+
+    this.setState({
+      userPuzzles: [...userPuzzles, newPuzzleSave],
+    });
+  };
+
   signOut = () => {
     this.setState({
       currentUser: "",
@@ -72,7 +83,7 @@ export default class App extends React.Component {
   };
   /* user and sign in/out */
 
-  /* puzzle dismensions */
+  /* puzzle */
   updateRows = (value) => {
     this.setState({
       rows: Number(value),
@@ -98,7 +109,6 @@ export default class App extends React.Component {
       cols: 21,
     });
   };
-  /* puzzle dismensions */
 
   updatePuzzleTitle = (puzzleTitle) => {
     this.setState({
@@ -118,6 +128,7 @@ export default class App extends React.Component {
       cellId,
     });
   };
+  /* puzzle */
 
   render() {
     const value = {
@@ -165,6 +176,7 @@ export default class App extends React.Component {
                   cols={this.state.cols}
                   puzzleTitle={this.state.puzzleTitle}
                   cellId={this.state.cellId}
+                  updateUserPuzzles={this.updateUserPuzzles}
                 />
               )}
             />

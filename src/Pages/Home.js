@@ -36,6 +36,7 @@ export default class Home extends React.Component {
                     to={{
                       pathname: "/puzzle-editor",
                       state: {
+                        id: p.id,
                         title: p.title,
                         freeze: true,
                         rows: p.rows,
