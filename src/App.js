@@ -67,8 +67,8 @@ export default class App extends React.Component {
 
   updateUserPuzzles = (newPuzzleSave) => {
     // TODO for some reason if you save changes to one puzzle, save, then edit and save a different one, all changes made to the first puzzle revert
-    if (userPuzzles.find((p) => p.id === newPuzzleSave.id)) {
-      const newPuzzles = userPuzzles.map((p) =>
+    if (this.state.userPuzzles.find((p) => p.id === newPuzzleSave.id)) {
+      const newPuzzles = this.state.userPuzzles.map((p) =>
         p.id === newPuzzleSave.id ? newPuzzleSave : p
       );
       this.setState({
