@@ -1,8 +1,9 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 
-import { users } from "./Context/tempUsersData";
+import { users, userPuzzles } from "./Context/tempUsersData";
 
+import Nav from "./Components/Nav/Nav";
 import Landing from "./Pages/Landing";
 import Login from "./Pages/Login";
 import SignUp from "./Pages/SignUp";
@@ -20,6 +21,7 @@ PROBLEMS/ISSUES/ROOM FOR IMPROVEMENT
   - this.state.cells (blocks + filled in letters. maybe save a version with and a version without letters)
   - the clues. currently these are stored nowhere. probably have to chance clues to a class component? or use hooks to use state in the current functional component
 
+  - TODO does double-click still work?
 */
 
 export default class App extends React.Component {
@@ -28,9 +30,10 @@ export default class App extends React.Component {
   state = {
     users: users,
     currentUser: "",
+    userPuzzles: [],
 
-    rows: 3,
-    cols: 3,
+    rows: "",
+    cols: "",
     puzzleTitle: "Untitled",
 
     cellId: [],
@@ -55,6 +58,28 @@ export default class App extends React.Component {
     });
   };
 
+  setUserPuzzles = (username) => {
+    const puzzles = userPuzzles.filter((p) => p.username === username);
+    this.setState({
+      userPuzzles: puzzles,
+    });
+  };
+
+  updateUserPuzzles = (newPuzzleSave) => {
+    if (this.state.userPuzzles.find((p) => p.id === newPuzzleSave.id)) {
+      const newPuzzles = this.state.userPuzzles.map((p) =>
+        p.id === newPuzzleSave.id ? newPuzzleSave : p
+      );
+      this.setState({
+        userPuzzles: newPuzzles,
+      });
+    } else {
+      this.setState({
+        userPuzzles: [...userPuzzles, newPuzzleSave],
+      });
+    }
+  };
+
   signOut = () => {
     this.setState({
       currentUser: "",
@@ -62,7 +87,7 @@ export default class App extends React.Component {
   };
   /* user and sign in/out */
 
-  /* puzzle dismensions */
+  /* puzzle */
   updateRows = (value) => {
     this.setState({
       rows: Number(value),
@@ -88,7 +113,6 @@ export default class App extends React.Component {
       cols: 21,
     });
   };
-  /* puzzle dismensions */
 
   updatePuzzleTitle = (puzzleTitle) => {
     this.setState({
@@ -108,19 +132,24 @@ export default class App extends React.Component {
       cellId,
     });
   };
+  /* puzzle */
 
   render() {
     const value = {
       users: this.state.users,
       currentUser: this.state.currentUser,
+      userPuzzles: this.state.userPuzzles,
       addNewUser: this.addNewUser,
       setCurrentUser: this.setCurrentUser,
+      setUserPuzzles: this.setUserPuzzles,
       signOut: this.signOut,
     };
-
     return (
       <Context.Provider value={value}>
         <div className="App">
+          <nav>
+            <Nav />
+          </nav>
           <Switch>
             <Route exact path="/" component={Landing} />
             <Route path="/login" component={Login} />
@@ -151,6 +180,7 @@ export default class App extends React.Component {
                   cols={this.state.cols}
                   puzzleTitle={this.state.puzzleTitle}
                   cellId={this.state.cellId}
+                  updateUserPuzzles={this.updateUserPuzzles}
                 />
               )}
             />

@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import Context from "../Context/Context";
 
 export default class Home extends React.Component {
@@ -18,32 +18,41 @@ export default class Home extends React.Component {
   };
 
   render() {
-    const puzzleDimensions = this.state.puzzleDimensions;
-    return (
-      <div className="Home">
-        <nav>
-          <Link className="btn-alt" to="/">
-            Back to Landing
-          </Link>
-          <button
-            type="button"
-            onClick={() => {
-              this.context.signOut();
-              this.props.history.push("/");
-            }}
-          >
-            Sign Out
-          </button>
-        </nav>
+    const user = this.context.currentUser;
 
+    const puzzleDimensions = this.state.puzzleDimensions;
+    const userPuzzles = this.context.userPuzzles;
+
+    return user ? (
+      <div className="Home">
         <main>
           <div>
             <h2>Welcome back, {this.context.currentUser}!</h2>
             <h3>Saved Puzzles</h3>
             <ul>
-              <li>Puzzle 1</li>
-              <li>Puzzle 2</li>
-              <li>Puzzle 3</li>
+              {userPuzzles.map((p, i) => (
+                <li key={i}>
+                  <Link
+                    to={{
+                      pathname: "/puzzle-editor",
+                      state: {
+                        id: p.id,
+                        title: p.title,
+                        freeze: true,
+                        rows: p.rows,
+                        cols: p.cols,
+                        cells: p.cells,
+                        clues_across: p.clues_across,
+                        clues_down: p.clues_down,
+                        new_puzzle: false,
+                        cellId: p.cellId,
+                      },
+                    }}
+                  >
+                    {p.title}
+                  </Link>
+                </li>
+              ))}
             </ul>
             <h3>Create New Puzzle</h3>
             <button type="button" onClick={() => this.createNewPuzzle()}>
@@ -55,6 +64,8 @@ export default class Home extends React.Component {
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
+                  this.props.history.push("/puzzle-editor");
+                  this.props.createCellIds();
                 }}
               >
                 <fieldset className="puzzle-dimensions">
@@ -79,8 +90,10 @@ export default class Home extends React.Component {
                       name="rows"
                       min={3}
                       max={25}
+                      placeholder="3"
                       value={this.props.rows}
                       onChange={(e) => this.props.updateRows(e.target.value)}
+                      required
                     />
                   </label>
                   <br />
@@ -91,8 +104,10 @@ export default class Home extends React.Component {
                       name="cols"
                       min={3}
                       max={25}
+                      placeholder="3"
                       value={this.props.cols}
                       onChange={(e) => this.props.updateCols(e.target.value)}
+                      required
                     />
                   </label>
                   <br />
@@ -109,15 +124,7 @@ export default class Home extends React.Component {
                   />
                 </label>
 
-                <button
-                  type="button"
-                  onClick={() => {
-                    this.props.history.push("/puzzle-editor");
-                    this.props.createCellIds();
-                  }}
-                >
-                  Begin
-                </button>
+                <button type="submit">Begin</button>
               </form>
             ) : (
               ""
@@ -125,6 +132,8 @@ export default class Home extends React.Component {
           </div>
         </main>
       </div>
+    ) : (
+      <Redirect to={{ pathname: "/" }} />
     );
   }
 }

@@ -12,13 +12,15 @@ export default class PuzzleEditor extends React.Component {
   static contextType = Context;
 
   state = {
-    title: "Untitled",
-    custom: false,
+    title: this.props.puzzleTitle,
+    rows: this.props.rows,
+    cols: this.props.cols,
     cells: Array(this.props.rows * this.props.cols).fill(true),
     selectedCell: null,
     orientationIsHorizontal: true,
     freezeBlocks: false,
     fills: [],
+    cellId: this.props.cellId,
 
     cellOrientation: [],
     cellNumber: [],
@@ -28,7 +30,38 @@ export default class PuzzleEditor extends React.Component {
 
     selectedAnswer: [],
     word: "",
+
+    new_puzzle: true,
+
+    puzzle_id: "",
+    clues_across: [],
+    clues_down: [],
+
+    edit_title: false,
   };
+
+  componentDidMount() {
+    const savedPuzzle = this.props.location.state;
+    if (savedPuzzle !== undefined) {
+      this.setState(
+        {
+          new_puzzle: false,
+          puzzle_id: savedPuzzle.id,
+          title: savedPuzzle.title,
+          freezeBlocks: true,
+          rows: savedPuzzle.rows,
+          cols: savedPuzzle.cols,
+          cells: savedPuzzle.cells,
+          cellId: savedPuzzle.cellId,
+          clues_across: savedPuzzle.clues_across,
+          clues_down: savedPuzzle.clues_down,
+        },
+        () => {
+          this.createCells();
+        }
+      );
+    }
+  }
 
   handleControlsInput = (field, value) => {
     if (typeof field === "object") {
@@ -38,6 +71,24 @@ export default class PuzzleEditor extends React.Component {
         [field]: value,
       });
     }
+  };
+
+  handleSavePuzzle = (cluesAcross, cluesDown) => {
+    const { puzzle_id, title, rows, cols, cells, cellId } = this.state;
+    const { currentUser, userPuzzles } = this.context;
+    const id = puzzle_id !== "" ? puzzle_id : userPuzzles.length + 1;
+    const puzzle = {
+      id: id,
+      username: currentUser,
+      title: title,
+      rows: rows,
+      cols: cols,
+      cells: cells,
+      cellId: cellId,
+      clues_across: cluesAcross,
+      clues_down: cluesDown,
+    };
+    this.props.updateUserPuzzles(puzzle);
   };
 
   selectCell = (value) => {
@@ -134,8 +185,8 @@ export default class PuzzleEditor extends React.Component {
     let nextCell;
     if (orientationIsHorizontal) {
       if (
-        ((cell + 1) / this.props.cols) % 2 === 0 ||
-        ((cell + 1) / this.props.cols) % 2 === 1
+        ((cell + 1) / this.state.cols) % 2 === 0 ||
+        ((cell + 1) / this.state.cols) % 2 === 1
       ) {
         console.log("right edge");
         return cell;
@@ -144,8 +195,8 @@ export default class PuzzleEditor extends React.Component {
         return nextCell;
       }
     } else {
-      if (cell < this.props.cols * this.props.rows - this.props.cols) {
-        nextCell = cell + this.props.cols;
+      if (cell < this.state.cols * this.state.rows - this.state.cols) {
+        nextCell = cell + this.state.cols;
         return nextCell;
       } else {
         return cell;
@@ -154,7 +205,7 @@ export default class PuzzleEditor extends React.Component {
   };
 
   fillCell = (cell, character) => {
-    const { rows, cols } = this.props;
+    const { rows, cols } = this.state;
     const { orientationIsHorizontal } = this.state;
     const totalSquares = rows * cols - 1;
     const cellTwinNumber = totalSquares - cell;
@@ -195,8 +246,8 @@ export default class PuzzleEditor extends React.Component {
     }
     if (e.key === "ArrowRight") {
       if (
-        ((cell + 1) / this.props.cols) % 2 === 0 ||
-        ((cell + 1) / this.props.cols) % 2 === 1
+        ((cell + 1) / this.state.cols) % 2 === 0 ||
+        ((cell + 1) / this.state.cols) % 2 === 1
       ) {
         console.log("right edge");
       } else {
@@ -206,8 +257,8 @@ export default class PuzzleEditor extends React.Component {
     if (e.key === "ArrowLeft") {
       if (
         cell === 0 ||
-        (cell / this.props.cols) % 2 === 0 ||
-        (cell / this.props.cols) % 2 === 1
+        (cell / this.state.cols) % 2 === 0 ||
+        (cell / this.state.cols) % 2 === 1
       ) {
         console.log("left edge");
       } else {
@@ -215,13 +266,13 @@ export default class PuzzleEditor extends React.Component {
       }
     }
     if (e.key === "ArrowUp") {
-      if (cell > this.props.cols - 1) {
-        this.selectCell(cell - this.props.cols);
+      if (cell > this.state.cols - 1) {
+        this.selectCell(cell - this.state.cols);
       }
     }
     if (e.key === "ArrowDown") {
-      if (cell < this.props.cols * this.props.rows - this.props.cols) {
-        this.selectCell(cell + this.props.cols);
+      if (cell < this.state.cols * this.state.rows - this.state.cols) {
+        this.selectCell(cell + this.state.cols);
       }
     }
     if (e.key === "Backspace") {
@@ -231,8 +282,8 @@ export default class PuzzleEditor extends React.Component {
         }
         if (
           cell === 0 ||
-          (cell / this.props.cols) % 2 === 0 ||
-          (cell / this.props.cols) % 2 === 1
+          (cell / this.state.cols) % 2 === 0 ||
+          (cell / this.state.cols) % 2 === 1
         ) {
           this.selectCell(cell);
         } else {
@@ -242,8 +293,8 @@ export default class PuzzleEditor extends React.Component {
         if (typeof this.state.cells[cell] === "string") {
           this.deleteCellContent(cell, true);
         }
-        if (cell > this.props.cols - 1) {
-          this.selectCell(cell - this.props.cols);
+        if (cell > this.state.cols - 1) {
+          this.selectCell(cell - this.state.cols);
         } else {
           this.selectCell(cell);
         }
@@ -266,8 +317,8 @@ export default class PuzzleEditor extends React.Component {
 
   createCells = () => {
     // setting the stage
-    const rows = this.props.rows;
-    const cols = this.props.cols;
+    const rows = this.state.rows;
+    const cols = this.state.cols;
     const cells = this.state.cells;
 
     // internal variables
@@ -364,16 +415,56 @@ export default class PuzzleEditor extends React.Component {
     });
   };
 
+  toggleEditTitle = () => {
+    this.setState({
+      edit_title: !this.state.edit_title,
+    });
+  };
+
+  updatePuzzleTitle = (new_title) => {
+    this.setState({
+      title: new_title,
+    });
+  };
+
   render() {
-    const rows = this.props.rows;
-    const cols = this.props.cols;
     const user = this.context.currentUser;
+    const rows = this.state.rows;
+    const cols = this.state.cols;
     const freeze = this.state.freezeBlocks;
+    const title = this.state.title;
+    const cells = this.state.cells;
+    const new_puzzle = this.state.new_puzzle;
+    const savedCluesAcross = this.state.clues_across;
+    const savedCluesDown = this.state.clues_down;
+
+    const edit_title = this.state.edit_title;
 
     return user ? (
       <div>
         <header>
-          <h1>{this.props.puzzleTitle}</h1>
+          <div className="flex-container">
+            {!edit_title ? (
+              <>
+                <h1>{title}</h1>
+                <button type="button" onClick={() => this.toggleEditTitle()}>
+                  Edit Title
+                </button>
+              </>
+            ) : (
+              <>
+                <input
+                  type="text"
+                  value={title}
+                  onChange={(e) => this.updatePuzzleTitle(e.target.value)}
+                />
+                <button type="button" onClick={() => this.toggleEditTitle()}>
+                  Save
+                </button>
+              </>
+            )}
+          </div>
+
           <p>by {this.context.currentUser}</p>
         </header>
 
@@ -383,7 +474,7 @@ export default class PuzzleEditor extends React.Component {
             freeze={freeze}
             rows={rows}
             cols={cols}
-            cells={this.state.cells}
+            cells={cells}
             createCells={this.createCells}
           />
 
@@ -392,11 +483,11 @@ export default class PuzzleEditor extends React.Component {
               width={cols * 33}
               height={rows * 33}
               cellNumber={this.state.cellNumber}
-              cellId={this.props.cellId}
+              cellId={this.state.cellId}
               selectedAnswer={this.state.selectedAnswer}
               rows={rows}
               cols={cols}
-              cells={this.state.cells}
+              cells={cells}
               selectedCell={this.state.selectedCell}
               selectCell={this.selectCell}
               handleKeyDown={this.handleKeyDown}
@@ -405,7 +496,7 @@ export default class PuzzleEditor extends React.Component {
 
             <div className="stats">
               {!freeze ? (
-                <BlockStats cells={this.state.cells} />
+                <BlockStats cells={cells} />
               ) : (
                 <ClueStats cellOrientation={this.state.cellOrientation} />
               )}
@@ -419,7 +510,7 @@ export default class PuzzleEditor extends React.Component {
           </div>
 
           <div className="clue__container">
-            {freeze ? (
+            {freeze && this.state.cellOrientation.length ? (
               <Clues
                 cellOrientation={this.state.cellOrientation}
                 cellNumber={this.state.cellNumber}
@@ -427,7 +518,11 @@ export default class PuzzleEditor extends React.Component {
                 handleDoubleClick={(direction) =>
                   this.handleDoubleClick(direction)
                 }
-                cellId={this.props.cellId}
+                cellId={this.state.cellId}
+                new_puzzle={new_puzzle}
+                savedCluesAcross={savedCluesAcross}
+                savedCluesDown={savedCluesDown}
+                handleSavePuzzle={this.handleSavePuzzle}
               />
             ) : (
               ""

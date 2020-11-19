@@ -35,6 +35,7 @@ export default class Grid extends React.Component {
     const cols = this.props.cols;
     const width = cols * 33;
     const height = rows * 33;
+
     return (
       <div className="crossword__container--grid-wrapper">
         <svg
