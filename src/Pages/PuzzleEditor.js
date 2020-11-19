@@ -36,6 +36,8 @@ export default class PuzzleEditor extends React.Component {
     puzzle_id: "",
     clues_across: [],
     clues_down: [],
+
+    edit_title: false,
   };
 
   componentDidMount() {
@@ -413,6 +415,18 @@ export default class PuzzleEditor extends React.Component {
     });
   };
 
+  toggleEditTitle = () => {
+    this.setState({
+      edit_title: !this.state.edit_title,
+    });
+  };
+
+  updatePuzzleTitle = (new_title) => {
+    this.setState({
+      title: new_title,
+    });
+  };
+
   render() {
     const user = this.context.currentUser;
     const rows = this.state.rows;
@@ -424,10 +438,33 @@ export default class PuzzleEditor extends React.Component {
     const savedCluesAcross = this.state.clues_across;
     const savedCluesDown = this.state.clues_down;
 
+    const edit_title = this.state.edit_title;
+
     return user ? (
       <div>
         <header>
-          <h1>{title}</h1>
+          <div className="flex-container">
+            {!edit_title ? (
+              <>
+                <h1>{title}</h1>
+                <button type="button" onClick={() => this.toggleEditTitle()}>
+                  Edit Title
+                </button>
+              </>
+            ) : (
+              <>
+                <input
+                  type="text"
+                  value={title}
+                  onChange={(e) => this.updatePuzzleTitle(e.target.value)}
+                />
+                <button type="button" onClick={() => this.toggleEditTitle()}>
+                  Save
+                </button>
+              </>
+            )}
+          </div>
+
           <p>by {this.context.currentUser}</p>
         </header>
 
