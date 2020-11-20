@@ -1,10 +1,11 @@
 import React, { useContext } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useHistory } from "react-router-dom";
 import Context from "../../Context/Context";
 
 function Nav() {
   const context = useContext(Context);
   const location = useLocation();
+  const history = useHistory();
 
   function SwitchNav(props) {
     switch (props.location) {
@@ -35,7 +36,24 @@ function Nav() {
       case "/puzzle-editor":
         return (
           <>
-            <Link to="/home">Home</Link>
+            {/* <Link
+              to="/home"
+              onClick={() => {
+                alert("Nothing will be saved");
+              }}
+            >
+              Home
+            </Link> */}
+            <button
+              type="button"
+              onClick={() => {
+                if (window.confirm("Return to Home without saving?")) {
+                  history.push("/home");
+                }
+              }}
+            >
+              Home
+            </button>
           </>
         );
       default:
