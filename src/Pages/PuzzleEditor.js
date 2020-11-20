@@ -494,19 +494,21 @@ export default class PuzzleEditor extends React.Component {
               handleDoubleClick={this.handleDoubleClick}
             />
 
-            <div className="stats">
-              {!freeze ? (
-                <BlockStats cells={cells} />
+            <div>
+              {freeze ? (
+                <Fills fillInWord={this.fillInWord} fills={this.state.fills} />
               ) : (
-                <ClueStats cellOrientation={this.state.cellOrientation} />
+                ""
               )}
-            </div>
 
-            {freeze ? (
-              <Fills fillInWord={this.fillInWord} fills={this.state.fills} />
-            ) : (
-              ""
-            )}
+              <div className="stats">
+                {!freeze ? (
+                  <BlockStats cells={cells} />
+                ) : (
+                  <ClueStats cellOrientation={this.state.cellOrientation} />
+                )}
+              </div>
+            </div>
           </div>
 
           <div className="clue__container">

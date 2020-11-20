@@ -40,6 +40,13 @@ rect {
   display: flex;
 }
 
+.stats {
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 10px;
+  margin-top: 10px;
+}
+
 .crossword__container--grid-wrapper {
   width: 500px;
   height: 400px;

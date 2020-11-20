@@ -17,8 +17,11 @@ function ClueStats({ cellOrientation }) {
 
   return (
     <div>
-      <p>across: {across}</p>
-      <p>down: {down}</p>
+      <p>
+        <strong>Number of Clues</strong>
+      </p>
+      <p>Across: {across}</p>
+      <p>Down: {down}</p>
     </div>
   );
 }

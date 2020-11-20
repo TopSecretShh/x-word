@@ -8,7 +8,7 @@ function BlockStats({ cells }) {
   return (
     <div>
       <p>
-        blocks: {blocks.length} / {cells.length} ({percentage}%)
+        Blocks: {blocks.length} / {cells.length} ({percentage}%)
       </p>
     </div>
   );
