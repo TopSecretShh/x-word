@@ -459,7 +459,7 @@ export default class PuzzleEditor extends React.Component {
                   onChange={(e) => this.updatePuzzleTitle(e.target.value)}
                 />
                 <button type="button" onClick={() => this.toggleEditTitle()}>
-                  Save
+                  Ok
                 </button>
               </>
             )}

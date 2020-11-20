@@ -171,6 +171,13 @@ function Clues({
         handleSubmit();
       }}
     >
+      <div className="clues_btn_panel">
+        <button type="submit">Save</button>
+        <button type="button" onClick={handleSubmitAndExit}>
+          Save and Exit to Home
+        </button>
+      </div>
+
       <div className="clues__container">
         <div>
           <h3>Across</h3>
@@ -182,11 +189,6 @@ function Clues({
           <ul className="clues__list">{down}</ul>
         </div>
       </div>
-
-      <button type="submit">Save</button>
-      <button type="button" onClick={handleSubmitAndExit}>
-        Save and Return to Home
-      </button>
     </form>
   );
 }

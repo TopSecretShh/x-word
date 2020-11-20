@@ -1,3 +1,7 @@
+.clues_btn_panel {
+  margin-top: 25px;
+}
+
 .clues__container {
   display: flex;
   padding: 16px;
