@@ -2,7 +2,7 @@ import React from "react";
 import generatePattern from "../../Context/Patterns";
 import "./Controls.css";
 
-export default class name extends React.Component {
+export default class Controls extends React.Component {
   handlePatternBtn = () => {
     const pattern = generatePattern(this.props.rows, this.props.cols);
     if (!this.props.freeze) {
