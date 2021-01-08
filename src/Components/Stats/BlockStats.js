@@ -1,14 +1,14 @@
 import React from "react";
 
-function BlockStats({ cells }) {
-  const blocks = cells.filter((c) => !c);
-  let percentage = (blocks.length / cells.length) * 100;
+function BlockStats({ blocks }) {
+  const allBlocks = blocks.filter((c) => !c);
+  let percentage = (allBlocks.length / blocks.length) * 100;
   percentage = parseFloat(percentage.toFixed(1));
 
   return (
     <div>
       <p>
-        Blocks: {blocks.length} / {cells.length} ({percentage}%)
+        Blocks: {allBlocks.length} / {blocks.length} ({percentage}%)
       </p>
     </div>
   );

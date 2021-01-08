@@ -15,8 +15,6 @@ export default class PuzzleEditor extends React.Component {
     title: this.props.puzzleTitle,
     rows: this.props.rows,
     cols: this.props.cols,
-    // splitting cells into blocks and letters. soon to be deprecated
-    cells: Array(this.props.rows * this.props.cols).fill(true),
     blocks: Array(this.props.rows * this.props.cols).fill(true),
     // letters: remove .fill('') returns an array of nulls which might be better, but when creating a deep copy null reverts to undefined
     letters: Array(this.props.rows * this.props.cols).fill(""),
@@ -55,7 +53,8 @@ export default class PuzzleEditor extends React.Component {
           freezeBlocks: true,
           rows: savedPuzzle.rows,
           cols: savedPuzzle.cols,
-          cells: savedPuzzle.cells,
+          blocks: savedPuzzle.blocks,
+          letters: savedPuzzle.letters,
           cellId: savedPuzzle.cellId,
           clues_across: savedPuzzle.clues_across,
           clues_down: savedPuzzle.clues_down,
@@ -78,7 +77,15 @@ export default class PuzzleEditor extends React.Component {
   };
 
   handleSavePuzzle = (cluesAcross, cluesDown) => {
-    const { puzzle_id, title, rows, cols, cells, cellId } = this.state;
+    const {
+      puzzle_id,
+      title,
+      rows,
+      cols,
+      blocks,
+      letters,
+      cellId,
+    } = this.state;
     const { currentUser, userPuzzles } = this.context;
     const id = puzzle_id !== "" ? puzzle_id : userPuzzles.length + 1;
     const puzzle = {
@@ -87,7 +94,8 @@ export default class PuzzleEditor extends React.Component {
       title: title,
       rows: rows,
       cols: cols,
-      cells: cells,
+      blocks: blocks,
+      letters: letters,
       cellId: cellId,
       clues_across: cluesAcross,
       clues_down: cluesDown,
@@ -160,25 +168,7 @@ export default class PuzzleEditor extends React.Component {
     }
   };
 
-  updateCell = (cell, character, cellTwinNumber) => {
-    let cellsCopy = [...this.state.cells];
-    cellsCopy[cell] = character || !cellsCopy[cell];
-
-    if (character) {
-      if (typeof cellsCopy[cellTwinNumber] !== "string") {
-        cellsCopy[cellTwinNumber] = true;
-      }
-    } else if (cellTwinNumber !== cell) {
-      cellsCopy[cellTwinNumber] = !cellsCopy[cellTwinNumber];
-    }
-
-    this.setState({
-      cells: cellsCopy,
-    });
-  };
-
-  // TODO change name deleteLetter
-  deleteCellContent = (cell) => {
+  deleteLetter = (cell) => {
     let lettersCopy = [...this.state.letters];
     lettersCopy[cell] = "";
     this.setState({
@@ -211,19 +201,8 @@ export default class PuzzleEditor extends React.Component {
 
   fillCell = (cell, character) => {
     const { letters, orientationIsHorizontal } = this.state;
-    // const { orientationIsHorizontal } = this.state;
-    // const totalSquares = rows * cols - 1;
-    // const cellTwinNumber = totalSquares - cell;
     const nextCell = this.findNextCell(cell, orientationIsHorizontal);
-
     let lettersCopy = [...letters];
-
-    // if (character) {
-    //   character = character.toUpperCase();
-    //   this.selectCell(nextCell);
-    // }
-
-    // this.updateCell(cell, character, cellTwinNumber);
 
     character = character.toUpperCase();
     lettersCopy[cell] = character;
@@ -258,11 +237,9 @@ export default class PuzzleEditor extends React.Component {
 
     if (e.key === "." && (cell || cell === 0) && !freeze) {
       this.blockCell(cell);
-      // this.fillCell(cell);
     }
     if (e.key.match(/^[a-z]+$/)) {
       if (freeze) {
-        // TODO change fillCell to use letters instead of cells
         this.fillCell(cell, e.key);
       }
     }
@@ -312,9 +289,8 @@ export default class PuzzleEditor extends React.Component {
     }
     if (e.key === "Backspace") {
       if (this.state.orientationIsHorizontal) {
-        // TODO this.state.cells will no longer exist soon
         if (this.state.letters[cell] !== "") {
-          this.deleteCellContent(cell);
+          this.deleteLetter(cell);
         }
         if (
           cell === 0 ||
@@ -326,9 +302,8 @@ export default class PuzzleEditor extends React.Component {
           this.selectCell(cell - 1);
         }
       } else {
-        // TODO deleteCellContent will need to be updated
         if (this.state.letters[cell] !== "") {
-          this.deleteCellContent(cell);
+          this.deleteLetter(cell);
         }
         if (cell > this.state.cols - 1) {
           this.selectCell(cell - this.state.cols);
@@ -355,9 +330,7 @@ export default class PuzzleEditor extends React.Component {
     // setting the stage
     const rows = this.state.rows;
     const cols = this.state.cols;
-    // TODO cells to be deprecated. to be replaced here with blocks
-    // changed this.state.cells to this.state.blocks, but should probably change const cells to const blocks and update rest of fn accordingly
-    const cells = this.state.blocks;
+    const blocks = this.state.blocks;
 
     // internal variables
     let counter = 0;
@@ -368,28 +341,28 @@ export default class PuzzleEditor extends React.Component {
     let cellOrientation = [];
     let cellNumber = [];
 
-    cells.forEach((_, i) => {
+    blocks.forEach((_, i) => {
       // figures out if cell should have a number based on block position
-      let isCellBlocked = cells[i] === false;
-      let isCellBeforeBlocked = cells[i - 1] === false || i % cols === 0;
-      let isCellAfterBlocked = cells[i + 1] === false || (i + 1) % cols === 0;
-      let isCellAboveBlocked = cells[i - cols] === false || i - cols < 0;
+      let isCellBlocked = blocks[i] === false;
+      let isCellBeforeBlocked = blocks[i - 1] === false || i % cols === 0;
+      let isCellAfterBlocked = blocks[i + 1] === false || (i + 1) % cols === 0;
+      let isCellAboveBlocked = blocks[i - cols] === false || i - cols < 0;
       let isCellBelowBlocked =
-        cells[i + cols] === false || i + cols >= rows * cols;
+        blocks[i + cols] === false || i + cols >= rows * cols;
 
       // helps figure out what word/clue a cell belongs to
       function findSiblings(clue, direction) {
-        if (cells[clue] === false) return [];
+        if (blocks[clue] === false) return [];
         let arr = [clue];
 
         if (direction === "across") {
-          for (let i = clue + 1; cells[i] !== false && i % cols !== 0; i++) {
+          for (let i = clue + 1; blocks[i] !== false && i % cols !== 0; i++) {
             arr.push(i);
           }
           if (clue % cols !== 0) {
             for (
               let i = clue - 1;
-              i >= 0 && cells[i] !== false && (i + 1) % cols !== 0;
+              i >= 0 && blocks[i] !== false && (i + 1) % cols !== 0;
               i--
             ) {
               arr.push(i);
@@ -398,12 +371,12 @@ export default class PuzzleEditor extends React.Component {
         }
 
         if (direction === "down") {
-          for (let i = clue - cols; cells[i] !== false && i >= 0; i -= cols) {
+          for (let i = clue - cols; blocks[i] !== false && i >= 0; i -= cols) {
             arr.push(i);
           }
           for (
             let i = clue + cols;
-            cells[i] !== false && i < rows * cols;
+            blocks[i] !== false && i < rows * cols;
             i += cols
           ) {
             arr.push(i);
@@ -467,15 +440,42 @@ export default class PuzzleEditor extends React.Component {
 
   render() {
     const user = this.context.currentUser;
+
+    // TODO why doesn't this syntax work?
+    // const {
+    //   rows,
+    //   cols,
+    //   freeze,
+    //   title,
+    //   edit_title,
+    //   new_puzzle,
+    //   savedCluesAcross,
+    //   savedCluesDown,
+    //   cellId,
+    //   cellNumber,
+    //   cellOrientation,
+    //   selectedCell,
+    //   selectedAnswer,
+    //   blocks,
+    //   letters,
+    //   fills,
+    // } = this.state;
+
     const rows = this.state.rows;
     const cols = this.state.cols;
     const freeze = this.state.freezeBlocks;
     const title = this.state.title;
-    const cells = this.state.cells;
     const new_puzzle = this.state.new_puzzle;
     const savedCluesAcross = this.state.clues_across;
     const savedCluesDown = this.state.clues_down;
-
+    const cellNumber = this.state.cellNumber;
+    const selectedAnswer = this.state.selectedAnswer;
+    const blocks = this.state.blocks;
+    const letters = this.state.letters;
+    const selectedCell = this.state.selectedCell;
+    const fills = this.state.fills;
+    const cellOrientation = this.state.cellOrientation;
+    const cellId = this.state.cellId;
     const edit_title = this.state.edit_title;
 
     return user ? (
@@ -503,7 +503,7 @@ export default class PuzzleEditor extends React.Component {
             )}
           </div>
 
-          <p>by {this.context.currentUser}</p>
+          <p>by {user}</p>
         </header>
 
         <main>
@@ -512,7 +512,6 @@ export default class PuzzleEditor extends React.Component {
             freeze={freeze}
             rows={rows}
             cols={cols}
-            cells={cells}
             createCells={this.createCells}
           />
 
@@ -520,15 +519,14 @@ export default class PuzzleEditor extends React.Component {
             <Grid
               width={cols * 33}
               height={rows * 33}
-              cellNumber={this.state.cellNumber}
-              cellId={this.state.cellId}
-              selectedAnswer={this.state.selectedAnswer}
+              cellNumber={cellNumber}
+              cellId={cellId}
+              selectedAnswer={selectedAnswer}
               rows={rows}
               cols={cols}
-              // cells={cells}
-              blocks={this.state.blocks}
-              letters={this.state.letters}
-              selectedCell={this.state.selectedCell}
+              blocks={blocks}
+              letters={letters}
+              selectedCell={selectedCell}
               selectCell={this.selectCell}
               handleKeyDown={this.handleKeyDown}
               handleDoubleClick={this.handleDoubleClick}
@@ -536,31 +534,31 @@ export default class PuzzleEditor extends React.Component {
 
             <div>
               {freeze ? (
-                <Fills fillInWord={this.fillInWord} fills={this.state.fills} />
+                <Fills fillInWord={this.fillInWord} fills={fills} />
               ) : (
                 ""
               )}
 
               <div className="stats">
                 {!freeze ? (
-                  <BlockStats cells={cells} />
+                  <BlockStats blocks={blocks} />
                 ) : (
-                  <ClueStats cellOrientation={this.state.cellOrientation} />
+                  <ClueStats cellOrientation={cellOrientation} />
                 )}
               </div>
             </div>
           </div>
 
           <div className="clue__container">
-            {freeze && this.state.cellOrientation.length ? (
+            {freeze && cellOrientation.length ? (
               <Clues
-                cellOrientation={this.state.cellOrientation}
-                cellNumber={this.state.cellNumber}
+                cellOrientation={cellOrientation}
+                cellNumber={cellNumber}
                 selectCell={this.selectCell}
                 handleDoubleClick={(direction) =>
                   this.handleDoubleClick(direction)
                 }
-                cellId={this.state.cellId}
+                cellId={cellId}
                 new_puzzle={new_puzzle}
                 savedCluesAcross={savedCluesAcross}
                 savedCluesDown={savedCluesDown}

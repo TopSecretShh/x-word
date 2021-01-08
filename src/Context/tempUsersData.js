@@ -18,7 +18,8 @@ export const userPuzzles = [
     title: "Small",
     rows: 3,
     cols: 3,
-    cells: [true, true, true, true, false, true, true, true, true],
+    blocks: [true, true, true, true, false, true, true, true, true],
+    letters: ["", "", "", "", "", "", "", "", ""],
     cellId: [0, 1, 2, 3, 4, 5, 6, 7, 8],
     clues_across: [
       {
@@ -47,7 +48,7 @@ export const userPuzzles = [
     title: "Medium",
     rows: 4,
     cols: 4,
-    cells: [
+    blocks: [
       true,
       true,
       true,
@@ -65,6 +66,7 @@ export const userPuzzles = [
       true,
       true,
     ],
+    letters: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
     cellId: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
     clues_across: [
       {
