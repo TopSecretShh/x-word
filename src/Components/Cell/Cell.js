@@ -9,6 +9,7 @@ function Cell({
   selectedCell,
   selectedAnswer,
   isNotBlocked,
+  letter,
   cellNumberLabel,
   handleKeyDown,
   handleDoubleClick,
@@ -46,7 +47,7 @@ function Cell({
         x={col * cellSize + 16}
         y={row * cellSize + 24}
       >
-        {isNotBlocked}
+        {letter}
       </text>
       <text
         className="crossword__cell--number"

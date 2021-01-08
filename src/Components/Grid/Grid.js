@@ -9,6 +9,7 @@ export default class Grid extends React.Component {
     const cols = this.props.cols;
     // const cells = this.props.cells;
     const blocks = this.props.blocks;
+    const letters = this.props.letters;
 
     const grid = blocks.map((block, i) => {
       return (
@@ -20,6 +21,7 @@ export default class Grid extends React.Component {
           selectCell={this.props.selectCell}
           selectedCell={i === this.props.selectedCell}
           isNotBlocked={block}
+          letter={letters[i]}
           cellNumberLabel={cellNumber[i]}
           handleKeyDown={this.props.handleKeyDown}
           handleDoubleClick={this.props.handleDoubleClick}

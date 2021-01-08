@@ -15,10 +15,11 @@ export default class PuzzleEditor extends React.Component {
     title: this.props.puzzleTitle,
     rows: this.props.rows,
     cols: this.props.cols,
+    // splitting cells into blocks and letters. soon to be deprecated
     cells: Array(this.props.rows * this.props.cols).fill(true),
     blocks: Array(this.props.rows * this.props.cols).fill(true),
-    // this creates an array of nulls. could .fill('') to get empty strings instead, not sure which is better
-    letters: Array(this.props.rows * this.props.cols),
+    // letters: remove .fill('') returns an array of nulls which might be better, but when creating a deep copy null reverts to undefined
+    letters: Array(this.props.rows * this.props.cols).fill(""),
     selectedCell: null,
     orientationIsHorizontal: true,
     freezeBlocks: false,
@@ -208,18 +209,29 @@ export default class PuzzleEditor extends React.Component {
   };
 
   fillCell = (cell, character) => {
-    const { rows, cols } = this.state;
-    const { orientationIsHorizontal } = this.state;
-    const totalSquares = rows * cols - 1;
-    const cellTwinNumber = totalSquares - cell;
+    const { letters, orientationIsHorizontal } = this.state;
+    // const { orientationIsHorizontal } = this.state;
+    // const totalSquares = rows * cols - 1;
+    // const cellTwinNumber = totalSquares - cell;
     const nextCell = this.findNextCell(cell, orientationIsHorizontal);
 
-    if (character) {
-      character = character.toUpperCase();
-      this.selectCell(nextCell);
-    }
+    let lettersCopy = [...letters];
 
-    this.updateCell(cell, character, cellTwinNumber);
+    // if (character) {
+    //   character = character.toUpperCase();
+    //   this.selectCell(nextCell);
+    // }
+
+    // this.updateCell(cell, character, cellTwinNumber);
+
+    character = character.toUpperCase();
+    lettersCopy[cell] = character;
+
+    this.setState({
+      letters: lettersCopy,
+    });
+
+    this.selectCell(nextCell);
   };
 
   blockCell = (cell) => {
@@ -249,6 +261,7 @@ export default class PuzzleEditor extends React.Component {
     }
     if (e.key.match(/^[a-z]+$/)) {
       if (freeze) {
+        // TODO change fillCell to use letters instead of cells
         this.fillCell(cell, e.key);
       }
     }
@@ -298,6 +311,7 @@ export default class PuzzleEditor extends React.Component {
     }
     if (e.key === "Backspace") {
       if (this.state.orientationIsHorizontal) {
+        // TODO this.state.cells will no longer exist soon
         if (typeof this.state.cells[cell] === "string") {
           this.deleteCellContent(cell, true);
         }
@@ -311,6 +325,7 @@ export default class PuzzleEditor extends React.Component {
           this.selectCell(cell - 1);
         }
       } else {
+        // TODO deleteCellContent will need to be updated
         if (typeof this.state.cells[cell] === "string") {
           this.deleteCellContent(cell, true);
         }
@@ -331,6 +346,7 @@ export default class PuzzleEditor extends React.Component {
       cellsCopy[this.state.selectedAnswer[i]] = fillWord[i].toUpperCase();
     }
 
+    // TODO cells to be deprecated. to be replaced here by letters
     this.setState({
       cells: cellsCopy,
     });
@@ -340,7 +356,9 @@ export default class PuzzleEditor extends React.Component {
     // setting the stage
     const rows = this.state.rows;
     const cols = this.state.cols;
-    const cells = this.state.cells;
+    // TODO cells to be deprecated. to be replaced here with blocks
+    // changed this.state.cells to this.state.blocks, but should probably change const cells to const blocks and update rest of fn accordingly
+    const cells = this.state.blocks;
 
     // internal variables
     let counter = 0;
@@ -510,6 +528,7 @@ export default class PuzzleEditor extends React.Component {
               cols={cols}
               // cells={cells}
               blocks={this.state.blocks}
+              letters={this.state.letters}
               selectedCell={this.state.selectedCell}
               selectCell={this.selectCell}
               handleKeyDown={this.handleKeyDown}
