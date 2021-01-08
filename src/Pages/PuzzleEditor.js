@@ -117,8 +117,8 @@ export default class PuzzleEditor extends React.Component {
     selectedAnswer
       .sort((a, b) => a - b)
       .forEach((i) =>
-        typeof this.state.cells[i] === "string"
-          ? word.push(this.state.cells[i])
+        this.state.letters[i] !== ""
+          ? word.push(this.state.letters[i])
           : word.push("?")
       );
     word = word.join("");
@@ -177,11 +177,12 @@ export default class PuzzleEditor extends React.Component {
     });
   };
 
-  deleteCellContent = (cell, value) => {
-    let cellsCopy = [...this.state.cells];
-    cellsCopy[cell] = value;
+  // TODO change name deleteLetter
+  deleteCellContent = (cell) => {
+    let lettersCopy = [...this.state.letters];
+    lettersCopy[cell] = "";
     this.setState({
-      cells: cellsCopy,
+      letters: lettersCopy,
     });
   };
 
@@ -312,8 +313,8 @@ export default class PuzzleEditor extends React.Component {
     if (e.key === "Backspace") {
       if (this.state.orientationIsHorizontal) {
         // TODO this.state.cells will no longer exist soon
-        if (typeof this.state.cells[cell] === "string") {
-          this.deleteCellContent(cell, true);
+        if (this.state.letters[cell] !== "") {
+          this.deleteCellContent(cell);
         }
         if (
           cell === 0 ||
@@ -326,8 +327,8 @@ export default class PuzzleEditor extends React.Component {
         }
       } else {
         // TODO deleteCellContent will need to be updated
-        if (typeof this.state.cells[cell] === "string") {
-          this.deleteCellContent(cell, true);
+        if (this.state.letters[cell] !== "") {
+          this.deleteCellContent(cell);
         }
         if (cell > this.state.cols - 1) {
           this.selectCell(cell - this.state.cols);
@@ -340,15 +341,13 @@ export default class PuzzleEditor extends React.Component {
   };
 
   fillInWord = (fill) => {
-    let cellsCopy = [...this.state.cells];
+    let lettersCopy = [...this.state.letters];
     let fillWord = Array.from(fill.replace(/\s+/g, ""));
     for (let i = 0; i < this.state.selectedAnswer.length; i++) {
-      cellsCopy[this.state.selectedAnswer[i]] = fillWord[i].toUpperCase();
+      lettersCopy[this.state.selectedAnswer[i]] = fillWord[i].toUpperCase();
     }
-
-    // TODO cells to be deprecated. to be replaced here by letters
     this.setState({
-      cells: cellsCopy,
+      letters: lettersCopy,
     });
   };
 
