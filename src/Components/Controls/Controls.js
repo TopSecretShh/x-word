@@ -6,14 +6,14 @@ export default class Controls extends React.Component {
   handlePatternBtn = () => {
     const pattern = generatePattern(this.props.rows, this.props.cols);
     if (!this.props.freeze) {
-      this.props.handleControlsInput("cells", pattern);
+      this.props.handleControlsInput("blocks", pattern);
     }
   };
 
   handleClearGrid = () => {
     const arr = Array(this.props.rows * this.props.cols).fill(true);
     if (!this.props.freeze) {
-      this.props.handleControlsInput("cells", arr);
+      this.props.handleControlsInput("blocks", arr);
     }
   };
 

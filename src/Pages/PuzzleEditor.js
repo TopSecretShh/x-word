@@ -16,6 +16,9 @@ export default class PuzzleEditor extends React.Component {
     rows: this.props.rows,
     cols: this.props.cols,
     cells: Array(this.props.rows * this.props.cols).fill(true),
+    blocks: Array(this.props.rows * this.props.cols).fill(true),
+    // this creates an array of nulls. could .fill('') to get empty strings instead, not sure which is better
+    letters: Array(this.props.rows * this.props.cols),
     selectedCell: null,
     orientationIsHorizontal: true,
     freezeBlocks: false,
@@ -219,12 +222,30 @@ export default class PuzzleEditor extends React.Component {
     this.updateCell(cell, character, cellTwinNumber);
   };
 
+  blockCell = (cell) => {
+    const { rows, cols } = this.state;
+    const totalSquares = rows * cols - 1;
+    const cellTwinNumber = totalSquares - cell;
+
+    let blocksCopy = [...this.state.blocks];
+    blocksCopy[cell] = !blocksCopy[cell];
+
+    if (cellTwinNumber !== cell) {
+      blocksCopy[cellTwinNumber] = !blocksCopy[cellTwinNumber];
+    }
+
+    this.setState({
+      blocks: blocksCopy,
+    });
+  };
+
   handleKeyDown = (e) => {
     const cell = this.state.selectedCell;
     const freeze = this.state.freezeBlocks;
 
     if (e.key === "." && (cell || cell === 0) && !freeze) {
-      this.fillCell(cell);
+      this.blockCell(cell);
+      // this.fillCell(cell);
     }
     if (e.key.match(/^[a-z]+$/)) {
       if (freeze) {
@@ -487,7 +508,8 @@ export default class PuzzleEditor extends React.Component {
               selectedAnswer={this.state.selectedAnswer}
               rows={rows}
               cols={cols}
-              cells={cells}
+              // cells={cells}
+              blocks={this.state.blocks}
               selectedCell={this.state.selectedCell}
               selectCell={this.selectCell}
               handleKeyDown={this.handleKeyDown}
