@@ -17,11 +17,6 @@ PROBLEMS/ISSUES/ROOM FOR IMPROVEMENT
 
 - TODO clicking fill words to fill grid takes focus away from grid. You have to click on the grid again to re-focus. Not sure if there's anything we can do about this?
 
-- TODO Next step: be able to 'save' a puzzle. This is going to require:
-  - this.state.cells (blocks + filled in letters. maybe save a version with and a version without letters)
-  - the clues. currently these are stored nowhere. probably have to chance clues to a class component? or use hooks to use state in the current functional component
-
-  - TODO does double-click still work?
 */
 
 export default class App extends React.Component {
