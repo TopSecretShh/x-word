@@ -23,11 +23,9 @@ export default class Controls extends React.Component {
   };
 
   handleClearLetters = () => {
-    let grid = this.props.cells;
-    let emptyGrid = grid.map((cell) =>
-      typeof cell === "string" ? (cell = true) : cell
-    );
-    this.props.handleControlsInput("cells", emptyGrid);
+    let grid = this.props.letters;
+    let emptyGrid = grid.map((cell) => (cell = ""));
+    this.props.handleControlsInput("letters", emptyGrid);
   };
 
   render() {

@@ -7,7 +7,6 @@ export default class Grid extends React.Component {
     const cellId = this.props.cellId;
     const selectedAnswer = this.props.selectedAnswer;
     const cols = this.props.cols;
-    // const cells = this.props.cells;
     const blocks = this.props.blocks;
     const letters = this.props.letters;
 

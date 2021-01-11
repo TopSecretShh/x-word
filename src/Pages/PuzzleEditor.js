@@ -512,6 +512,7 @@ export default class PuzzleEditor extends React.Component {
             freeze={freeze}
             rows={rows}
             cols={cols}
+            letters={letters}
             createCells={this.createCells}
           />
 
