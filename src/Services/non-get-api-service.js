@@ -1,4 +1,5 @@
 import config from "../config";
+import TokenService from "./token-service";
 
 const NonGetApiService = {
   addUser(newUser) {
@@ -6,6 +7,7 @@ const NonGetApiService = {
       method: "POST",
       headers: {
         "content-type": "application/json",
+        Authorization: `Bearer ${TokenService.getAuthToken()}`,
       },
       body: JSON.stringify(newUser),
     }).then((res) =>
@@ -17,6 +19,7 @@ const NonGetApiService = {
       method: "POST",
       headers: {
         "content-type": "application/json",
+        Authorization: `Bearer ${TokenService.getAuthToken()}`,
       },
       body: JSON.stringify(newPuzzle),
     }).then((res) =>
@@ -28,6 +31,7 @@ const NonGetApiService = {
       method: "PATCH",
       headers: {
         "content-type": "application/json",
+        Authorization: `Bearer ${TokenService.getAuthToken()}`,
       },
       body: JSON.stringify(newPuzzle),
     }).then((res) =>
@@ -37,7 +41,9 @@ const NonGetApiService = {
   deletePuzzle(puzzleId) {
     return fetch(`${config.API_ENDPOINT}/puzzles/${puzzleId}`, {
       method: "DELETE",
-      headers: {},
+      headers: {
+        Authorization: `Bearer ${TokenService.getAuthToken()}`,
+      },
     }).then((res) =>
       !res.ok ? res.json().then((e) => Promise.reject(e)) : true
     );

@@ -1,7 +1,7 @@
 import config from "../config";
+import TokenService from "./token-service";
 
 const GetApiService = {
-  // TODO do we ever need to get all users?!?
   getUsers() {
     return fetch(`${config.API_ENDPOINT}/users`, {
       headers: {},
@@ -11,12 +11,22 @@ const GetApiService = {
   },
   getUserByUsername(user_name) {
     return fetch(`${config.API_ENDPOINT}/users/:${user_name}`, {
-      headers: {},
+      headers: {
+        Authorization: `Bearer ${TokenService.getAuthToken()}`,
+      },
     }).then((res) =>
       !res.ok ? res.json().then((e) => Promise.reject(e)) : res.json()
     );
   },
-  //   TODO is it better to get all puzzles and filter for the user, or just pull user specific puzzles? Probably the latter...
+  getUser() {
+    return fetch(`${config.API_ENDPOINT}/users/getusername`, {
+      headers: {
+        Authorization: `Bearer ${TokenService.getAuthToken()}`,
+      },
+    }).then((res) =>
+      !res.ok ? res.json().then((e) => Promise.reject(e)) : res.json()
+    );
+  },
   getPuzzles() {
     return fetch(`${config.API_ENDPOINT}/puzzles`, {
       headers: {},
@@ -26,7 +36,9 @@ const GetApiService = {
   },
   getUserPuzzles(userId) {
     return fetch(`${config.API_ENDPOINT}/puzzles/users/${userId}`, {
-      headers: {},
+      headers: {
+        Authorization: `Bearer ${TokenService.getAuthToken()}`,
+      },
     }).then((res) =>
       !res.ok ? res.json().then((e) => Promise.reject(e)) : res.json()
     );

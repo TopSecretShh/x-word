@@ -1,5 +1,8 @@
 import React from "react";
 import Context from "../Context/Context";
+import AuthApiService from "../Services/auth-api-service";
+import GetApiService from "../Services/get-api-service";
+import TokenService from "../Services/token-service";
 
 export default class Login extends React.Component {
   static contextType = Context;
@@ -8,25 +11,45 @@ export default class Login extends React.Component {
     error: null,
   };
 
-  handleSubmit = (e) => {
-    const users = this.context.users;
-    const username = e.target.username.value;
-    const password = e.target.password.value;
-    const match = users
-      .filter((u) => u.username === username)
-      .filter((u) => u.password === password);
+  // handleSubmit = (e) => {
+  //   const users = this.context.users;
+  //   const username = e.target.username.value;
+  //   const password = e.target.password.value;
+  //   const match = users
+  //     .filter((u) => u.username === username)
+  //     .filter((u) => u.password === password);
 
-    if (match.length) {
-      console.log("we have a match!");
-      this.context.setCurrentUser(username);
-      this.context.setUserPuzzles(username);
-      this.handleLoginSuccess();
-    } else {
-      console.log("no such user");
-    }
+  //   if (match.length) {
+  //     console.log("we have a match!");
+  //     this.context.setCurrentUser(username);
+  //     this.context.setUserPuzzles(username);
+  //     this.handleLoginSuccess();
+  //   } else {
+  //     console.log("no such user");
+  //   }
+  // };
+
+  handleSubmitJwtAuth = (e) => {
+    this.setState({ error: null });
+    const user_name = e.target.username.value;
+    const password = e.target.password.value;
+
+    AuthApiService.postLogin({
+      user_name: user_name,
+      password: password,
+    })
+      .then((res) => {
+        TokenService.saveAuthToken(res.authToken);
+        this.handleLoginSuccess();
+      })
+      .catch((res) => {
+        this.setState({ error: res.error.message });
+      });
   };
 
+  // this fn needs to be updated
   handleLoginSuccess = () => {
+    GetApiService.getUser().then((res) => {});
     this.props.history.push("/home");
   };
 
