@@ -4,12 +4,13 @@ import Cell from "../Cell/Cell";
 export default class Grid extends React.Component {
   renderGrid = () => {
     const cellNumber = this.props.cellNumber;
-    const cellId = this.props.cellId;
+    const cell_id = this.props.cell_id;
     const selectedAnswer = this.props.selectedAnswer;
     const cols = this.props.cols;
-    const cells = this.props.cells;
+    const blocks = this.props.blocks;
+    const letters = this.props.letters;
 
-    const grid = cells.map((cell, i) => {
+    const grid = blocks.map((block, i) => {
       return (
         <Cell
           key={i}
@@ -18,11 +19,12 @@ export default class Grid extends React.Component {
           col={i % cols}
           selectCell={this.props.selectCell}
           selectedCell={i === this.props.selectedCell}
-          isNotBlocked={cell}
+          isNotBlocked={block}
+          letter={letters[i]}
           cellNumberLabel={cellNumber[i]}
           handleKeyDown={this.props.handleKeyDown}
           handleDoubleClick={this.props.handleDoubleClick}
-          cellId={cellId[i]}
+          cell_id={cell_id[i]}
           selectedAnswer={selectedAnswer}
         />
       );

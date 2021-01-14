@@ -9,12 +9,13 @@ function Cell({
   selectedCell,
   selectedAnswer,
   isNotBlocked,
+  letter,
   cellNumberLabel,
   handleKeyDown,
   handleDoubleClick,
-  cellId,
+  cell_id,
 }) {
-  let highlight = selectedAnswer.some((a) => a === cellId);
+  let highlight = selectedAnswer.some((a) => a === cell_id);
 
   function handleClick(cell) {
     selectCell(cell);
@@ -28,7 +29,7 @@ function Cell({
             ${highlight ? "crossword__cell--highlighted" : ""}
             `}
       onClick={() => {
-        handleClick(cellId);
+        handleClick(cell_id);
       }}
       onDoubleClick={() => handleDoubleClick()}
       onKeyDown={(e) => handleKeyDown(e)}
@@ -46,7 +47,7 @@ function Cell({
         x={col * cellSize + 16}
         y={row * cellSize + 24}
       >
-        {isNotBlocked}
+        {letter}
       </text>
       <text
         className="crossword__cell--number"

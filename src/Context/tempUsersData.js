@@ -11,6 +11,7 @@ export const users = [
   },
 ];
 
+// TODO NEED TO CHANGE username to user_id in order to function with backend
 export const userPuzzles = [
   {
     id: 0,
@@ -18,8 +19,9 @@ export const userPuzzles = [
     title: "Small",
     rows: 3,
     cols: 3,
-    cells: [true, true, true, true, false, true, true, true, true],
-    cellId: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+    blocks: [true, true, true, true, false, true, true, true, true],
+    letters: ["", "", "", "", "", "", "", "", ""],
+    cell_id: [0, 1, 2, 3, 4, 5, 6, 7, 8],
     clues_across: [
       {
         id: "1 across",
@@ -47,7 +49,7 @@ export const userPuzzles = [
     title: "Medium",
     rows: 4,
     cols: 4,
-    cells: [
+    blocks: [
       true,
       true,
       true,
@@ -65,7 +67,8 @@ export const userPuzzles = [
       true,
       true,
     ],
-    cellId: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+    letters: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+    cell_id: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
     clues_across: [
       {
         id: "1 across",

@@ -6,14 +6,14 @@ export default class Controls extends React.Component {
   handlePatternBtn = () => {
     const pattern = generatePattern(this.props.rows, this.props.cols);
     if (!this.props.freeze) {
-      this.props.handleControlsInput("cells", pattern);
+      this.props.handleControlsInput("blocks", pattern);
     }
   };
 
   handleClearGrid = () => {
     const arr = Array(this.props.rows * this.props.cols).fill(true);
     if (!this.props.freeze) {
-      this.props.handleControlsInput("cells", arr);
+      this.props.handleControlsInput("blocks", arr);
     }
   };
 
@@ -23,11 +23,9 @@ export default class Controls extends React.Component {
   };
 
   handleClearLetters = () => {
-    let grid = this.props.cells;
-    let emptyGrid = grid.map((cell) =>
-      typeof cell === "string" ? (cell = true) : cell
-    );
-    this.props.handleControlsInput("cells", emptyGrid);
+    let grid = this.props.letters;
+    let emptyGrid = grid.map((cell) => (cell = ""));
+    this.props.handleControlsInput("letters", emptyGrid);
   };
 
   render() {

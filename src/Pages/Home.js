@@ -41,11 +41,12 @@ export default class Home extends React.Component {
                         freeze: true,
                         rows: p.rows,
                         cols: p.cols,
-                        cells: p.cells,
+                        blocks: p.blocks,
+                        letters: p.letters,
                         clues_across: p.clues_across,
                         clues_down: p.clues_down,
                         new_puzzle: false,
-                        cellId: p.cellId,
+                        cell_id: p.cell_id,
                       },
                     }}
                   >
