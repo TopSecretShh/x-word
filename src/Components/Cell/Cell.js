@@ -13,9 +13,9 @@ function Cell({
   cellNumberLabel,
   handleKeyDown,
   handleDoubleClick,
-  cellId,
+  cell_id,
 }) {
-  let highlight = selectedAnswer.some((a) => a === cellId);
+  let highlight = selectedAnswer.some((a) => a === cell_id);
 
   function handleClick(cell) {
     selectCell(cell);
@@ -29,7 +29,7 @@ function Cell({
             ${highlight ? "crossword__cell--highlighted" : ""}
             `}
       onClick={() => {
-        handleClick(cellId);
+        handleClick(cell_id);
       }}
       onDoubleClick={() => handleDoubleClick()}
       onKeyDown={(e) => handleKeyDown(e)}

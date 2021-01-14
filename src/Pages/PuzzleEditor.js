@@ -16,13 +16,12 @@ export default class PuzzleEditor extends React.Component {
     rows: this.props.rows,
     cols: this.props.cols,
     blocks: Array(this.props.rows * this.props.cols).fill(true),
-    // letters: remove .fill('') returns an array of nulls which might be better, but when creating a deep copy null reverts to undefined
     letters: Array(this.props.rows * this.props.cols).fill(""),
     selectedCell: null,
     orientationIsHorizontal: true,
     freezeBlocks: false,
     fills: [],
-    cellId: this.props.cellId,
+    cell_id: this.props.cell_id,
 
     cellOrientation: [],
     cellNumber: [],
@@ -55,7 +54,7 @@ export default class PuzzleEditor extends React.Component {
           cols: savedPuzzle.cols,
           blocks: savedPuzzle.blocks,
           letters: savedPuzzle.letters,
-          cellId: savedPuzzle.cellId,
+          cell_id: savedPuzzle.cell_id,
           clues_across: savedPuzzle.clues_across,
           clues_down: savedPuzzle.clues_down,
         },
@@ -84,7 +83,7 @@ export default class PuzzleEditor extends React.Component {
       cols,
       blocks,
       letters,
-      cellId,
+      cell_id,
     } = this.state;
     const { currentUser, userPuzzles } = this.context;
     const id = puzzle_id !== "" ? puzzle_id : userPuzzles.length + 1;
@@ -96,7 +95,7 @@ export default class PuzzleEditor extends React.Component {
       cols: cols,
       blocks: blocks,
       letters: letters,
-      cellId: cellId,
+      cell_id: cell_id,
       clues_across: cluesAcross,
       clues_down: cluesDown,
     };
@@ -451,7 +450,7 @@ export default class PuzzleEditor extends React.Component {
     //   new_puzzle,
     //   savedCluesAcross,
     //   savedCluesDown,
-    //   cellId,
+    //   cell_id,
     //   cellNumber,
     //   cellOrientation,
     //   selectedCell,
@@ -475,7 +474,7 @@ export default class PuzzleEditor extends React.Component {
     const selectedCell = this.state.selectedCell;
     const fills = this.state.fills;
     const cellOrientation = this.state.cellOrientation;
-    const cellId = this.state.cellId;
+    const cell_id = this.state.cell_id;
     const edit_title = this.state.edit_title;
 
     return user ? (
@@ -521,7 +520,7 @@ export default class PuzzleEditor extends React.Component {
               width={cols * 33}
               height={rows * 33}
               cellNumber={cellNumber}
-              cellId={cellId}
+              cell_id={cell_id}
               selectedAnswer={selectedAnswer}
               rows={rows}
               cols={cols}
@@ -559,7 +558,7 @@ export default class PuzzleEditor extends React.Component {
                 handleDoubleClick={(direction) =>
                   this.handleDoubleClick(direction)
                 }
-                cellId={cellId}
+                cell_id={cell_id}
                 new_puzzle={new_puzzle}
                 savedCluesAcross={savedCluesAcross}
                 savedCluesDown={savedCluesDown}

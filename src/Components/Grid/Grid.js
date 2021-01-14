@@ -4,7 +4,7 @@ import Cell from "../Cell/Cell";
 export default class Grid extends React.Component {
   renderGrid = () => {
     const cellNumber = this.props.cellNumber;
-    const cellId = this.props.cellId;
+    const cell_id = this.props.cell_id;
     const selectedAnswer = this.props.selectedAnswer;
     const cols = this.props.cols;
     const blocks = this.props.blocks;
@@ -24,7 +24,7 @@ export default class Grid extends React.Component {
           cellNumberLabel={cellNumber[i]}
           handleKeyDown={this.props.handleKeyDown}
           handleDoubleClick={this.props.handleDoubleClick}
-          cellId={cellId[i]}
+          cell_id={cell_id[i]}
           selectedAnswer={selectedAnswer}
         />
       );

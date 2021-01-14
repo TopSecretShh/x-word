@@ -31,7 +31,7 @@ export default class App extends React.Component {
     cols: "",
     puzzleTitle: "Untitled",
 
-    cellId: [],
+    cell_id: [],
   };
 
   /* user and sign in/out */
@@ -117,14 +117,14 @@ export default class App extends React.Component {
 
   createCellIds = () => {
     const cells = Array(this.state.rows * this.state.cols).fill(true);
-    let cellId = [];
+    let cell_id = [];
 
     cells.forEach((_, i) => {
-      cellId.push(i);
+      cell_id.push(i);
     });
 
     this.setState({
-      cellId,
+      cell_id,
     });
   };
   /* puzzle */
@@ -174,7 +174,7 @@ export default class App extends React.Component {
                   rows={this.state.rows}
                   cols={this.state.cols}
                   puzzleTitle={this.state.puzzleTitle}
-                  cellId={this.state.cellId}
+                  cell_id={this.state.cell_id}
                   updateUserPuzzles={this.updateUserPuzzles}
                 />
               )}
