@@ -36,14 +36,6 @@ function Nav() {
       case "/puzzle-editor":
         return (
           <>
-            {/* <Link
-              to="/home"
-              onClick={() => {
-                alert("Nothing will be saved");
-              }}
-            >
-              Home
-            </Link> */}
             <button
               type="button"
               onClick={() => {

@@ -12,6 +12,7 @@ import PuzzleEditor from "./Pages/PuzzleEditor";
 import Context from "./Context/Context";
 import "./App.css";
 import GetApiService from "./Services/get-api-service";
+import TokenService from "./Services/token-service";
 
 /*
 PROBLEMS/ISSUES/ROOM FOR IMPROVEMENT
@@ -55,9 +56,7 @@ export default class App extends React.Component {
   };
 
   setUserPuzzles = (userId) => {
-    GetApiService.getUserPuzzles(userId).then((res) => {
-      console.log(res);
-    });
+    GetApiService.getUserPuzzles(userId).then(this.setUserPuzzles);
     // this.setState({
     //   userPuzzles: puzzles,
     // });
@@ -79,8 +78,10 @@ export default class App extends React.Component {
   };
 
   signOut = () => {
+    TokenService.clearAuthToken();
+    TokenService.clearCallbackBeforeExpiry();
     this.setState({
-      currentUser: "",
+      currentUser: {},
     });
   };
   /* user and sign in/out */
