@@ -89,7 +89,7 @@ export default class PuzzleEditor extends React.Component {
     const id = puzzle_id !== "" ? puzzle_id : userPuzzles.length + 1;
     const puzzle = {
       id: id,
-      username: currentUser,
+      user_id: currentUser.user_id,
       title: title,
       rows: rows,
       cols: cols,
@@ -440,26 +440,6 @@ export default class PuzzleEditor extends React.Component {
   render() {
     const user = this.context.currentUser;
 
-    // TODO why doesn't this syntax work?
-    // const {
-    //   rows,
-    //   cols,
-    //   freeze,
-    //   title,
-    //   edit_title,
-    //   new_puzzle,
-    //   savedCluesAcross,
-    //   savedCluesDown,
-    //   cell_id,
-    //   cellNumber,
-    //   cellOrientation,
-    //   selectedCell,
-    //   selectedAnswer,
-    //   blocks,
-    //   letters,
-    //   fills,
-    // } = this.state;
-
     const rows = this.state.rows;
     const cols = this.state.cols;
     const freeze = this.state.freezeBlocks;
@@ -502,7 +482,7 @@ export default class PuzzleEditor extends React.Component {
             )}
           </div>
 
-          <p>by {user}</p>
+          <p>by {user.user_name}</p>
         </header>
 
         <main>

@@ -18,7 +18,7 @@ export default class Home extends React.Component {
   };
 
   render() {
-    const user = this.context.currentUser;
+    const user = this.context.currentUser.user_name;
 
     const puzzleDimensions = this.state.puzzleDimensions;
     const userPuzzles = this.context.userPuzzles;
@@ -27,7 +27,7 @@ export default class Home extends React.Component {
       <div className="Home">
         <main>
           <div>
-            <h2>Welcome back, {this.context.currentUser}!</h2>
+            <h2>Welcome back, {user}!</h2>
             <h3>Saved Puzzles</h3>
             <ul>
               {userPuzzles.map((p, i) => (

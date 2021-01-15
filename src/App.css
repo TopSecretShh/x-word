@@ -15,6 +15,10 @@ rect {
   margin: 16px;
 }
 
+.error {
+  color: red;
+}
+
 @media (max-width: 400px) {
   .App {
     margin: 8px;

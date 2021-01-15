@@ -11,24 +11,6 @@ export default class Login extends React.Component {
     error: null,
   };
 
-  // handleSubmit = (e) => {
-  //   const users = this.context.users;
-  //   const username = e.target.username.value;
-  //   const password = e.target.password.value;
-  //   const match = users
-  //     .filter((u) => u.username === username)
-  //     .filter((u) => u.password === password);
-
-  //   if (match.length) {
-  //     console.log("we have a match!");
-  //     this.context.setCurrentUser(username);
-  //     this.context.setUserPuzzles(username);
-  //     this.handleLoginSuccess();
-  //   } else {
-  //     console.log("no such user");
-  //   }
-  // };
-
   handleSubmitJwtAuth = (e) => {
     this.setState({ error: null });
     const user_name = e.target.username.value;
@@ -47,10 +29,18 @@ export default class Login extends React.Component {
       });
   };
 
-  // this fn needs to be updated
   handleLoginSuccess = () => {
-    GetApiService.getUser().then((res) => {});
-    this.props.history.push("/home");
+    GetApiService.getUser()
+      .then((res) => {
+        const userInfo = {
+          user_id: res.id,
+          user_name: res.user_name,
+        };
+        this.props.setCurrentUser(userInfo);
+        // TODO if there are no user puzzles, this causes errors in the console
+        this.props.setUserPuzzles(userInfo.user_id);
+      })
+      .then(() => this.props.history.push("/home"));
   };
 
   handleCancelBtn = () => {
@@ -65,7 +55,7 @@ export default class Login extends React.Component {
           className="form-login"
           onSubmit={(e) => {
             e.preventDefault();
-            this.handleSubmit(e);
+            this.handleSubmitJwtAuth(e);
           }}
         >
           <fieldset>

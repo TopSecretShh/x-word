@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 
-import { users, userPuzzles } from "./Context/tempUsersData";
+// import { users, userPuzzles } from "./Context/tempUsersData";
 
 import Nav from "./Components/Nav/Nav";
 import Landing from "./Pages/Landing";
@@ -11,6 +11,7 @@ import Home from "./Pages/Home";
 import PuzzleEditor from "./Pages/PuzzleEditor";
 import Context from "./Context/Context";
 import "./App.css";
+import GetApiService from "./Services/get-api-service";
 
 /*
 PROBLEMS/ISSUES/ROOM FOR IMPROVEMENT
@@ -23,8 +24,8 @@ export default class App extends React.Component {
   static contextType = Context;
 
   state = {
-    users: users,
-    currentUser: "",
+    // users: users,
+    currentUser: {},
     userPuzzles: [],
 
     rows: "",
@@ -53,11 +54,13 @@ export default class App extends React.Component {
     });
   };
 
-  setUserPuzzles = (username) => {
-    const puzzles = userPuzzles.filter((p) => p.username === username);
-    this.setState({
-      userPuzzles: puzzles,
+  setUserPuzzles = (userId) => {
+    GetApiService.getUserPuzzles(userId).then((res) => {
+      console.log(res);
     });
+    // this.setState({
+    //   userPuzzles: puzzles,
+    // });
   };
 
   updateUserPuzzles = (newPuzzleSave) => {
@@ -70,7 +73,7 @@ export default class App extends React.Component {
       });
     } else {
       this.setState({
-        userPuzzles: [...userPuzzles, newPuzzleSave],
+        userPuzzles: [...this.state.userPuzzles, newPuzzleSave],
       });
     }
   };
@@ -147,7 +150,17 @@ export default class App extends React.Component {
           </nav>
           <Switch>
             <Route exact path="/" component={Landing} />
-            <Route path="/login" component={Login} />
+            {/* <Route path="/login" component={Login} /> */}
+            <Route
+              path="/login"
+              render={(props) => (
+                <Login
+                  {...props}
+                  setCurrentUser={this.setCurrentUser}
+                  setUserPuzzles={this.setUserPuzzles}
+                />
+              )}
+            />
             <Route path="/signup" component={SignUp} />
             <Route
               path="/home"
