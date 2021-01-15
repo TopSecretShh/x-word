@@ -8,6 +8,9 @@ import Clues from "../Components/Clues/Clues";
 import BlockStats from "../Components/Stats/BlockStats";
 import ClueStats from "../Components/Stats/ClueStats";
 
+import NonGetApiService from "../Services/non-get-api-service";
+import GetApiService from "../Services/get-api-service";
+
 export default class PuzzleEditor extends React.Component {
   static contextType = Context;
 
@@ -77,7 +80,7 @@ export default class PuzzleEditor extends React.Component {
 
   handleSavePuzzle = (cluesAcross, cluesDown) => {
     const {
-      puzzle_id,
+      // puzzle_id,
       title,
       rows,
       cols,
@@ -85,10 +88,10 @@ export default class PuzzleEditor extends React.Component {
       letters,
       cell_id,
     } = this.state;
-    const { currentUser, userPuzzles } = this.context;
-    const id = puzzle_id !== "" ? puzzle_id : userPuzzles.length + 1;
+    const { currentUser } = this.context;
+    // const id = puzzle_id !== "" ? puzzle_id : userPuzzles.length + 1;
     const puzzle = {
-      id: id,
+      // id: id,
       user_id: currentUser.user_id,
       title: title,
       rows: rows,
@@ -96,10 +99,16 @@ export default class PuzzleEditor extends React.Component {
       blocks: blocks,
       letters: letters,
       cell_id: cell_id,
+      // TODO backend wants a single clues array, but handleSavePuzzle and Clues use cluesAcross and cluesDown (two arrays)
+      // clues: cluesAcross,
+      // cluesDown,
       clues_across: cluesAcross,
       clues_down: cluesDown,
     };
-    this.props.updateUserPuzzles(puzzle);
+
+    NonGetApiService.addPuzzle(puzzle)
+      .then(this.props.updateUserPuzzles(puzzle))
+      .catch((err) => console.log(err));
   };
 
   selectCell = (value) => {

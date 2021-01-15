@@ -1,7 +1,7 @@
 import React from "react";
 
 export default React.createContext({
-  users: [],
+  // users: [],
   currentUser: "",
   userPuzzles: [],
   addNewUser: () => {},

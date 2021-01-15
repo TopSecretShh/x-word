@@ -135,7 +135,7 @@ export default class App extends React.Component {
 
   render() {
     const value = {
-      users: this.state.users,
+      // users: this.state.users,
       currentUser: this.state.currentUser,
       userPuzzles: this.state.userPuzzles,
       addNewUser: this.addNewUser,

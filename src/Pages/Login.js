@@ -37,8 +37,8 @@ export default class Login extends React.Component {
           user_name: res.user_name,
         };
         this.props.setCurrentUser(userInfo);
-        // TODO if there are no user puzzles, this causes errors in the console
-        this.props.setUserPuzzles(userInfo.user_id);
+        // TODO this doesn't work
+        // this.props.setUserPuzzles(userInfo.user_id);
       })
       .then(() => this.props.history.push("/home"));
   };
